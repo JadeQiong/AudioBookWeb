@@ -1,25 +1,24 @@
 {
   "files": {
-    "main.css": "/AudioBookWeb/static/css/main.f6058610.css",
-    "main.js": "/AudioBookWeb/static/js/main.5b1ec768.js",
+    "main.css": "/AudioBookWeb/static/css/main.b2e565b8.css",
+    "main.js": "/AudioBookWeb/static/js/main.15cc33fb.js",
     "static/js/453.f3bb842a.chunk.js": "/AudioBookWeb/static/js/453.f3bb842a.chunk.js",
     "static/media/zero_to_one.wav": "/AudioBookWeb/static/media/zero_to_one.3338f330ccefe2c4d1e2.wav",
     "static/media/chip_war.mp3": "/AudioBookWeb/static/media/chip_war.a7f89885c7e671541111.mp3",
     "static/media/educated.mp3": "/AudioBookWeb/static/media/educated.a7f89885c7e671541111.mp3",
-    "static/media/the_class_maker.mp3": "/AudioBookWeb/static/media/the_class_maker.a7f89885c7e671541111.mp3",
-    "static/media/to_kill_a_mocking_bird.mp3": "/AudioBookWeb/static/media/to_kill_a_mocking_bird.a7f89885c7e671541111.mp3",
-    "static/media/the_class_maker.png": "/AudioBookWeb/static/media/the_class_maker.c93a03591ccd094a119b.png",
-    "static/media/to_kill_a_mocking_bird.png": "/AudioBookWeb/static/media/to_kill_a_mocking_bird.d6d65bbd642ad932725d.png",
+    "static/media/zero_to_one.png": "/AudioBookWeb/static/media/zero_to_one.57b9bab386be9b429ee7.png",
+    "static/media/hackers_painters.png": "/AudioBookWeb/static/media/hackers_painters.c76fc287607e0fc7a94e.png",
     "static/media/educated.png": "/AudioBookWeb/static/media/educated.8e2167903805b5a7e8ca.png",
     "static/media/elon_musk.png": "/AudioBookWeb/static/media/elon_musk.a9243f4f79a2f422e483.png",
+    "static/media/background.png": "/AudioBookWeb/static/media/background.c503ccb2992c96bc089f.png",
     "static/media/chip_war.png": "/AudioBookWeb/static/media/chip_war.624ad8f971965810bb81.png",
     "index.html": "/AudioBookWeb/index.html",
-    "main.f6058610.css.map": "/AudioBookWeb/static/css/main.f6058610.css.map",
-    "main.5b1ec768.js.map": "/AudioBookWeb/static/js/main.5b1ec768.js.map",
+    "main.b2e565b8.css.map": "/AudioBookWeb/static/css/main.b2e565b8.css.map",
+    "main.15cc33fb.js.map": "/AudioBookWeb/static/js/main.15cc33fb.js.map",
     "453.f3bb842a.chunk.js.map": "/AudioBookWeb/static/js/453.f3bb842a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f6058610.css",
-    "static/js/main.5b1ec768.js"
+    "static/css/main.b2e565b8.css",
+    "static/js/main.15cc33fb.js"
   ]
 }
