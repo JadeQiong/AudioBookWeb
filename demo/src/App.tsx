@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Carousel from './components/Carousel';
 import { CarouselItem } from './components/Carousel';
 import { CarouselRef } from './components/Carousel';
+import BookInfoPanel from './components/BookInfoPanel';
 import { ContinuousSlider } from './components/ContinuousSlider';
 import './App.css';
 
@@ -23,9 +24,14 @@ import elonMuskAudio from './assets/audios/zero_to_one.wav';
 import toKillAMockingBirdAudio from './assets/audios/to_kill_a_mocking_bird.mp3';
 import classMakerAudio from './assets/audios/the_class_maker.mp3';
 import chipWarAudio from './assets/audios/chip_war.mp3';
-import zeroToOneAudio from './assets/audios/chip_war.mp3';
+import zeroToOneAudio from './assets/audios/zero_to_one.wav';
 import hackersPaintersAudio from './assets/audios/chip_war.mp3';
 
+import { elonMaskContent } from './types/hardcoded';
+import { chipWarContent } from './types/hardcoded';
+import { hackersPaintersContent } from './types/hardcoded';
+import { zeroToOneContet } from './types/hardcoded';
+import { EducatedContent } from './types/hardcoded';
 import { selectClasses } from '@mui/material';
 import { log } from 'console';
 
@@ -45,6 +51,14 @@ const picturesMap = [
   educatedImage,
 ];
 
+const contentsMap = [
+  elonMaskContent,
+  chipWarContent,
+  hackersPaintersContent,
+  zeroToOneContet,
+  EducatedContent
+  
+]
 let repeatedImagesArray: any[] = [];
 for (let i = 0; i < 4; i++) {
   repeatedImagesArray = [...repeatedImagesArray, ...picturesMap];
@@ -55,6 +69,11 @@ for (let i = 0; i < 4; i++) {
   repeatedAudiosArray = [...repeatedAudiosArray, ...audiosMap];
 }
 
+let repeatedContentsArray: any[] = [];
+for (let i = 0; i < 4; i++) {
+  repeatedContentsArray = [...repeatedContentsArray, ...contentsMap];
+}
+
 const items: CarouselItem[] = Array(20)
   .fill('')
   .map((_: string, index: number) => ({
@@ -62,10 +81,15 @@ const items: CarouselItem[] = Array(20)
     // image: `https://picsum.photos/${210 + index}`,
     image: repeatedImagesArray[index],
     content: (
-      <div>
-        {/* <strong>Round Carousel</strong>
-		<span>Slide number {index + 1}</span> */}
-      </div>
+ 
+<BookInfoPanel
+  title={repeatedContentsArray[index].title}
+  author={repeatedContentsArray[index].author}
+  categories={repeatedContentsArray[index].categories}
+  description={repeatedContentsArray[index].description}
+  link={repeatedContentsArray[index].link}
+/>
+
     ),
   }));
 
@@ -139,9 +163,11 @@ function App() {
               ref={carouselRef}
               items={items}
               slideOnClick
+              showControls={false}
               onIndexChange={handleIndexChange}
             ></Carousel>
           </Stack>
+          <Box sx={{height: 2}}></Box>
           <ContinuousSlider audio={curAudio}></ContinuousSlider>
         </Stack>
 
