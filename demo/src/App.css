@@ -83,7 +83,7 @@ h1 {
   width: 200px;
   height: 35px;
   font-size: 16px;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 16px;
   background-clip: padding-box, border-box;
   background-origin: padding-box, border-box;
