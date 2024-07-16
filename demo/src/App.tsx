@@ -17,7 +17,7 @@ import classMakerImage from './assets/images/the_class_maker.png';
 import chipWarImage from './assets/images/chip_war.png';
 
 import educatedAudio from './assets/audios/educated.mp3';
-import elonMuskAudio from './assets/audios/elon_musk.mp3';
+import elonMuskAudio from './assets/audios/zero_to_one.wav';
 import toKillAMockingBirdAudio from './assets/audios/to_kill_a_mocking_bird.mp3';
 import classMakerAudio from './assets/audios/the_class_maker.mp3';
 import chipWarAudio from './assets/audios/chip_war.mp3';
@@ -79,8 +79,7 @@ function App() {
           spacing={2}
           sx={{ marginTop: 2, marginBottom: 2 }}
         >
-      
-      <img src={logo} width={35} height={35}/>
+          <img src={logo} width={35} height={35} />
 
           <Button
             variant="contained"
@@ -141,7 +140,7 @@ function App() {
           <ContinuousSlider audio={curAudio}></ContinuousSlider>
         </Stack>
 
-        <Stack direction="column" sx={{width: '60%', marginBottom: 5}} >
+        <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
           <Typography variant="h4" gutterBottom>
             Engaging, Captivating, Premium
           </Typography>
@@ -155,7 +154,7 @@ function App() {
             with AI-Powered BookTalks, where every book becomes a captivating
             conversation.
           </Typography>
-          <Button size='small'>Join Our Waitlist</Button>
+          <Button size="small">Join Our Waitlist</Button>
         </Stack>
       </div>
     </div>
