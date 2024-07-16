@@ -12,6 +12,8 @@ import './App.css';
 
 import educatedImage from './assets/images/educated.png';
 import elonMuskImage from './assets/images/elon_musk.png';
+import hackersPaintersImage from './assets/images/hackers_painters.png';
+import zeroToOneImage from './assets/images/zero_to_one.png';
 import toKillAMockingBirdImage from './assets/images/to_kill_a_mocking_bird.png';
 import classMakerImage from './assets/images/the_class_maker.png';
 import chipWarImage from './assets/images/chip_war.png';
@@ -21,22 +23,25 @@ import elonMuskAudio from './assets/audios/zero_to_one.wav';
 import toKillAMockingBirdAudio from './assets/audios/to_kill_a_mocking_bird.mp3';
 import classMakerAudio from './assets/audios/the_class_maker.mp3';
 import chipWarAudio from './assets/audios/chip_war.mp3';
+import zeroToOneAudio from './assets/audios/chip_war.mp3';
+import hackersPaintersAudio from './assets/audios/chip_war.mp3';
+
 import { selectClasses } from '@mui/material';
 import { log } from 'console';
 
 const audiosMap = [
-  chipWarAudio,
-  toKillAMockingBirdAudio,
   elonMuskAudio,
-  classMakerAudio,
+  chipWarAudio,
+  hackersPaintersAudio,
+  zeroToOneAudio,
   educatedAudio,
 ];
 
 const picturesMap = [
-  chipWarImage,
-  toKillAMockingBirdImage,
   elonMuskImage,
-  classMakerImage,
+  chipWarImage,
+  hackersPaintersImage,
+  zeroToOneImage,
   educatedImage,
 ];
 
