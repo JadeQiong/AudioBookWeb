@@ -34,6 +34,14 @@ import { zeroToOneContet } from './types/hardcoded';
 import { EducatedContent } from './types/hardcoded';
 import { selectClasses } from '@mui/material';
 import { log } from 'console';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+
+const theme = createTheme({
+  typography: {
+    fontFamily: 'Roboto',
+  },
+});
 
 const audiosMap = [
   elonMuskAudio,
@@ -100,95 +108,115 @@ function App() {
     setCurAudio(repeatedAudiosArray[index]);
   };
 
-  return (
-    <div className="App">
-      <div className="App-header">
-        <Stack
-          direction="row"
-          spacing={2}
-          sx={{ marginTop: 2, marginBottom: 2 }}
-        >
-          <img src={logo} width={35} height={35} />
+  return (<ThemeProvider theme={theme}>
+      <div className="App">
+        <div className="App-header">
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ marginTop: 2, marginBottom: 2 }}
+          >
+            <img src={logo} width={35} height={35} />
 
-          <Button
-            variant="contained"
-            sx={{
-              color: '#292929',
-              backgroundColor: 'white',
-              borderRadius: '12px',
-              borderColor: 'lightgray',
-            }}
-          >
-            Library
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{
-              color: 'white',
-              borderRadius: '12px',
-              borderColor: 'lightgray',
-            }}
-          >
-            Upload
-          </Button>
-          <Box sx={{ width: 400 }} />
-          <Button
-            sx={{
-              color: 'white',
-              borderRadius: '12px',
-              borderColor: 'lightgray',
-            }}
-          >
-            About Us
-          </Button>
-          <Button
-            sx={{
-              color: 'white',
-            }}
-          >
-            Contact Us
-          </Button>
-          <Button
-            sx={{
-              color: 'white',
-            }}
-          >
-            Login
-          </Button>
-        </Stack>
-
-        <Stack spacing={2} sx={{ height: 400 }}>
-          <Stack sx={{ height: 300 }}>
-            <Carousel
-              ref={carouselRef}
-              items={items}
-              slideOnClick
-              showControls={false}
-              onIndexChange={handleIndexChange}
-            ></Carousel>
+            <Button
+              variant="contained"
+              sx={{
+                color: '#292929',
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                borderColor: 'lightgray',
+              }}
+            >
+              Library
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{
+                color: 'white',
+                borderRadius: '12px',
+                borderColor: 'lightgray',
+              }}
+            >
+              Upload
+            </Button>
+            <Box sx={{ width: 400 }} />
+            <Button
+              sx={{
+                color: 'white',
+                borderRadius: '12px',
+                borderColor: 'lightgray',
+              }}
+            >
+              About Us
+            </Button>
+            <Button
+              sx={{
+                color: 'white',
+              }}
+            >
+              Contact Us
+            </Button>
+            <Button
+              sx={{
+                color: 'white',
+              }}
+            >
+              Login
+            </Button>
           </Stack>
-          <Box sx={{height: 2}}></Box>
-          <ContinuousSlider audio={curAudio}></ContinuousSlider>
-        </Stack>
 
-        <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
-          <Typography variant="h4" gutterBottom>
-            Engaging, Captivating, Premium
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            AI-Powered Podcasts on Today's Best Reads
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            No more dry summaries—AI-Powered BookTalks delivers a vibrant audio
-            experience that brings literature to life, connecting readers with
-            books in a profound and modern way. Experience the future of reading
-            with AI-Powered BookTalks, where every book becomes a captivating
-            conversation.
-          </Typography>
-          <Button size="small">Join Our Waitlist</Button>
-        </Stack>
+          <Stack spacing={2} sx={{ height: 400 }}>
+            <Stack sx={{ height: 300 }}>
+              <Carousel
+                ref={carouselRef}
+                items={items}
+                slideOnClick
+                showControls={false}
+                onIndexChange={handleIndexChange}
+              ></Carousel>
+            </Stack>
+            <Box sx={{height: 2}}></Box>
+            <ContinuousSlider audio={curAudio}></ContinuousSlider>
+          </Stack>
+
+          <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
+          <Typography variant="h4" component="h1" gutterBottom sx={{
+            fontWeight: 'bold',
+            background: 'linear-gradient(to bottom, #ebebec, #979797)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'inline'
+          }}>
+              Engaging, Captivating, Premium
+            </Typography>
+            <Typography variant="h6" gutterBottom sx={{ 
+              fontWeight: 'bold',
+              background: '#c1c1c1',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              display: 'inline'
+            }}>
+              AI-Powered Podcasts on Today's Best Reads
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              No more dry summaries—AI-Powered BookTalks delivers a vibrant audio
+              experience that brings literature to life, connecting readers with
+              books in a profound and modern way. Experience the future of reading
+              with AI-Powered BookTalks, where every book becomes a captivating
+              conversation.
+            </Typography>
+
+            <div className="container">
+            <div className="border-box">
+              <div className="content">
+                Join Our Waitlist
+              </div>
+            </div>
+            </div>
+          </Stack>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 

@@ -13,6 +13,15 @@
   }
 }
 
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+h1 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -36,3 +45,45 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+.gradient-border-button {
+  position: relative;
+  padding: 10px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #152543; /* Updated dark blue background */
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  cursor: pointer;
+  overflow: hidden; /* Ensures no overflow outside the border radius */
+}
+
+
+.container {
+  display: flex;  /* Establishes a flex container */
+  align-items: center;  /* Centers vertically in the container */
+  justify-content: center;  /* Centers horizontally in the container */
+  height: 10vh;  /* Takes full viewport height */
+  width: 100%;  /* Takes full viewport width */
+}
+.border-box {
+  width: 200px;
+  height: 35px;
+  font-size: 16px;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  background-image: linear-gradient(to right, #152543, #152543), linear-gradient(90deg, #202c6a, #919fe5);
+  display: flex; /* Flexbox inside the border-box */
+  align-items: center; /* Center content vertically inside the box */
+  justify-content: center; 
+}
+
+
+
+
