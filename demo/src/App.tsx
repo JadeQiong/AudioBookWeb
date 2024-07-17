@@ -178,7 +178,8 @@ function App() {
             <Box sx={{height: 2}}></Box>
             <ContinuousSlider audio={curAudio}></ContinuousSlider>
           </Stack>
-
+          
+          <div className="container_background">
           <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
           <Typography variant="h4" component="h1" gutterBottom sx={{
             fontWeight: 'bold',
@@ -214,6 +215,8 @@ function App() {
             </div>
             </div>
           </Stack>
+          </div>
+
         </div>
       </div>
     </ThemeProvider>
