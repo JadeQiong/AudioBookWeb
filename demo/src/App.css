@@ -62,6 +62,15 @@ h1 {
   overflow: hidden; /* Ensures no overflow outside the border radius */
 }
 
+.container_background{
+  background: radial-gradient(circle at center bottom, #162b56, #101010 50%);
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
 
 .container {
   display: flex;  /* Establishes a flex container */
@@ -74,7 +83,7 @@ h1 {
   width: 200px;
   height: 35px;
   font-size: 16px;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   border-radius: 16px;
   background-clip: padding-box, border-box;
   background-origin: padding-box, border-box;
