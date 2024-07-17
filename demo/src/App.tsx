@@ -153,8 +153,9 @@ function App() {
           </Button>
         </Stack>
 
-        <Stack spacing={2} sx={{ height: 400 }}>
-          <Stack sx={{ height: 300 }}>
+
+        <Stack spacing={2} sx={{ height: 640, width: '100%', overflow: 'hidden'}}>
+          <Stack direction="column" spacing={5} sx={{ height: 640, overflow: 'hidden', alignItems:'center' }}>
             <Carousel
               ref={carouselRef}
               items={items}
@@ -162,48 +163,46 @@ function App() {
               showControls={false}
               onIndexChange={handleIndexChange}
             ></Carousel>
+              <ContinuousSlider audio={curAudio}></ContinuousSlider>
           </Stack>
         </Stack>
        
-<Stack sx={{height: '120px'}}></Stack>
-<ContinuousSlider audio={curAudio}></ContinuousSlider>
-<Stack sx={{height: '50px'}}></Stack>
           <div className="container_background">
-          <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
-          <Typography variant="h4" component="h1" gutterBottom sx={{
-            fontWeight: 'bold',
-            background: 'linear-gradient(to bottom, #ebebec, #979797)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            display: 'inline'
-          }}>
-              Engaging, Captivating, Premium
-            </Typography>
-            <Typography variant="h6" gutterBottom sx={{ 
+            <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={{
               fontWeight: 'bold',
-              background: '#c1c1c1',
+              background: 'linear-gradient(to bottom, #ebebec, #979797)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               display: 'inline'
             }}>
-              AI-Powered Podcasts on Today's Best Reads
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              No more dry summaries—AI-Powered BookTalks delivers a vibrant audio
-              experience that brings literature to life, connecting readers with
-              books in a profound and modern way. Experience the future of reading
-              with AI-Powered BookTalks, where every book becomes a captivating
-              conversation.
-            </Typography>
+                Engaging, Captivating, Premium
+              </Typography>
+              <Typography variant="h6" gutterBottom sx={{ 
+                fontWeight: 'bold',
+                background: '#c1c1c1',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                display: 'inline'
+              }}>
+                AI-Powered Podcasts on Today's Best Reads
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                No more dry summaries—AI-Powered BookTalks delivers a vibrant audio
+                experience that brings literature to life, connecting readers with
+                books in a profound and modern way. Experience the future of reading
+                with AI-Powered BookTalks, where every book becomes a captivating
+                conversation.
+              </Typography>
 
-            <div className="container">
-            <div className="border-box">
-              <div className="content">
-                Join Our Waitlist
+              <div className="container">
+              <div className="border-box">
+                <div className="content">
+                  Join Our Waitlist
+                </div>
               </div>
-            </div>
-            </div>
-          </Stack>
+              </div>
+            </Stack>
           </div>
 
         </div>

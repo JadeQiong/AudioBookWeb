@@ -1,6 +1,6 @@
 .carousel {
-  width: 13.125rem;
-  height: 13.125rem;
+  width: 20rem;
+  height: 30rem;
   position: relative;
   margin: 0 auto;
   perspective: 62.5rem;
@@ -16,8 +16,10 @@
 
 .carousel__slide {
   position: absolute;
-  width: 11.875rem;
-  height: 11.875rem;
+  /* width: 11.875rem;
+  height: 11.875rem; */
+  width: 20rem;
+  height: 60rem;
   left: 0.625rem;
   top: 0.625rem;
   border: 0.125rem solid;
@@ -118,4 +120,22 @@
 
 .carousel__control--prev::after {
   transform: rotate(45deg);
+}
+
+.reflection {
+  position: absolute;
+  bottom: 0;  /* Start at the bottom edge of the carousel slide */
+  left: 0;
+  width: 100%;  /* Match the width of the carousel slide */
+  height: 50%;  /* Height of the reflection, adjust based on your design */
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: scaleY(-1); /* Flip the image vertically for a mirror effect */
+  opacity: 0.5;  /* Make the reflection semi-transparent */
+  overflow: hidden; /* Ensures no spillover */
+  z-index: -1;  /* Place the reflection behind the image */
+
+  /* Create a fading effect using a gradient that fades to transparent */
+  mask-image: linear-gradient(to top, transparent, black 70%);
+  /* -webkit-mask-image: linear-gradient(to top, transparent, black 70%); */
 }
