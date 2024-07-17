@@ -21,6 +21,7 @@ export type CarouselItem = Readonly<{
   image: string;
   content: ReactNode;
   onClick?: () => void;
+  reflectionImage?: string;
 }>;
 
 export type DecoratedCarouselItem = CarouselItem & Readonly<{ id: string }>;
@@ -73,8 +74,9 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     const len = useMemo(() => data.length, [data.length]);
     const theta = useMemo(() => 360 / len, [len]);
 
+    const radiusFactor = 1.5; 
     const radius = useMemo(
-      () => Math.round(itemWidth / 2 / Math.tan(Math.PI / len)),
+      () => Math.round((itemWidth / 2) / Math.tan(Math.PI / len) * radiusFactor),
       [itemWidth, len]
     );
 
@@ -90,6 +92,16 @@ export const Carousel: FC<CarouselProps> = forwardRef(
 
           style.opacity = 1;
           style.transform = `rotateY(${cellAngle}deg) translateZ(${radius}px)`;
+
+          if (index === selectedIndex - 1 || index === selectedIndex + 1) {
+              const additionalRotation = index === selectedIndex - 1 ? 40 : -40;
+              style.transform += ` rotateY(${additionalRotation}deg)`;
+          }
+
+          if (index === selectedIndex - 2 || index === selectedIndex + 2) {
+              const additionalRotation = index === selectedIndex - 2 ? 50 : -50;
+              style.transform += ` rotateY(${additionalRotation}deg)`;
+          }
         } else {
           style.opacity = 0;
           style.transform = 'none';
@@ -97,7 +109,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
 
         return style;
       },
-      [len, radius, theta]
+      [len, radius, theta, selectedIndex]
     );
 
     const getItemStyle = useCallback((): CSSProperties => {
@@ -173,9 +185,8 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                 }}
                 className={getClassName('__slide')}
               >
-                <img src={item.image}  style={{width: '11.875rem',
-  height: '18.875rem'}}
-  alt={item.alt} />
+                <img src={item.image}  style={{width: '20rem', height: '30rem'}} alt={item.alt} />
+                <img src={item.image}  style={{width: '20rem', height: '30rem', transform: 'scaleY(-1)', opacity: 0.2}} alt={item.alt} />
                 {index === selectedIndex && (
                 <div
                 className={
