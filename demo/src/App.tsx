@@ -56,9 +56,8 @@ const contentsMap = [
   chipWarContent,
   hackersPaintersContent,
   zeroToOneContet,
-  EducatedContent
-  
-]
+  EducatedContent,
+];
 let repeatedImagesArray: any[] = [];
 for (let i = 0; i < 4; i++) {
   repeatedImagesArray = [...repeatedImagesArray, ...picturesMap];
@@ -81,15 +80,13 @@ const items: CarouselItem[] = Array(20)
     // image: `https://picsum.photos/${210 + index}`,
     image: repeatedImagesArray[index],
     content: (
- 
-<BookInfoPanel
-  title={repeatedContentsArray[index].title}
-  author={repeatedContentsArray[index].author}
-  categories={repeatedContentsArray[index].categories}
-  description={repeatedContentsArray[index].description}
-  link={repeatedContentsArray[index].link}
-/>
-
+      <BookInfoPanel
+        title={repeatedContentsArray[index].title}
+        author={repeatedContentsArray[index].author}
+        categories={repeatedContentsArray[index].categories}
+        description={repeatedContentsArray[index].description}
+        link={repeatedContentsArray[index].link}
+      />
     ),
   }));
 
@@ -167,7 +164,7 @@ function App() {
               onIndexChange={handleIndexChange}
             ></Carousel>
           </Stack>
-          <Box sx={{height: 2}}></Box>
+          <Box sx={{ height: 2 }}></Box>
           <ContinuousSlider audio={curAudio}></ContinuousSlider>
         </Stack>
 

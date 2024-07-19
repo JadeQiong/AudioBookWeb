@@ -173,19 +173,16 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                 }}
                 className={getClassName('__slide')}
               >
-                <img src={item.image}  style={{width: '11.875rem',
-  height: '18.875rem'}}
-  alt={item.alt} />
+                <img
+                  src={item.image}
+                  style={{ width: '11.875rem', height: '18.875rem' }}
+                  alt={item.alt}
+                />
                 {index === selectedIndex && (
-                <div
-                className={
-                    getClassName(
-                	'__slide-overlay'
-                    )}
-                >
-                  {item.content}
-                </div>)
-                }
+                  <div className={getClassName('__slide-overlay')}>
+                    {item.content}
+                  </div>
+                )}
               </div>
             ))}
           </div>
