@@ -77,7 +77,6 @@ const items: CarouselItem[] = Array(20)
   .fill('')
   .map((_: string, index: number) => ({
     alt: 'A random photo',
-    // image: `https://picsum.photos/${210 + index}`,
     image: repeatedImagesArray[index],
     content: (
       <BookInfoPanel
@@ -168,7 +167,6 @@ function App() {
        
 <Stack sx={{height: '120px'}}></Stack>
 <ContinuousSlider audio={curAudio}></ContinuousSlider>
-      
 <Stack sx={{height: '50px'}}></Stack>
           <div className="container_background">
           <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>

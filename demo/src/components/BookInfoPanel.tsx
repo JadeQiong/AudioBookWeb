@@ -30,8 +30,8 @@ const BookInfoPanel: React.FC<BookInfo> = ({
     <Box
       sx={{
         color: 'white',
-        padding: '15px',
-        height: '17rem',
+        width: '20rem', 
+        height: '30rem',
         maxWidth: '100%',
         backgroundImage: { backgroundImage },
         backgroundSize: 'cover',
@@ -39,6 +39,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
         position: 'relative',
       }}
     >
+      <Box sx={{padding: '20px'}}>
       <Typography component="h4" sx={{ fontWeight: 'bold', fontSize: 13 }}>
         {title}
       </Typography>
@@ -52,11 +53,10 @@ const BookInfoPanel: React.FC<BookInfo> = ({
             label={category}
             sx={{
               backgroundColor: '#343434',
-              fontSize: '7px',
-              height: 15,
+              fontSize: '9px',
+              height: 25,
               color: '#DADADA',
-              maxWidth: 45,
-              overflow: 'auto',
+              maxWidth: 85,
             }}
           />
         ))}
@@ -104,6 +104,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
           }}
         />
       </Button>
+      </Box>
     </Box>
   );
 };
