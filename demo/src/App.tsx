@@ -164,11 +164,12 @@ function App() {
               onIndexChange={handleIndexChange}
             ></Carousel>
           </Stack>
-          <Box sx={{ height: 2 }}></Box>
-          <ContinuousSlider audio={curAudio}></ContinuousSlider>
         </Stack>
+       
+<Stack sx={{height: '120px', backgroundColor: 'red'}}></Stack>
+<ContinuousSlider audio={curAudio}></ContinuousSlider>
 
-        <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
+        <Stack direction="column" sx={{ width: '60%', margin: 5 }}>
           <Typography variant="h4" gutterBottom>
             Engaging, Captivating, Premium
           </Typography>
