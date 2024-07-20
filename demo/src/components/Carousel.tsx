@@ -74,9 +74,10 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     const len = useMemo(() => data.length, [data.length]);
     const theta = useMemo(() => 360 / len, [len]);
 
-    const radiusFactor = 1.5; 
+    const radiusFactor = 1.5;
     const radius = useMemo(
-      () => Math.round((itemWidth / 2) / Math.tan(Math.PI / len) * radiusFactor),
+      () =>
+        Math.round((itemWidth / 2 / Math.tan(Math.PI / len)) * radiusFactor),
       [itemWidth, len]
     );
 
@@ -94,13 +95,13 @@ export const Carousel: FC<CarouselProps> = forwardRef(
           style.transform = `rotateY(${cellAngle}deg) translateZ(${radius}px)`;
 
           if (index === selectedIndex - 1 || index === selectedIndex + 1) {
-              const additionalRotation = index === selectedIndex - 1 ? 40 : -40;
-              style.transform += ` rotateY(${additionalRotation}deg)`;
+            const additionalRotation = index === selectedIndex - 1 ? 40 : -40;
+            style.transform += ` rotateY(${additionalRotation}deg)`;
           }
 
           if (index === selectedIndex - 2 || index === selectedIndex + 2) {
-              const additionalRotation = index === selectedIndex - 2 ? 50 : -50;
-              style.transform += ` rotateY(${additionalRotation}deg)`;
+            const additionalRotation = index === selectedIndex - 2 ? 50 : -50;
+            style.transform += ` rotateY(${additionalRotation}deg)`;
           }
         } else {
           style.opacity = 0;
@@ -185,8 +186,22 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                 }}
                 className={getClassName('__slide')}
               >
-                <img src={item.image}  style={{width: '20rem', height: '30rem'}} alt={item.alt} />
-                <img src={item.image}  style={{width: '20rem', height: '30rem', transform: 'scaleY(-1)', opacity: 0.2,   pointerEvents: 'none' }} alt={item.alt} />
+                <img
+                  src={item.image}
+                  style={{ width: '20rem', height: '30rem' }}
+                  alt={item.alt}
+                />
+                <img
+                  src={item.image}
+                  style={{
+                    width: '20rem',
+                    height: '30rem',
+                    transform: 'scaleY(-1)',
+                    opacity: 0.2,
+                    pointerEvents: 'none',
+                  }}
+                  alt={item.alt}
+                />
                 {index === selectedIndex && (
                   <div className={getClassName('__slide-overlay')}>
                     {item.content}

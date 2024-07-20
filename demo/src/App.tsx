@@ -36,7 +36,6 @@ import { selectClasses } from '@mui/material';
 import { log } from 'console';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
 const theme = createTheme({
   typography: {
     fontFamily: 'Roboto',
@@ -104,7 +103,8 @@ function App() {
     setCurAudio(repeatedAudiosArray[index]);
   };
 
-  return (<ThemeProvider theme={theme}>
+  return (
+    <ThemeProvider theme={theme}>
       <div className="App">
         <div className="App-header">
           <Stack
@@ -114,109 +114,120 @@ function App() {
           >
             <img src={logo} width={35} height={35} />
 
-          <Button
-            variant="contained"
-            sx={{
-              color: '#292929',
-              backgroundColor: 'white',
-              borderRadius: '12px',
-              borderColor: 'lightgray',
-            }}
-          >
-            Library
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{
-              color: 'white',
-              borderRadius: '12px',
-              borderColor: 'lightgray',
-            }}
-          >
-            Upload
-          </Button>
-          <Box sx={{ width: 400 }} />
-          <Button
-            sx={{
-              color: 'white',
-              borderRadius: '12px',
-              borderColor: 'lightgray',
-            }}
-          >
-            About Us
-          </Button>
-          <Button
-            sx={{
-              color: 'white',
-            }}
-          >
-            Contact Us
-          </Button>
-          <Button
-            sx={{
-              color: 'white',
-            }}
-          >
-            Login
-          </Button>
-        </Stack>
-
-
-        <Stack spacing={2} sx={{ height: 640, width: '100%', overflow: 'hidden'}}>
-          <Stack direction="column" spacing={5} sx={{ height: 640, overflow: 'hidden', alignItems:'center' }}>
-            <Carousel
-              ref={carouselRef}
-              items={items}
-              slideOnClick
-              showControls={false}
-              onIndexChange={handleIndexChange}
-            ></Carousel>
-              <ContinuousSlider audio={curAudio}></ContinuousSlider>
+            <Button
+              variant="contained"
+              sx={{
+                color: '#292929',
+                backgroundColor: 'white',
+                borderRadius: '12px',
+                borderColor: 'lightgray',
+              }}
+            >
+              Library
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{
+                color: 'white',
+                borderRadius: '12px',
+                borderColor: 'lightgray',
+              }}
+            >
+              Upload
+            </Button>
+            <Box sx={{ width: 400 }} />
+            <Button
+              sx={{
+                color: 'white',
+                borderRadius: '12px',
+                borderColor: 'lightgray',
+              }}
+            >
+              About Us
+            </Button>
+            <Button
+              sx={{
+                color: 'white',
+              }}
+            >
+              Contact Us
+            </Button>
+            <Button
+              sx={{
+                color: 'white',
+              }}
+            >
+              Login
+            </Button>
           </Stack>
-        </Stack>
-       
+
+          <Stack
+            spacing={2}
+            sx={{ height: 640, width: '100%', overflow: 'hidden' }}
+          >
+            <Stack
+              direction="column"
+              spacing={5}
+              sx={{ height: 640, overflow: 'hidden', alignItems: 'center' }}
+            >
+              <Carousel
+                ref={carouselRef}
+                items={items}
+                slideOnClick
+                showControls={false}
+                onIndexChange={handleIndexChange}
+              ></Carousel>
+              <ContinuousSlider audio={curAudio}></ContinuousSlider>
+            </Stack>
+          </Stack>
+
           <div className="container_background">
             <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
-            <Typography variant="h4" component="h1" gutterBottom sx={{
-              fontWeight: 'bold',
-              background: 'linear-gradient(to bottom, #ebebec, #979797)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              display: 'inline'
-            }}>
+              <Typography
+                variant="h4"
+                component="h1"
+                gutterBottom
+                sx={{
+                  fontWeight: 'bold',
+                  background: 'linear-gradient(to bottom, #ebebec, #979797)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  display: 'inline',
+                }}
+              >
                 Engaging, Captivating, Premium
               </Typography>
-              <Typography variant="h6" gutterBottom sx={{ 
-                fontWeight: 'bold',
-                background: '#c1c1c1',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                display: 'inline'
-              }}>
+              <Typography
+                variant="h6"
+                gutterBottom
+                sx={{
+                  fontWeight: 'bold',
+                  background: '#c1c1c1',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  display: 'inline',
+                }}
+              >
                 AI-Powered Podcasts on Today's Best Reads
               </Typography>
               <Typography variant="body1" gutterBottom>
-                No more dry summaries—AI-Powered BookTalks delivers a vibrant audio
-                experience that brings literature to life, connecting readers with
-                books in a profound and modern way. Experience the future of reading
-                with AI-Powered BookTalks, where every book becomes a captivating
-                conversation.
+                No more dry summaries—AI-Powered BookTalks delivers a vibrant
+                audio experience that brings literature to life, connecting
+                readers with books in a profound and modern way. Experience the
+                future of reading with AI-Powered BookTalks, where every book
+                becomes a captivating conversation.
               </Typography>
 
               <div className="container">
-              <div className="border-box">
-                <div className="content">
-                  Join Our Waitlist
+                <div className="border-box">
+                  <div className="content">Join Our Waitlist</div>
                 </div>
-              </div>
               </div>
             </Stack>
           </div>
-
         </div>
-
       </div>
-   </ThemeProvider>
+    </ThemeProvider>
   );
 }
 

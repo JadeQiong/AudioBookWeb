@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import { Typography } from '@mui/material';
 
 const formatTime = (seconds: number) => {
-  if(!isNaN(seconds) || !seconds){
+  if (!isNaN(seconds) || !seconds) {
     seconds = 0;
   }
   const h = Math.floor(seconds / 3600);
