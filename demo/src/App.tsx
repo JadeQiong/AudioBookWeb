@@ -64,9 +64,8 @@ const contentsMap = [
   chipWarContent,
   hackersPaintersContent,
   zeroToOneContet,
-  EducatedContent
-  
-]
+  EducatedContent,
+];
 let repeatedImagesArray: any[] = [];
 for (let i = 0; i < 4; i++) {
   repeatedImagesArray = [...repeatedImagesArray, ...picturesMap];
@@ -86,18 +85,15 @@ const items: CarouselItem[] = Array(20)
   .fill('')
   .map((_: string, index: number) => ({
     alt: 'A random photo',
-    // image: `https://picsum.photos/${210 + index}`,
     image: repeatedImagesArray[index],
     content: (
- 
-<BookInfoPanel
-  title={repeatedContentsArray[index].title}
-  author={repeatedContentsArray[index].author}
-  categories={repeatedContentsArray[index].categories}
-  description={repeatedContentsArray[index].description}
-  link={repeatedContentsArray[index].link}
-/>
-
+      <BookInfoPanel
+        title={repeatedContentsArray[index].title}
+        author={repeatedContentsArray[index].author}
+        categories={repeatedContentsArray[index].categories}
+        description={repeatedContentsArray[index].description}
+        link={repeatedContentsArray[index].link}
+      />
     ),
   }));
 
@@ -118,84 +114,67 @@ function App() {
           >
             <img src={logo} width={35} height={35} />
 
-            <Button
-              variant="contained"
-              sx={{
-                color: '#292929',
-                backgroundColor: 'white',
-                borderRadius: '12px',
-                borderColor: 'lightgray',
-              }}
-            >
-              Library
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                color: 'white',
-                borderRadius: '12px',
-                borderColor: 'lightgray',
-              }}
-            >
-              Upload
-            </Button>
-            <Box sx={{ width: 400 }} />
-            <Button
-              sx={{
-                color: 'white',
-                borderRadius: '12px',
-                borderColor: 'lightgray',
-              }}
-            >
-              About Us
-            </Button>
-            <Button
-              sx={{
-                color: 'white',
-              }}
-            >
-              Contact Us
-            </Button>
-            <Button
-              sx={{
-                color: 'white',
-              }}
-            >
-              Login
-            </Button>
+          <Button
+            variant="contained"
+            sx={{
+              color: '#292929',
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              borderColor: 'lightgray',
+            }}
+          >
+            Library
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{
+              color: 'white',
+              borderRadius: '12px',
+              borderColor: 'lightgray',
+            }}
+          >
+            Upload
+          </Button>
+          <Box sx={{ width: 400 }} />
+          <Button
+            sx={{
+              color: 'white',
+              borderRadius: '12px',
+              borderColor: 'lightgray',
+            }}
+          >
+            About Us
+          </Button>
+          <Button
+            sx={{
+              color: 'white',
+            }}
+          >
+            Contact Us
+          </Button>
+          <Button
+            sx={{
+              color: 'white',
+            }}
+          >
+            Login
+          </Button>
+        </Stack>
+
+
+        <Stack spacing={2} sx={{ height: 640, width: '100%', overflow: 'hidden'}}>
+          <Stack direction="column" spacing={5} sx={{ height: 640, overflow: 'hidden', alignItems:'center' }}>
+            <Carousel
+              ref={carouselRef}
+              items={items}
+              slideOnClick
+              showControls={false}
+              onIndexChange={handleIndexChange}
+            ></Carousel>
+              <ContinuousSlider audio={curAudio}></ContinuousSlider>
           </Stack>
-          <div className="carousel_background">
-          <Stack spacing={2} sx={{ height: 400}}>
-            <Stack sx={{ height: 300 }}>
-              <Carousel
-                ref={carouselRef}
-                items={items}
-                itemWidth={250}
-                slideOnClick
-                showControls={false}
-                onIndexChange={handleIndexChange}
-              ></Carousel>
-            </Stack>
-            <Box sx={{height: 12}}></Box>
-            <Box sx={{
-              position: 'relative',
-              zIndex: 1000,
-              paddingTop: '175px',
-              paddingLeft: '50px',
-            }}>
-              <Box sx={{
-                backgroundColor: 'rgba(225, 225, 225, 0.5)',  // Apply background to this inner Box as well
-                width: '80%',
-                height: '80%',
-                borderRadius: '10px',  // Rounded corners for aesthetic enhancement
-                border: '1px solid rgba(255, 255, 255, 0.25)', 
-              }}>
-                <ContinuousSlider audio={curAudio} />
-              </Box>
-            </Box>
-            
-          </Stack>
-          </div>
+        </Stack>
+       
           <div className="container_background">
             <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
             <Typography variant="h4" component="h1" gutterBottom sx={{
@@ -235,8 +214,9 @@ function App() {
           </div>
 
         </div>
+
       </div>
-    </ThemeProvider>
+   </ThemeProvider>
   );
 }
 

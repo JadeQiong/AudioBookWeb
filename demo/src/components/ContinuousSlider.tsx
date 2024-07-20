@@ -5,6 +5,23 @@ import Slider from '@mui/material/Slider';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
+import Forward30Icon from '@mui/icons-material/Forward30';
+import Replay30Icon from '@mui/icons-material/Replay30';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import { Typography } from '@mui/material';
+
+const formatTime = (seconds: number) => {
+  if(!isNaN(seconds) || !seconds){
+    seconds = 0;
+  }
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  return h > 0
+    ? `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`
+    : `${m}:${s < 10 ? '0' : ''}${s}`;
+};
 
 export type SliderProps = Readonly<{
   audio?: any;
@@ -58,6 +75,33 @@ export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
     }
   };
 
+  const handleStop = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setPlaying(false);
+    setValue(0);
+  };
+
+  const handleForward30 = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.min(
+        audioRef.current.currentTime + 30,
+        duration
+      );
+    }
+  };
+
+  const handleBack30 = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = Math.max(
+        audioRef.current.currentTime - 30,
+        0
+      );
+    }
+  };
+
   React.useEffect(() => {
     setValue(0);
     setPlaying(false);
@@ -72,8 +116,33 @@ export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
   }, [volume]);
 
   return (
-    <Box sx={{ width: 200 }}>
-      <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+    <Box sx={{ width: 500 }}>
+      <Box
+        display="flex"
+        sx={{ height: 20 }}
+        alignItems="center"
+        justifyContent="center"
+      >
+        title
+        <IconButton
+          onClick={handleStop}
+          sx={{
+            height: 10,
+            width: 10,
+            position: 'relative',
+            top: 0,
+            right: -250,
+          }}
+        >
+          <CloseIcon sx={{ color: 'white' }} />
+        </IconButton>
+      </Box>
+
+      <Stack direction="row" sx={{ mb: 1 }} alignItems="center">
+        <IconButton onClick={handleBack30}>
+          <Replay30Icon sx={{ color: 'white' }} />
+        </IconButton>
+
         <Box
           onClick={handlePlayPause}
           sx={{
@@ -85,6 +154,15 @@ export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
         >
           {playing ? <StopIcon /> : <PlayArrowIcon />}
         </Box>
+
+        <IconButton onClick={handleForward30}>
+          <Forward30Icon sx={{ color: 'white' }} />
+        </IconButton>
+
+        <Typography sx={{ fontSize: 12, margin: 2 }}>
+          {formatTime(value)}
+        </Typography>
+
         <Slider
           aria-label="Audio Progress"
           value={value}
@@ -92,6 +170,11 @@ export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
           min={0}
           max={100}
         />
+
+        <Typography sx={{ fontSize: 12, margin: 1 }}>
+          {formatTime(duration)}
+        </Typography>
+
         <Box
           onClick={handleVolumeUp}
           sx={{
