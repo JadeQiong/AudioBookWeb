@@ -171,8 +171,8 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
               height: 10,
               width: 10,
               position: 'absolute',
-              top: 990,
-              right: 230,
+              top: 1000,
+              right: 420,
             }}
           >
             <CloseIcon sx={{ color: 'white', height: 15, width: 15 }} />
