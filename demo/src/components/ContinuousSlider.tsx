@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import { Typography } from '@mui/material';
 
 const formatTime = (seconds: number) => {
-  if (!isNaN(seconds) || !seconds) {
+  if (isNaN(seconds) || !seconds) {
     seconds = 0;
   }
   const h = Math.floor(seconds / 3600);
@@ -23,13 +23,26 @@ const formatTime = (seconds: number) => {
     : `${m}:${s < 10 ? '0' : ''}${s}`;
 };
 
+export type ContinuousSliderRef = {
+  handlePlayPause: () => void;
+};
+
 export type SliderProps = Readonly<{
+  ref?: React.LegacyRef<ContinuousSliderRef>;
   audio?: any;
+  title?: string;
+  isHide: boolean;
+  setIsHide?: any;
+  playing: boolean;
+  setPlaying?: any;
 }>;
 
-export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
-  const [value, setValue] = React.useState<number>(30);
-  const [playing, setPlaying] = React.useState<boolean>(false);
+export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
+  ContinuousSliderRef,
+  SliderProps
+>(({ audio, title, isHide, setIsHide, playing, setPlaying }, ref) => {
+  const [value, setValue] = React.useState<number>(0);
+
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const [duration, setDuration] = React.useState<number>(0); // Duration of the audio
   const [volume, setVolume] = React.useState<number>(50); // Default volume level at 50%
@@ -37,9 +50,14 @@ export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
   // Update the current time of the audio as it plays
   const handleTimeUpdate = () => {
     if (audioRef.current) {
-      setValue(
-        (audioRef.current.currentTime / audioRef.current.duration) * 100
-      );
+      if (
+        audioRef.current.duration &&
+        !isNaN(audioRef.current.currentTime / audioRef.current.duration)
+      ) {
+        setValue(
+          (audioRef.current.currentTime / audioRef.current.duration) * 100
+        );
+      }
     }
   };
 
@@ -72,7 +90,14 @@ export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
         audioRef.current.play();
       }
       setPlaying(!playing);
+    } else {
+      setPlaying(false);
     }
+  };
+
+  const hanldeClose = () => {
+    handleStop();
+    setIsHide(true);
   };
 
   const handleStop = () => {
@@ -104,7 +129,10 @@ export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
 
   React.useEffect(() => {
     setValue(0);
-    setPlaying(false);
+    if (audioRef.current) {
+      audioRef.current.play();
+      setPlaying(true);
+    }
     setDuration(0);
     setVolume(50);
   }, [audio]);
@@ -115,85 +143,101 @@ export const ContinuousSlider: React.FC<SliderProps> = ({ audio }) => {
     }
   }, [volume]);
 
-  return (
-    <Box sx={{ width: 500 }}>
-      <Box
-        display="flex"
-        sx={{ height: 20 }}
-        alignItems="center"
-        justifyContent="center"
-      >
-        title
-        <IconButton
-          onClick={handleStop}
-          sx={{
-            height: 10,
-            width: 10,
-            position: 'relative',
-            top: 0,
-            right: -250,
-          }}
-        >
-          <CloseIcon sx={{ color: 'white' }} />
-        </IconButton>
-      </Box>
+  // Expose handlePlayPause to the parent component
+  React.useImperativeHandle(ref, () => ({
+    handlePlayPause,
+  }));
 
-      <Stack direction="row" sx={{ mb: 1 }} alignItems="center">
-        <IconButton onClick={handleBack30}>
-          <Replay30Icon sx={{ color: 'white' }} />
-        </IconButton>
-
+  if (!isHide) {
+    return (
+      <Box sx={{ width: 350 }}>
         <Box
-          onClick={handlePlayPause}
+          display="flex"
           sx={{
-            '&:hover': {
-              opacity: 0.7, // 70% opacity on hover
-              cursor: 'pointer', // Changes the cursor to a pointer
-            },
+            height: 20,
+            fontSize: 12,
+            fontWeight: 'bold',
+            paddingLeft: 5,
+            paddingRight: 5,
           }}
+          alignItems="center"
+          justifyContent="center"
         >
-          {playing ? <StopIcon /> : <PlayArrowIcon />}
+          {title}
+
+          <IconButton
+            onClick={hanldeClose}
+            sx={{
+              height: 10,
+              width: 10,
+              position: 'absolute',
+              top: 990,
+              right: 230,
+            }}
+          >
+            <CloseIcon sx={{ color: 'white', height: 15, width: 15 }} />
+          </IconButton>
         </Box>
 
-        <IconButton onClick={handleForward30}>
-          <Forward30Icon sx={{ color: 'white' }} />
-        </IconButton>
+        <Stack
+          direction="row"
+          sx={{ zIndex: 2 }}
+          padding={0}
+          alignItems="center"
+        >
+          <IconButton
+            onClick={handleBack30}
+            sx={{ height: 10, width: 10, margin: 0.5 }}
+          >
+            <Replay30Icon sx={{ color: 'white' }} />
+          </IconButton>
 
-        <Typography sx={{ fontSize: 12, margin: 2 }}>
-          {formatTime(value)}
-        </Typography>
+          <IconButton
+            onClick={handlePlayPause}
+            sx={{ height: 10, width: 10, margin: 0.5 }}
+            disabled={!audio}
+          >
+            {playing ? (
+              <StopIcon sx={{ color: 'white' }} />
+            ) : (
+              <PlayArrowIcon sx={{ color: 'white' }} />
+            )}
+          </IconButton>
 
-        <Slider
-          aria-label="Audio Progress"
-          value={value}
-          onChange={handleChange}
-          min={0}
-          max={100}
+          <IconButton
+            onClick={handleForward30}
+            sx={{ height: 10, width: 10, margin: 0.5 }}
+          >
+            <Forward30Icon sx={{ color: 'white' }} />
+          </IconButton>
+
+          <Typography sx={{ fontSize: 12, margin: 2 }}>
+            {formatTime(value)}
+          </Typography>
+
+          <Slider
+            aria-label="Audio Progress"
+            value={value}
+            onChange={handleChange}
+            min={0}
+            max={100}
+          />
+
+          <Typography sx={{ fontSize: 12, margin: 1 }}>
+            {formatTime(duration)}
+          </Typography>
+        </Stack>
+        <audio
+          ref={audioRef}
+          src={audio}
+          onLoadedMetadata={handleLoadedMetadata}
+          onTimeUpdate={handleTimeUpdate}
+          preload="metadata"
         />
+      </Box>
+    );
+  }
+  return <></>;
+});
 
-        <Typography sx={{ fontSize: 12, margin: 1 }}>
-          {formatTime(duration)}
-        </Typography>
-
-        <Box
-          onClick={handleVolumeUp}
-          sx={{
-            '&:hover': {
-              opacity: 0.7, // 70% opacity on hover
-              cursor: 'pointer', // Changes the cursor to a pointer
-            },
-          }}
-        >
-          <VolumeUpIcon></VolumeUpIcon>
-        </Box>
-      </Stack>
-      <audio
-        ref={audioRef}
-        src={audio}
-        onLoadedMetadata={handleLoadedMetadata}
-        onTimeUpdate={handleTimeUpdate}
-        preload="metadata"
-      />
-    </Box>
-  );
-};
+export default ContinuousSlider;

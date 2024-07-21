@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import logo from './assets/images/logo.png';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -8,7 +8,12 @@ import Carousel from './components/Carousel';
 import { CarouselItem } from './components/Carousel';
 import { CarouselRef } from './components/Carousel';
 import BookInfoPanel from './components/BookInfoPanel';
-import { ContinuousSlider } from './components/ContinuousSlider';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import IconButton from '@mui/material/IconButton';
+import ContinuousSlider, {
+  ContinuousSliderRef,
+} from './components/ContinuousSlider';
 import './App.css';
 
 import educatedImage from './assets/images/educated.png';
@@ -80,28 +85,50 @@ for (let i = 0; i < 4; i++) {
   repeatedContentsArray = [...repeatedContentsArray, ...contentsMap];
 }
 
-const items: CarouselItem[] = Array(20)
-  .fill('')
-  .map((_: string, index: number) => ({
-    alt: 'A random photo',
-    image: repeatedImagesArray[index],
-    content: (
-      <BookInfoPanel
-        title={repeatedContentsArray[index].title}
-        author={repeatedContentsArray[index].author}
-        categories={repeatedContentsArray[index].categories}
-        description={repeatedContentsArray[index].description}
-        link={repeatedContentsArray[index].link}
-      />
-    ),
-  }));
-
 function App() {
+  const [isHide, setIsHide] = React.useState(true);
   const carouselRef = React.createRef<CarouselRef>();
+  const sliderRef = React.useRef<ContinuousSliderRef>(null);
   const [curAudio, setCurAudio] = useState(null);
-  const handleIndexChange = (index: number) => {
-    setCurAudio(repeatedAudiosArray[index]);
+  const [curTitle, setCurTitle] = useState('');
+  const [sliderIndex, setSliderIndex] = useState(0);
+  const [playing, setPlaying] = React.useState<boolean>(false);
+  const [audioIndex, setAudioIndex] = useState(-1);
+
+  const handleTriggerPlayPause = () => {
+    if (sliderRef.current) {
+      sliderRef.current.handlePlayPause();
+    }
   };
+
+  const handleAudioChange = () => {
+    setIsHide(false);
+    setAudioIndex(sliderIndex);
+    // setCurAudio(repeatedAudiosArray[sliderIndex]);
+    // setCurTitle(repeatedContentsArray[sliderIndex].title);
+  };
+
+  const handleIndexChange = (index: number) => {
+    setSliderIndex(index);
+    // setCurAudio(repeatedAudiosArray[index]);
+    // setCurTitle(repeatedContentsArray[index].title);
+  };
+
+  const items: CarouselItem[] = Array(20)
+    .fill('')
+    .map((_: string, index: number) => ({
+      alt: 'A random photo',
+      image: repeatedImagesArray[index],
+      content: (
+        <BookInfoPanel
+          title={repeatedContentsArray[index].title}
+          author={repeatedContentsArray[index].author}
+          categories={repeatedContentsArray[index].categories}
+          description={repeatedContentsArray[index].description}
+          link={repeatedContentsArray[index].link}
+        />
+      ),
+    }));
 
   return (
     <ThemeProvider theme={theme}>
@@ -161,28 +188,8 @@ function App() {
             </Button>
           </Stack>
 
-          <Stack
-            spacing={2}
-            sx={{ height: 640, width: '100%', overflow: 'hidden' }}
-          >
-            <Stack
-              direction="column"
-              spacing={5}
-              sx={{ height: 640, overflow: 'hidden', alignItems: 'center' }}
-            >
-              <Carousel
-                ref={carouselRef}
-                items={items}
-                slideOnClick
-                showControls={false}
-                onIndexChange={handleIndexChange}
-              ></Carousel>
-              <ContinuousSlider audio={curAudio}></ContinuousSlider>
-            </Stack>
-          </Stack>
-
           <div className="container_background">
-            <Stack direction="column" sx={{ width: '60%', marginBottom: 5 }}>
+            <Stack direction="column" sx={{ width: '60%' }}>
               <Typography
                 variant="h4"
                 component="h1"
@@ -217,13 +224,71 @@ function App() {
                 future of reading with AI-Powered BookTalks, where every book
                 becomes a captivating conversation.
               </Typography>
-
-              <div className="container">
-                <div className="border-box">
-                  <div className="content">Join Our Waitlist</div>
-                </div>
-              </div>
             </Stack>
+          </div>
+
+          <Stack
+            spacing={2}
+            sx={{ height: 640, width: '100%', overflow: 'hidden' }}
+          >
+            <Stack
+              direction="column"
+              // spacing={5}
+              sx={{ height: 640, overflow: 'hidden', alignItems: 'center' }}
+            >
+              <Carousel
+                ref={carouselRef}
+                items={items}
+                slideOnClick
+                showControls={false}
+                onIndexChange={handleIndexChange}
+              ></Carousel>
+
+              <IconButton
+                onClick={() => {
+                  if (audioIndex === sliderIndex && !isHide) {
+                    handleTriggerPlayPause();
+                  } else {
+                    handleAudioChange();
+                  }
+                }}
+                sx={{
+                  height: 40, // Adjust the size as needed
+                  width: 40,
+                  margin: 3,
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(255, 255, 255, 0.3)', // Initial background color
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.6)', // Darker background on hover
+                  },
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                {audioIndex === sliderIndex && playing ? (
+                  <StopIcon sx={{ color: 'white' }} />
+                ) : (
+                  <PlayArrowIcon sx={{ color: 'white' }} />
+                )}
+              </IconButton>
+
+              <ContinuousSlider
+                ref={sliderRef}
+                audio={repeatedAudiosArray[audioIndex]}
+                title={repeatedContentsArray[audioIndex]?.title}
+                isHide={isHide}
+                setIsHide={setIsHide}
+                playing={playing}
+                setPlaying={setPlaying}
+              ></ContinuousSlider>
+            </Stack>
+          </Stack>
+
+          <div className="container">
+            <div className="border-box">
+              <div className="content">Join Our Waitlist</div>
+            </div>
           </div>
         </div>
       </div>
