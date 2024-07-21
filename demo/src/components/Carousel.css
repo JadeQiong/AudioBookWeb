@@ -1,3 +1,5 @@
+/* import backgroundImage from '../assets/images/background.png'; */
+
 .carousel {
   width: 20rem;
   height: 30rem;
@@ -49,7 +51,9 @@
   left: 0;
   opacity: 0;
   transition: opacity 0.35s ease-in-out;
-  background-color: rgba(0, 0, 0, 0.7);
+  background: url('../assets/images/background.png') no-repeat center center;
+  /* background: '../assets/images/background.png'; */
+  /* background-color: rgba(0, 0, 0, 0.7); */
   user-select: none;
 }
 

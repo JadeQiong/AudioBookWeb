@@ -9,7 +9,6 @@ import {
   colors,
 } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
-import backgroundImage from '../assets/images/background.png';
 
 interface BookInfo {
   title: string;
@@ -33,17 +32,17 @@ const BookInfoPanel: React.FC<BookInfo> = ({
         width: '20rem',
         height: '30rem',
         maxWidth: '100%',
-        backgroundImage: { backgroundImage },
+
         backgroundSize: 'cover',
         borderRadius: '8px',
         position: 'relative',
       }}
     >
       <Box sx={{ padding: '20px' }}>
-        <Typography component="h4" sx={{ fontWeight: 'bold', fontSize: 13 }}>
+        <Typography component="h4" sx={{ fontWeight: 'bold', fontSize: 20 }}>
           {title}
         </Typography>
-        <Typography sx={{ marginBottom: '20px', fontSize: 10 }}>
+        <Typography sx={{ marginBottom: '20px', fontSize: 15 }}>
           by {author}
         </Typography>
         <Stack direction="row" spacing={1}>
@@ -53,7 +52,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
               label={category}
               sx={{
                 backgroundColor: '#343434',
-                fontSize: '9px',
+                fontSize: '12px',
                 height: 25,
                 color: '#DADADA',
                 maxWidth: 85,
@@ -61,7 +60,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
             />
           ))}
         </Stack>
-        <Typography sx={{ marginTop: 2, fontSize: 9 }}>
+        <Typography sx={{ marginTop: 2, fontSize: 15 }}>
           {description}
         </Typography>
 
@@ -69,10 +68,10 @@ const BookInfoPanel: React.FC<BookInfo> = ({
           variant="outlined"
           sx={{
             position: 'absolute',
-            bottom: 10,
-            right: 10,
-            height: 8,
-            width: 40,
+            bottom: 20,
+            right: 18,
+            height: 20,
+            width: 90,
             borderRadius: '10px',
             borderColor: 'white',
             color: 'white',
@@ -84,28 +83,27 @@ const BookInfoPanel: React.FC<BookInfo> = ({
           href={link}
           target="_blank"
           rel="noopener noreferrer"
+        ></Button>
+        <Typography
+          sx={{
+            fontSize: 15,
+            position: 'absolute',
+            bottom: 27,
+            right: 50,
+            height: 15,
+          }}
         >
-          <Typography
-            sx={{
-              fontSize: 10,
-              position: 'absolute',
-              bottom: 8,
-              right: 22,
-              height: 8,
-            }}
-          >
-            Source
-          </Typography>
-          <LaunchIcon
-            sx={{
-              height: 10,
-              width: 10,
-              position: 'absolute',
-              bottom: 4,
-              right: 8,
-            }}
-          />
-        </Button>
+          Source
+        </Typography>
+        <LaunchIcon
+          sx={{
+            height: 16,
+            width: 16,
+            position: 'absolute',
+            bottom: 22,
+            right: 30,
+          }}
+        />
       </Box>
     </Box>
   );
