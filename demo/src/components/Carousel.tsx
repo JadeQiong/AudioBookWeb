@@ -1,6 +1,7 @@
 import TouchSweep from 'touchsweep';
 import { v4 as uuid } from 'uuid';
 import './Carousel.css';
+import { Alert, AlertTitle, Box } from '@mui/material';
 
 import {
   FC,
@@ -82,8 +83,8 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     );
 
     const ref = useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = useState(0);
-
+    const [selectedIndex, setSelectedIndex] = useState(Math.floor(items.length/2));
+      const [showAlert, setShowAlert] = useState(false);
     const getPrevNIndex = (N: number) => {
       return (selectedIndex - N + len)%len;
     }
@@ -92,9 +93,16 @@ export const Carousel: FC<CarouselProps> = forwardRef(
       return (selectedIndex + N + len)%len;
     }
 
+    const handleItemClick = (index: number) => {
+      if(Math.abs(selectedIndex - index) !== 19){
+        setSelectedIndex(index);
+      } else{
+        setShowAlert(true);
+      }
+    }
+
     const getSlideStyle = useCallback(
-      (index: number): CSSProperties => {
-        console.log("selected ", selectedIndex)
+      (index: number): CSSProperties => { 
         const style: CSSProperties = {};
 
         if (index < len) {
@@ -184,6 +192,13 @@ export const Carousel: FC<CarouselProps> = forwardRef(
 
     return (
       <>
+      {showAlert && 
+              <Box sx={{ width: '100%', marginTop: 2 }}>
+              <Alert severity="warning">
+               Ops! You've reached the end of list.
+              </Alert>
+            </Box>}
+
         <div className={getClassName('')} ref={ref}>
           <div className={getClassName('__container')} style={getItemStyle()}>
             {data.map((item: DecoratedCarouselItem, index: number) => (
@@ -191,9 +206,11 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                 key={item.id}
                 style={getSlideStyle(index)}
                 onClick={() => {
+                  setShowAlert(false);
                   if (item.onClick) item.onClick();
                   if (slideOnClick) {
-                    setSelectedIndex(index);
+                    handleItemClick(index);
+                    // setSelectedIndex(index);
                   }
                 }}
                 className={getClassName('__slide')}

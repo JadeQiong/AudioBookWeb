@@ -185,7 +185,7 @@ function App() {
           </Stack>
 
           <div className="container_background">
-            <Stack direction="column" sx={{ width: '60%' }}>
+            <Stack direction="column" sx={{ width: '100%' }}>
               <Typography
                 variant="h4"
                 component="h1"
@@ -212,13 +212,6 @@ function App() {
                 }}
               >
                 AI-Powered Podcasts on Today's Best Reads
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                No more dry summaries—AI-Powered BookTalks delivers a vibrant
-                audio experience that brings literature to life, connecting
-                readers with books in a profound and modern way. Experience the
-                future of reading with AI-Powered BookTalks, where every book
-                becomes a captivating conversation.
               </Typography>
             </Stack>
           </div>
@@ -285,11 +278,25 @@ function App() {
             </Stack>
           </Stack>
 
-          <div className="container">
+          <div className="container_background">
+            <Stack direction="column" sx={{ width: '60%' }}>
+
+              <Typography variant="body1" gutterBottom>
+                No more dry summaries—AI-Powered BookTalks delivers a vibrant
+                audio experience that brings literature to life, connecting
+                readers with books in a profound and modern way. Experience the
+                future of reading with AI-Powered BookTalks, where every book
+                becomes a captivating conversation.
+              </Typography>
+              <div className="container">
             <div className="border-box">
               <div className="content">Join Our Waitlist</div>
             </div>
           </div>
+            </Stack>
+          </div>
+
+
         </div>
       </div>
     </ThemeProvider>

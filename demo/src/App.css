@@ -63,7 +63,7 @@ h1 {
 
 .container_background {
   background: radial-gradient(circle at center bottom, #162b56, #101010 50%);
-  height: 40vh;
+  height: 30vh;
   display: flex;
   justify-content: center;
   align-items: center;
