@@ -160,19 +160,20 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
             paddingLeft: 5,
             paddingRight: 5,
           }}
-          alignItems="center"
-          justifyContent="center"
+          alignItems="flex-start"
+          justifyContent="space-between"
         >
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
           {title}
+          </Box>
+          
 
           <IconButton
             onClick={hanldeClose}
             sx={{
               height: 10,
               width: 10,
-              position: 'absolute',
-              top: 1000,
-              right: 420,
+              marginRight: 0
             }}
           >
             <CloseIcon sx={{ color: 'white', height: 15, width: 15 }} />
