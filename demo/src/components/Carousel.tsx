@@ -84,8 +84,17 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     const ref = useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
 
+    const getPrevNIndex = (N: number) => {
+      return (selectedIndex - N + len)%len;
+    }
+
+    const getNextNIndex = (N: number) => {
+      return (selectedIndex + N + len)%len;
+    }
+
     const getSlideStyle = useCallback(
       (index: number): CSSProperties => {
+        console.log("selected ", selectedIndex)
         const style: CSSProperties = {};
 
         if (index < len) {
@@ -94,20 +103,22 @@ export const Carousel: FC<CarouselProps> = forwardRef(
           style.opacity = 1;
           style.transform = `rotateY(${cellAngle}deg) translateZ(${radius}px)`;
 
-          if (index === selectedIndex - 1 || index === selectedIndex + 1) {
-            const additionalRotation = index === selectedIndex - 1 ? 40 : -40;
+          if (index === getPrevNIndex(1) || index === getNextNIndex(1)) {
+            const additionalRotation = index === getPrevNIndex(1) ? 40 : -40;
             style.transform += ` rotateY(${additionalRotation}deg)`;
           }
 
-          if (index === selectedIndex - 2 || index === selectedIndex + 2) {
-            const additionalRotation = index === selectedIndex - 2 ? 50 : -50;
+          if (index === getPrevNIndex(2) || index === getNextNIndex(2)) {
+            const additionalRotation = index === getPrevNIndex(2) ? 50 : -50;
             style.transform += ` rotateY(${additionalRotation}deg)`;
           }
         } else {
+
           style.opacity = 0;
           style.transform = 'none';
         }
 
+        // console.log(`style(${index}) = ${style.transform}`)
         return style;
       },
       [len, radius, theta, selectedIndex]
@@ -181,8 +192,9 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                 style={getSlideStyle(index)}
                 onClick={() => {
                   if (item.onClick) item.onClick();
-
-                  if (slideOnClick) setSelectedIndex(index);
+                  if (slideOnClick) {
+                    setSelectedIndex(index);
+                  }
                 }}
                 className={getClassName('__slide')}
               >

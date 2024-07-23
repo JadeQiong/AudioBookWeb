@@ -33,17 +33,16 @@ const BookInfoPanel: React.FC<BookInfo> = ({
         width: '20rem',
         height: '30rem',
         maxWidth: '100%',
-
         backgroundSize: 'cover',
         borderRadius: '8px',
         position: 'relative',
       }}
     >
       <Box sx={{ padding: '20px' }}>
-        <Typography component="h4" sx={{ fontWeight: 'bold', fontSize: 20 }}>
+        <Typography component="h4" sx={{ fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>
           {title}
         </Typography>
-        <Typography sx={{ marginBottom: '20px', fontSize: 15 }}>
+        <Typography sx={{ marginBottom: '20px', fontSize: 15, textAlign: 'left' }}>
           by {author}
         </Typography>
         <Stack direction="row" spacing={1}>
@@ -61,7 +60,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
             />
           ))}
         </Stack>
-        <Typography sx={{ marginTop: 2, fontSize: 15 }}>
+        <Typography sx={{ marginTop: 2, fontSize: 15, textAlign: 'left' }}>
           {description}
         </Typography>
 
