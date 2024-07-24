@@ -1,11 +1,13 @@
 {
   "files": {
     "main.css": "/AudioBookWeb/static/css/main.df286a64.css",
-    "main.js": "/AudioBookWeb/static/js/main.762dfe32.js",
+    "main.js": "/AudioBookWeb/static/js/main.e4e6faaf.js",
     "static/js/453.f3bb842a.chunk.js": "/AudioBookWeb/static/js/453.f3bb842a.chunk.js",
-    "static/media/zero_to_one.wav": "/AudioBookWeb/static/media/zero_to_one.3338f330ccefe2c4d1e2.wav",
-    "static/media/chip_war.mp3": "/AudioBookWeb/static/media/chip_war.a7f89885c7e671541111.mp3",
-    "static/media/educated.mp3": "/AudioBookWeb/static/media/educated.a7f89885c7e671541111.mp3",
+    "static/media/elon_musk.mp3": "/AudioBookWeb/static/media/elon_musk.78a80357ec73c0b8988e.mp3",
+    "static/media/hacker_painter.mp3": "/AudioBookWeb/static/media/hacker_painter.ad6f81c3a22096aaf492.mp3",
+    "static/media/educated.mp3": "/AudioBookWeb/static/media/educated.344bcfe03d58ce839700.mp3",
+    "static/media/zero_to_one.mp3": "/AudioBookWeb/static/media/zero_to_one.0aebc592f31d844e31df.mp3",
+    "static/media/chip_war.mp3": "/AudioBookWeb/static/media/chip_war.f461705807bee3405e67.mp3",
     "static/media/zero_to_one.png": "/AudioBookWeb/static/media/zero_to_one.57b9bab386be9b429ee7.png",
     "static/media/hackers_painters.png": "/AudioBookWeb/static/media/hackers_painters.c76fc287607e0fc7a94e.png",
     "static/media/educated.png": "/AudioBookWeb/static/media/educated.8e2167903805b5a7e8ca.png",
@@ -14,11 +16,11 @@
     "static/media/chip_war.png": "/AudioBookWeb/static/media/chip_war.624ad8f971965810bb81.png",
     "index.html": "/AudioBookWeb/index.html",
     "main.df286a64.css.map": "/AudioBookWeb/static/css/main.df286a64.css.map",
-    "main.762dfe32.js.map": "/AudioBookWeb/static/js/main.762dfe32.js.map",
+    "main.e4e6faaf.js.map": "/AudioBookWeb/static/js/main.e4e6faaf.js.map",
     "453.f3bb842a.chunk.js.map": "/AudioBookWeb/static/js/453.f3bb842a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.df286a64.css",
-    "static/js/main.762dfe32.js"
+    "static/js/main.e4e6faaf.js"
   ]
 }
