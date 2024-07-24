@@ -23,10 +23,12 @@ import zeroToOneImage from './assets/images/zero_to_one.png';
 import chipWarImage from './assets/images/chip_war.png';
 
 import educatedAudio from './assets/audios/educated.mp3';
-import elonMuskAudio from './assets/audios/zero_to_one.wav';
+import elonMuskAudio from './assets/audios/elon_musk.mp3';
+import toKillAMockingBirdAudio from './assets/audios/to_kill_a_mocking_bird.mp3';
+import classMakerAudio from './assets/audios/the_class_maker.mp3';
 import chipWarAudio from './assets/audios/chip_war.mp3';
-import zeroToOneAudio from './assets/audios/zero_to_one.wav';
-import hackersPaintersAudio from './assets/audios/educated.mp3';
+import zeroToOneAudio from './assets/audios/zero_to_one.mp3';
+import hackersPaintersAudio from './assets/audios/hacker_painter.mp3';
 
 import { elonMaskContent } from './types/hardcoded';
 import { chipWarContent } from './types/hardcoded';
