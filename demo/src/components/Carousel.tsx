@@ -94,11 +94,11 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     }
 
     const handleItemClick = (index: number) => {
-      if(Math.abs(selectedIndex - index) !== 19){
+      //if(Math.abs(selectedIndex - index) !== 19){
         setSelectedIndex(index);
-      } else{
-        setShowAlert(true);
-      }
+      // } else{
+      //   setShowAlert(true);
+      // }
     }
 
     const getSlideStyle = useCallback(
