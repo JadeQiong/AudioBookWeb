@@ -83,26 +83,28 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     );
 
     const ref = useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = useState(Math.floor(items.length/2));
-      const [showAlert, setShowAlert] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(
+      Math.floor(items.length / 2)
+    );
+    const [showAlert, setShowAlert] = useState(false);
     const getPrevNIndex = (N: number) => {
-      return (selectedIndex - N + len)%len;
-    }
+      return (selectedIndex - N + len) % len;
+    };
 
     const getNextNIndex = (N: number) => {
-      return (selectedIndex + N + len)%len;
-    }
+      return (selectedIndex + N + len) % len;
+    };
 
     const handleItemClick = (index: number) => {
       //if(Math.abs(selectedIndex - index) !== 19){
-        setSelectedIndex(index);
+      setSelectedIndex(index);
       // } else{
       //   setShowAlert(true);
       // }
-    }
+    };
 
     const getSlideStyle = useCallback(
-      (index: number): CSSProperties => { 
+      (index: number): CSSProperties => {
         const style: CSSProperties = {};
 
         if (index < len) {
@@ -121,7 +123,6 @@ export const Carousel: FC<CarouselProps> = forwardRef(
             style.transform += ` rotateY(${additionalRotation}deg)`;
           }
         } else {
-
           style.opacity = 0;
           style.transform = 'none';
         }
@@ -192,12 +193,13 @@ export const Carousel: FC<CarouselProps> = forwardRef(
 
     return (
       <>
-      {showAlert && 
-              <Box sx={{ width: '100%', marginTop: 2 }}>
-              <Alert severity="warning">
-               Ops! You've reached the end of list.
-              </Alert>
-            </Box>}
+        {showAlert && (
+          <Box sx={{ width: '100%', marginTop: 2 }}>
+            <Alert severity="warning">
+              Ops! You've reached the end of list.
+            </Alert>
+          </Box>
+        )}
 
         <div className={getClassName('')} ref={ref}>
           <div className={getClassName('__container')} style={getItemStyle()}>

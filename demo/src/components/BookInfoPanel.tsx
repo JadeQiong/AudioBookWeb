@@ -6,9 +6,10 @@ import {
   Button,
   Link,
   Stack,
-  colors,
+  IconButton,
 } from '@mui/material';
-
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
 import LaunchIcon from '@mui/icons-material/Launch';
 
 interface BookInfo {
@@ -17,6 +18,10 @@ interface BookInfo {
   categories: string[];
   description: string;
   link: string;
+  handleAudioChange: any;
+  handleTriggerPlayPause: any;
+  playing: boolean;
+  isCurrent: boolean;
 }
 
 const BookInfoPanel: React.FC<BookInfo> = ({
@@ -25,27 +30,83 @@ const BookInfoPanel: React.FC<BookInfo> = ({
   categories,
   description,
   link,
+  handleAudioChange,
+  handleTriggerPlayPause,
+  playing,
+  isCurrent,
 }) => {
   return (
     <Box
       sx={{
+        position: 'relative',
         color: 'white',
         width: '20rem',
         height: '30rem',
         maxWidth: '100%',
         backgroundSize: 'cover',
         borderRadius: '8px',
-        position: 'relative',
       }}
     >
       <Box sx={{ padding: '20px' }}>
-        <Typography component="h4" sx={{ fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>
+        <Typography
+          component="h4"
+          sx={{ fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}
+        >
           {title}
         </Typography>
-        <Typography sx={{ marginBottom: '20px', fontSize: 15, textAlign: 'left' }}>
+        <Typography sx={{ fontSize: 15, textAlign: 'left' }}>
           by {author}
         </Typography>
-        <Stack direction="row" spacing={1}>
+
+        <Stack
+          direction="row"
+          margin={1}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Button
+            variant="outlined"
+            sx={{
+              height: 20,
+              width: 90,
+              borderRadius: '10px',
+              borderColor: 'white',
+              color: 'white',
+              textTransform: 'none',
+              padding: 1,
+              fontSize: 16,
+              alignItems: 'left',
+              display: 'flex',
+              justifyContent: 'flex-start',
+            }}
+            component={Link}
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            endIcon={
+              <LaunchIcon
+                sx={{
+                  height: 14,
+                  width: 14,
+                  marginTop: 1,
+                  marginRight: 6,
+                }}
+              />
+            }
+          >
+            <Typography
+              sx={{
+                fontSize: 15,
+                height: 15,
+                marginBottom: 1,
+              }}
+            >
+              Source
+            </Typography>
+          </Button>
+        </Stack>
+
+        <Stack direction="row" spacing={1} margin={1}>
           {categories.map((category, index) => (
             <Chip
               key={index}
@@ -60,50 +121,49 @@ const BookInfoPanel: React.FC<BookInfo> = ({
             />
           ))}
         </Stack>
-        <Typography sx={{ marginTop: 2, fontSize: 15, textAlign: 'left' }}>
+
+        <Typography sx={{ margin: 1, fontSize: 15, textAlign: 'left' }}>
           {description}
         </Typography>
-
-        <Button
-          variant="outlined"
-          sx={{
-            position: 'absolute',
-            bottom: 20,
-            right: 18,
-            height: 20,
-            width: 90,
-            borderRadius: '10px',
-            borderColor: 'white',
-            color: 'white',
-            textTransform: 'none',
-            padding: 1,
-            fontSize: 16,
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 16,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton
+          onClick={() => {
+            if (isCurrent) {
+              handleTriggerPlayPause();
+            } else {
+              handleAudioChange();
+            }
           }}
-          component={Link}
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-        ></Button>
-        <Typography
           sx={{
-            fontSize: 15,
-            position: 'absolute',
-            bottom: 27,
-            right: 50,
-            height: 15,
+            height: 40,
+            width: 40,
+            borderRadius: '50%',
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.6)',
+            },
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          Source
-        </Typography>
-        <LaunchIcon
-          sx={{
-            height: 16,
-            width: 16,
-            position: 'absolute',
-            bottom: 22,
-            right: 30,
-          }}
-        />
+          {playing && isCurrent ? (
+            <StopIcon sx={{ color: 'white' }} />
+          ) : (
+            <PlayArrowIcon sx={{ color: 'white' }} />
+          )}
+        </IconButton>
       </Box>
     </Box>
   );
