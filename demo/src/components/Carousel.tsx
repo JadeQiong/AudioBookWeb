@@ -37,6 +37,7 @@ export type CarouselProps = Readonly<{
   nextButtonContent?: string | ReactNode;
   prevButtonContent?: string | ReactNode;
   onIndexChange?: any;
+  autoPlay?: boolean;
 }>;
 
 export type CarouselRef = Readonly<{
@@ -58,6 +59,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
       prevButtonContent = 'Previous',
       nextButtonContent = 'Next',
       onIndexChange,
+      autoPlay = false,
     }: CarouselProps,
     CarouselRef
   ) => {
@@ -86,7 +88,10 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     const [selectedIndex, setSelectedIndex] = useState(
       Math.floor(items.length / 2)
     );
+
     const [showAlert, setShowAlert] = useState(false);
+    const [disableHover, setDisableHover] = useState(false);
+
     const getPrevNIndex = (N: number) => {
       return (selectedIndex - N + len) % len;
     };
@@ -96,11 +101,8 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     };
 
     const handleItemClick = (index: number) => {
-      //if(Math.abs(selectedIndex - index) !== 19){
+      setDisableHover(true);
       setSelectedIndex(index);
-      // } else{
-      //   setShowAlert(true);
-      // }
     };
 
     const getSlideStyle = useCallback(
@@ -127,7 +129,6 @@ export const Carousel: FC<CarouselProps> = forwardRef(
           style.transform = 'none';
         }
 
-        // console.log(`style(${index}) = ${style.transform}`)
         return style;
       },
       [len, radius, theta, selectedIndex]
@@ -150,13 +151,13 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     );
 
     const prev = useCallback(
-      () => setSelectedIndex(selectedIndex - 1),
-      [selectedIndex]
+      () => setSelectedIndex((selectedIndex - 1 + len) % len),
+      [selectedIndex, len]
     );
 
     const next = useCallback(
-      () => setSelectedIndex(selectedIndex + 1),
-      [selectedIndex]
+      () => setSelectedIndex((selectedIndex + 1) % len),
+      [selectedIndex, len]
     );
 
     useEffect(() => {
@@ -179,6 +180,35 @@ export const Carousel: FC<CarouselProps> = forwardRef(
         area?.removeEventListener('swiperight', prev);
       };
     });
+
+    useEffect(() => {
+      const container = ref.current;
+      const handleTransitionEnd = () => {
+        setDisableHover(false);
+      };
+
+      if (container) {
+        container.addEventListener('transitionend', handleTransitionEnd);
+      }
+
+      return () => {
+        if (container) {
+          container.removeEventListener('transitionend', handleTransitionEnd);
+        }
+      };
+    }, [selectedIndex]);
+
+    useEffect(() => {
+      let intervalId: NodeJS.Timeout;
+      if (autoPlay) {
+        intervalId = setInterval(next, 5000);
+      }
+      return () => {
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      };
+    }, [autoPlay, next]);
 
     useImperativeHandle(
       CarouselRef,
@@ -212,10 +242,13 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                   if (item.onClick) item.onClick();
                   if (slideOnClick) {
                     handleItemClick(index);
-                    // setSelectedIndex(index);
                   }
                 }}
-                className={getClassName('__slide')}
+                className={
+                  disableHover
+                    ? getClassName('__slide__disable-hover')
+                    : getClassName('__slide')
+                }
               >
                 <img
                   src={item.image}

@@ -144,7 +144,6 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
 
     const updateRotationDegree = () => {
       const now = Date.now();
-      console.log(rotationDegree);
       if (lastUpdateTime) {
         const elapsedTime = now - lastUpdateTime;
         setRotationDegree((prev) => prev + elapsedTime * 0.18);

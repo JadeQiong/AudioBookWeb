@@ -16,6 +16,22 @@
   transition: transform 1s;
 }
 
+.carousel__slide__disable-hover {
+  pointer-events: none;
+  position: absolute;
+  /* width: 11.875rem;
+  height: 11.875rem; */
+  width: 20rem;
+  height: 60rem;
+  left: 0.625rem;
+  top: 0.625rem;
+  /* border: 0.125rem solid; */
+  border-radius: 5px;
+  transition:
+    transform 1s,
+    opacity 1s;
+}
+
 .carousel__slide {
   position: absolute;
   /* width: 11.875rem;

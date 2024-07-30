@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import logo from './assets/images/logo.png';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -228,11 +228,11 @@ function App() {
                 slideOnClick
                 showControls={false}
                 onIndexChange={handleIndexChange}
+                autoPlay={true}
               ></Carousel>
               <Stack sx={{ height: 40 }}></Stack>
               <ContinuousSlider
                 ref={sliderRef}
-                
                 audio={repeatedAudiosArray[audioIndex]}
                 title={repeatedContentsArray[audioIndex]?.title}
                 isHide={isHide}
