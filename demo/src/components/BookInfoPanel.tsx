@@ -54,7 +54,9 @@ const BookInfoPanel: React.FC<BookInfo> = ({
         >
           {title}
         </Typography>
-        <Typography sx={{ fontSize: 15, textAlign: 'left' }}>
+        <Typography
+          sx={{ marginBottom: '20px', fontSize: 15, textAlign: 'left' }}
+        >
           by {author}
         </Typography>
 

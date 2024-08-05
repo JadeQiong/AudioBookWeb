@@ -19,7 +19,7 @@ import elonMuskImage from './assets/images/elon_musk.png';
 import hackersPaintersImage from './assets/images/hackers_painters.png';
 import zeroToOneImage from './assets/images/zero_to_one.png';
 import chipWarImage from './assets/images/chip_war.png';
-
+import IconButton from '@mui/material';
 import educatedAudio from './assets/audios/educated.mp3';
 import elonMuskAudio from './assets/audios/elon_musk.mp3';
 import toKillAMockingBirdAudio from './assets/audios/to_kill_a_mocking_bird.mp3';
@@ -39,7 +39,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'Roboto',
+    fontFamily: 'Montserrat, Arial, sans-serif',
   },
 });
 
@@ -130,56 +130,74 @@ function App() {
         <div className="App-header">
           <Stack
             direction="row"
-            spacing={2}
-            sx={{ marginTop: 2, marginBottom: 2 }}
+            sx={{ margin: 2, alignItems: 'center', width: '90%' }}
           >
-            <img src={logo} width={35} height={35} />
-
-            <Button
-              variant="contained"
-              sx={{
-                color: '#292929',
-                backgroundColor: 'white',
-                borderRadius: '12px',
-                borderColor: 'lightgray',
-              }}
+            <Stack
+              direction="row"
+              marginLeft={5}
+              spacing={2}
+              alignItems="center"
             >
-              Library
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                color: 'white',
-                borderRadius: '12px',
-                borderColor: 'lightgray',
-              }}
+              <img src={logo} width={35} height={35} />
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  color: '#292929',
+                  backgroundColor: 'white',
+                  borderRadius: '12px',
+                  borderColor: 'lightgray',
+                }}
+              >
+                Library
+              </Button>
+              <Button
+                variant="outlined"
+                size="large"
+                sx={{
+                  color: 'white',
+                  borderRadius: '12px',
+                  borderColor: 'lightgray',
+                }}
+              >
+                Upload
+              </Button>
+            </Stack>
+            <Box sx={{ flexGrow: 1 }} />{' '}
+            {/* This Box will take up remaining space */}
+            <Stack
+              direction="row"
+              spacing={2}
+              marginRight={5}
+              alignItems="center"
             >
-              Upload
-            </Button>
-            <Box sx={{ width: 400 }} />
-            <Button
-              sx={{
-                color: 'white',
-                borderRadius: '12px',
-                borderColor: 'lightgray',
-              }}
-            >
-              About Us
-            </Button>
-            <Button
-              sx={{
-                color: 'white',
-              }}
-            >
-              Contact Us
-            </Button>
-            <Button
-              sx={{
-                color: 'white',
-              }}
-            >
-              Login
-            </Button>
+              <Button
+                size="large"
+                sx={{
+                  color: 'white',
+                  borderRadius: '12px',
+                  borderColor: 'lightgray',
+                }}
+              >
+                About Us
+              </Button>
+              <Button
+                size="large"
+                sx={{
+                  color: 'white',
+                }}
+              >
+                Contact Us
+              </Button>
+              <Button
+                size="large"
+                sx={{
+                  color: 'white',
+                }}
+              >
+                Login
+              </Button>
+            </Stack>
           </Stack>
 
           <div className="container_background">
@@ -189,7 +207,9 @@ function App() {
                 component="h1"
                 gutterBottom
                 sx={{
+                  fontSize: 48,
                   fontWeight: 'bold',
+                  fontFamily: 'Montserrat, Arial, sans-serif',
                   background: 'linear-gradient(to bottom, #ebebec, #979797)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -202,7 +222,7 @@ function App() {
                 variant="h6"
                 gutterBottom
                 sx={{
-                  fontWeight: 'bold',
+                  fontSize: 24,
                   background: '#c1c1c1',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -230,7 +250,8 @@ function App() {
                 onIndexChange={handleIndexChange}
                 autoPlay={true}
               ></Carousel>
-              <Stack sx={{ height: 40 }}></Stack>
+
+<Box sx={{height: 30}}></Box>
               <ContinuousSlider
                 ref={sliderRef}
                 audio={repeatedAudiosArray[audioIndex]}

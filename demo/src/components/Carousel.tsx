@@ -92,6 +92,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     const [showAlert, setShowAlert] = useState(false);
     const [disableHover, setDisableHover] = useState(false);
 
+
     const getPrevNIndex = (N: number) => {
       return (selectedIndex - N + len) % len;
     };
@@ -199,15 +200,15 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     }, [selectedIndex]);
 
     useEffect(() => {
-      let intervalId: NodeJS.Timeout;
-      if (autoPlay) {
-        intervalId = setInterval(next, 5000);
-      }
-      return () => {
-        if (intervalId) {
-          clearInterval(intervalId);
-        }
-      };
+      // let intervalId: NodeJS.Timeout;
+      // if (autoPlay) {
+      //   intervalId = setInterval(next, 5000);
+      // }
+      // return () => {
+      //   if (intervalId) {
+      //     clearInterval(intervalId);
+      //   }
+      // };
     }, [autoPlay, next]);
 
     useImperativeHandle(
@@ -245,9 +246,10 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                   }
                 }}
                 className={
-                  disableHover
-                    ? getClassName('__slide__disable-hover')
-                    : getClassName('__slide')
+                  // disableHover
+                  //   ? getClassName('__slide__disable-hover')
+                  //   : getClassName('__slide')
+                getClassName('__slide')
                 }
               >
                 <img
@@ -255,7 +257,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                   style={{ width: '20rem', height: '30rem' }}
                   alt={item.alt}
                 />
-                <img
+                {Math.abs(selectedIndex - index) <= 2 &&                 <img
                   src={item.image}
                   style={{
                     width: '20rem',
@@ -265,7 +267,8 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                     pointerEvents: 'none',
                   }}
                   alt={item.alt}
-                />
+                />}
+
                 {index === selectedIndex && (
                   <div className={getClassName('__slide-overlay')}>
                     {item.content}
