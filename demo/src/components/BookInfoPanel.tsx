@@ -91,7 +91,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
                   height: 14,
                   width: 14,
                   marginTop: 1,
-                  marginRight: 6,
+                  marginRight: 8,
                 }}
               />
             }

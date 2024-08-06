@@ -251,7 +251,7 @@ function App() {
                 autoPlay={true}
               ></Carousel>
 
-<Box sx={{height: 30}}></Box>
+              <Box sx={{ height: 50 }}></Box>
               <ContinuousSlider
                 ref={sliderRef}
                 audio={repeatedAudiosArray[audioIndex]}

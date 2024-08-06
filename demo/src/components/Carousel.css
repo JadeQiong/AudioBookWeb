@@ -154,11 +154,18 @@
   background-size: cover;
   background-repeat: no-repeat;
   transform: scaleY(-1); /* Flip the image vertically for a mirror effect */
-  opacity: 0.5; /* Make the reflection semi-transparent */
+  opacity: 0.5;
   overflow: hidden; /* Ensures no spillover */
   z-index: -1; /* Place the reflection behind the image */
 
   /* Create a fading effect using a gradient that fades to transparent */
   mask-image: linear-gradient(to top, transparent, black 70%);
   /* -webkit-mask-image: linear-gradient(to top, transparent, black 70%); */
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.blurredGlass {
+  backdrop-filter: blur(2px);
+  background-color: rgba(255, 255, 255, 0.4);
 }

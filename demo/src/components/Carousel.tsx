@@ -2,6 +2,7 @@ import TouchSweep from 'touchsweep';
 import { v4 as uuid } from 'uuid';
 import './Carousel.css';
 import { Alert, AlertTitle, Box } from '@mui/material';
+import { Backdrop } from '@mui/material';
 
 import {
   FC,
@@ -91,7 +92,6 @@ export const Carousel: FC<CarouselProps> = forwardRef(
 
     const [showAlert, setShowAlert] = useState(false);
     const [disableHover, setDisableHover] = useState(false);
-
 
     const getPrevNIndex = (N: number) => {
       return (selectedIndex - N + len) % len;
@@ -249,7 +249,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                   // disableHover
                   //   ? getClassName('__slide__disable-hover')
                   //   : getClassName('__slide')
-                getClassName('__slide')
+                  getClassName('__slide')
                 }
               >
                 <img
@@ -257,17 +257,34 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                   style={{ width: '20rem', height: '30rem' }}
                   alt={item.alt}
                 />
-                {Math.abs(selectedIndex - index) <= 2 &&                 <img
-                  src={item.image}
-                  style={{
-                    width: '20rem',
-                    height: '30rem',
-                    transform: 'scaleY(-1)',
-                    opacity: 0.2,
-                    pointerEvents: 'none',
-                  }}
-                  alt={item.alt}
-                />}
+                <Box sx={{ height: '1rem' }}></Box>
+                {Math.abs(selectedIndex - index) <= 2 && (
+                  <>
+                    <img
+                      src={item.image}
+                      style={{
+                        width: '20rem',
+                        height: '30rem',
+                        transform: 'scaleY(-1)',
+                        // opacity: 0.2,
+                        pointerEvents: 'none',
+                      }}
+                      alt={item.alt}
+                    />
+                    <Backdrop
+                      open={true}
+                      className="blurredGlass"
+                      style={{
+                        // position: 'absolute',
+                        marginTop: '30rem',
+                        width: '20rem',
+                        height: '30rem',
+                        transform: 'scaleY(-1)',
+                        opacity: Math.abs(selectedIndex - index) <= 2 ? 1 : 0,
+                      }}
+                    ></Backdrop>
+                  </>
+                )}
 
                 {index === selectedIndex && (
                   <div className={getClassName('__slide-overlay')}>

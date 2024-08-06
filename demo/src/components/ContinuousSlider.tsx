@@ -188,24 +188,26 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
       };
     }, [playing, lastUpdateTime]);
 
-  if (!isHide) {
-    return (
-      <Box sx={{ width: 350 }}>
-        <Box
-          display="flex"
-          sx={{
-            height: 20,
-            fontSize: 12,
-            fontWeight: 'bold',
-            paddingLeft: 5,
-            paddingRight: 5,
-          }}
-          alignItems="flex-start"
-          justifyContent="space-between"
-        >
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-            {title}
-          </Box>
+    if (!isHide) {
+      return (
+        <Box sx={{ width: 350, zIndex: 3 }}>
+          <Box
+            display="flex"
+            sx={{
+              height: 20,
+              fontSize: 12,
+              fontWeight: 'bold',
+              paddingLeft: 5,
+              paddingRight: 5,
+            }}
+            alignItems="flex-start"
+            justifyContent="space-between"
+          >
+            <Box
+              sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}
+            >
+              {title}
+            </Box>
             <IconButton
               onClick={hanldeClose}
               sx={{
@@ -326,7 +328,7 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
               left: '50%',
               transform: 'translateX(-50%)',
               // bottom: '-5%',
-              marginTop: -2
+              marginTop: -2,
             }}
           >
             <Typography sx={{ fontSize: 12, margin: 1 }}>
