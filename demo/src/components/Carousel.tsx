@@ -258,7 +258,10 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                   alt={item.alt}
                 />
                 <Box sx={{ height: '1rem' }}></Box>
-                {Math.abs(selectedIndex - index) <= 2 && (
+                {Math.min(
+                  Math.abs(selectedIndex - index),
+                  20 - Math.abs(selectedIndex - index)
+                ) <= 2 && (
                   <>
                     <img
                       src={item.image}
@@ -276,11 +279,17 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                       className="blurredGlass"
                       style={{
                         // position: 'absolute',
-                        marginTop: '30rem',
+                        marginTop: '31rem',
                         width: '20rem',
                         height: '30rem',
                         transform: 'scaleY(-1)',
-                        opacity: Math.abs(selectedIndex - index) <= 2 ? 1 : 0,
+                        opacity:
+                          Math.min(
+                            Math.abs(selectedIndex - index),
+                            20 - Math.abs(selectedIndex - index)
+                          ) <= 2
+                            ? 1
+                            : 0,
                       }}
                     ></Backdrop>
                   </>

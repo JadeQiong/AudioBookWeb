@@ -22,8 +22,6 @@ import chipWarImage from './assets/images/chip_war.png';
 import IconButton from '@mui/material';
 import educatedAudio from './assets/audios/educated.mp3';
 import elonMuskAudio from './assets/audios/elon_musk.mp3';
-import toKillAMockingBirdAudio from './assets/audios/to_kill_a_mocking_bird.mp3';
-import classMakerAudio from './assets/audios/the_class_maker.mp3';
 import chipWarAudio from './assets/audios/chip_war.mp3';
 import zeroToOneAudio from './assets/audios/zero_to_one.mp3';
 import hackersPaintersAudio from './assets/audios/hacker_painter.mp3';
@@ -33,9 +31,9 @@ import { chipWarContent } from './types/hardcoded';
 import { hackersPaintersContent } from './types/hardcoded';
 import { zeroToOneContet } from './types/hardcoded';
 import { EducatedContent } from './types/hardcoded';
-import { selectClasses } from '@mui/material';
-import { log } from 'console';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Footer from './components/Footer';
+import dotsIcon from './assets/images/dots.png';
 
 const theme = createTheme({
   typography: {
@@ -266,20 +264,44 @@ function App() {
           </Stack>
 
           <div className="container_background">
-            <Stack direction="column" sx={{ width: '60%' }}>
-              <Typography variant="body1" gutterBottom>
-                No more dry summaries—AI-Powered BookTalks delivers a vibrant
-                audio experience that brings literature to life, connecting
-                readers with books in a profound and modern way. Experience the
-                future of reading with AI-Powered BookTalks, where every book
-                becomes a captivating conversation.
-              </Typography>
-              <div className="container">
-                <div className="border-box">
-                  <div className="content">Join Our Waitlist</div>
-                </div>
-              </div>
+            <Stack direction="column" sx={{ width: '60%', marginTop: '6rem' }}>
+              <Stack direction="row">
+                <Stack direction="column" sx={{ width: '50%' }}>
+                  <Typography
+                    variant="h4"
+                    gutterBottom
+                    sx={{ textAlign: 'left', fontWeight: 'bolder' }}
+                  >
+                    Immersive book talks.
+                  </Typography>
+                  <img src={dotsIcon} width={46} height={15} />
+                </Stack>
+
+                <Stack direction="column" sx={{ width: '50%' }}>
+                  <Typography
+                    variant="body1"
+                    gutterBottom
+                    sx={{ textAlign: 'left' }}
+                  >
+                    No more dry summaries—AI-Powered BookTalks delivers a
+                    vibrant audio experience that brings literature to life,
+                    connecting readers with books in a profound and modern way.
+                    Experience the future of reading with AI-Powered BookTalks,
+                    where every book becomes a captivating conversation.
+                  </Typography>
+
+                  <div className="container">
+                    <div className="border-box">
+                      <div className="content">Join Our Waitlist</div>
+                    </div>
+                  </div>
+                </Stack>
+              </Stack>
             </Stack>
+          </div>
+
+          <div>
+            <Footer></Footer>
           </div>
         </div>
       </div>
