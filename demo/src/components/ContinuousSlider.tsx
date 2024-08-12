@@ -56,6 +56,11 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
     const [duration, setDuration] = React.useState<number>(0); // Duration of the audio
     const [volume, setVolume] = React.useState<number>(50); // Default volume level at 50%
 
+    const handleAudioEnded = () => {
+      setPlaying(false);
+      setValue(0); // Optionally reset the slider to the start
+    };
+
     // Update the current time of the audio as it plays
     const handleTimeUpdate = () => {
       if (audioRef.current) {
@@ -70,13 +75,13 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
       }
     };
 
-    // Jump to new time in the audio file
     const handleChange = (event: Event, newValue: number | number[]) => {
       const newTime = ((newValue as number) / 100) * duration;
       if (audioRef.current) {
         audioRef.current.currentTime = newTime;
+        // Update value as a percentage
+        setValue((audioRef.current.currentTime / duration) * 100);
       }
-      setValue(newValue as number);
     };
 
     const handleVolumeUp = () => {
@@ -158,6 +163,12 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
         audioRef.current.play();
         setPlaying(true);
         setLastUpdateTime(Date.now());
+        audioRef.current.addEventListener('ended', handleAudioEnded);
+        // Return a cleanup function that removes the event listener
+        return () => {
+          if (audioRef.current)
+            audioRef.current.removeEventListener('ended', handleAudioEnded);
+        };
       }
       setDuration(0);
       setVolume(50);
@@ -213,10 +224,10 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
               sx={{
                 height: 10,
                 width: 10,
-                marginRight: 0,
+                marginRight: -5,
               }}
             >
-              <CloseIcon sx={{ color: 'white', height: 15, width: 15 }} />
+              <CloseIcon sx={{ color: 'white', scale: '0.8' }} />
             </IconButton>
           </Box>
 
@@ -246,7 +257,6 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
                   src={coverImage}
                   alt="Cover"
                   style={{
-                    backgroundColor: 'red',
                     width: '100%',
                     height: 'auto',
                   }}
@@ -266,12 +276,13 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
                 '& .MuiSlider-thumb': {
                   height: 12, // Control button height
                   width: 12, // Control button width
-                  borderRadius: '50%', // Control button shape
+                  borderRadius: '40%', // Control button shape
                   backgroundColor: 'transparent',
                 },
                 '& .MuiSlider-track': {
                   border: 'none',
                   marginLeft: 0.5,
+                  marginRight: 0.5,
                   height: 3, // Track height
                   borderRadius: 4, // Track border radius
                   background: 'linear-gradient(to right, #00008b, #fff)', // Gradient color
@@ -286,14 +297,14 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
 
             <IconButton
               onClick={handleBack30}
-              sx={{ height: 10, width: 10, margin: 0.5 }}
+              sx={{ height: 10, width: 10, margin: 0.5, scale: '1.2' }}
             >
               <Replay30Icon sx={{ color: 'white' }} />
             </IconButton>
 
             <IconButton
               onClick={handlePlayPause}
-              sx={{ height: 10, width: 10, margin: 0.5 }}
+              sx={{ height: 10, width: 10, margin: 0.5, scale: '1.2' }}
               disabled={!audio}
             >
               {playing ? (
@@ -305,7 +316,7 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
 
             <IconButton
               onClick={handleForward30}
-              sx={{ height: 10, width: 10, margin: 0.5 }}
+              sx={{ height: 10, width: 10, margin: 0.5, scale: '1.2' }}
             >
               <Forward30Icon sx={{ color: 'white' }} />
             </IconButton>
@@ -327,12 +338,16 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
               position: 'absolute',
               left: '50%',
               transform: 'translateX(-50%)',
-              // bottom: '-5%',
               marginTop: -2,
             }}
           >
-            <Typography sx={{ fontSize: 12, margin: 1 }}>
-              {formatTime(value)} / {formatTime(duration)}
+            <Typography sx={{ fontSize: 15, margin: 1 }}>
+              {formatTime(
+                audioRef.current
+                  ? Math.min(duration, audioRef.current.currentTime)
+                  : 0
+              )}{' '}
+              / {formatTime(duration)}
             </Typography>
           </Stack>
         </Box>

@@ -78,7 +78,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     const len = useMemo(() => data.length, [data.length]);
     const theta = useMemo(() => 360 / len, [len]);
 
-    const radiusFactor = 1.5;
+    const radiusFactor = 1.8;
     const radius = useMemo(
       () =>
         Math.round((itemWidth / 2 / Math.tan(Math.PI / len)) * radiusFactor),
@@ -254,7 +254,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
               >
                 <img
                   src={item.image}
-                  style={{ width: '20rem', height: '30rem' }}
+                  style={{ width: '24rem', height: '36rem' }}
                   alt={item.alt}
                 />
                 <Box sx={{ height: '1rem' }}></Box>
@@ -266,10 +266,9 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                     <img
                       src={item.image}
                       style={{
-                        width: '20rem',
-                        height: '30rem',
+                        width: '24rem',
+                        height: '36rem',
                         transform: 'scaleY(-1)',
-                        // opacity: 0.2,
                         pointerEvents: 'none',
                       }}
                       alt={item.alt}
@@ -278,11 +277,11 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                       open={true}
                       className="blurredGlass"
                       style={{
-                        // position: 'absolute',
-                        marginTop: '31rem',
-                        width: '20rem',
-                        height: '30rem',
+                        marginTop: '37rem',
+                        width: '24rem',
+                        height: '36rem',
                         transform: 'scaleY(-1)',
+                        borderRadius: '5px',
                         opacity:
                           Math.min(
                             Math.abs(selectedIndex - index),

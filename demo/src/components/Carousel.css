@@ -157,7 +157,7 @@
   opacity: 0.5;
   overflow: hidden; /* Ensures no spillover */
   z-index: -1; /* Place the reflection behind the image */
-
+  border-radius: 5px;
   /* Create a fading effect using a gradient that fades to transparent */
   mask-image: linear-gradient(to top, transparent, black 70%);
   /* -webkit-mask-image: linear-gradient(to top, transparent, black 70%); */

@@ -162,7 +162,6 @@ function App() {
               </Button>
             </Stack>
             <Box sx={{ flexGrow: 1 }} />{' '}
-            {/* This Box will take up remaining space */}
             <Stack
               direction="row"
               spacing={2}
@@ -199,7 +198,10 @@ function App() {
           </Stack>
 
           <div className="container_background">
-            <Stack direction="column" sx={{ width: '100%' }}>
+            <Stack
+              direction="column"
+              sx={{ width: '100%', marginBottom: '5%' }}
+            >
               <Typography
                 variant="h4"
                 component="h1"
@@ -212,6 +214,7 @@ function App() {
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   display: 'inline',
+                  marginTop: '10%',
                 }}
               >
                 Engaging, Captivating, Premium
@@ -234,11 +237,11 @@ function App() {
 
           <Stack
             spacing={2}
-            sx={{ height: 640, width: '100%', overflow: 'hidden' }}
+            sx={{ height: 750, width: '100%', overflow: 'hidden' }}
           >
             <Stack
               direction="column"
-              sx={{ height: 640, overflow: 'hidden', alignItems: 'center' }}
+              sx={{ height: 750, overflow: 'hidden', alignItems: 'center' }}
             >
               <Carousel
                 ref={carouselRef}
@@ -249,7 +252,7 @@ function App() {
                 autoPlay={true}
               ></Carousel>
 
-              <Box sx={{ height: 50 }}></Box>
+              <Box sx={{ height: 150 }}></Box>
               <ContinuousSlider
                 ref={sliderRef}
                 audio={repeatedAudiosArray[audioIndex]}
@@ -264,9 +267,9 @@ function App() {
           </Stack>
 
           <div className="container_background">
-            <Stack direction="column" sx={{ width: '60%', marginTop: '6rem' }}>
+            <Stack direction="column" sx={{ width: '60%', marginTop: '5%' }}>
               <Stack direction="row">
-                <Stack direction="column" sx={{ width: '50%' }}>
+                <Stack direction="column" sx={{ width: '45%' }}>
                   <Typography
                     variant="h4"
                     gutterBottom
@@ -276,7 +279,7 @@ function App() {
                   </Typography>
                   <img src={dotsIcon} width={46} height={15} />
                 </Stack>
-
+                <Stack sx={{ width: '5%' }}></Stack>
                 <Stack direction="column" sx={{ width: '50%' }}>
                   <Typography
                     variant="body1"
@@ -300,9 +303,7 @@ function App() {
             </Stack>
           </div>
 
-          <div>
-            <Footer></Footer>
-          </div>
+          <Footer></Footer>
         </div>
       </div>
     </ThemeProvider>

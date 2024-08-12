@@ -4,7 +4,7 @@ import LogoIcon from '../assets/images/footer.png';
 
 const Footer = () => {
   return (
-    <Box sx={{ width: '80rem', mt: 4, py: 3, color: 'text.secondary' }}>
+    <Box sx={{ width: '80%', color: 'text.secondary', padding: 2 }}>
       <Divider
         sx={{
           height: '0.5px',
