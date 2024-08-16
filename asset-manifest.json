@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/AudioBookWeb/static/css/main.2bfd765a.css",
-    "main.js": "/AudioBookWeb/static/js/main.a1052ac4.js",
+    "main.css": "/AudioBookWeb/static/css/main.59ac914e.css",
+    "main.js": "/AudioBookWeb/static/js/main.93915946.js",
     "static/js/453.f3bb842a.chunk.js": "/AudioBookWeb/static/js/453.f3bb842a.chunk.js",
     "static/media/elon_musk.mp3": "/AudioBookWeb/static/media/elon_musk.e661fcf3d55ac6450dee.mp3",
     "static/media/hacker_painter.mp3": "/AudioBookWeb/static/media/hacker_painter.fe19c909266daa20b1ea.mp3",
@@ -15,12 +15,12 @@
     "static/media/background.png": "/AudioBookWeb/static/media/background.c503ccb2992c96bc089f.png",
     "static/media/chip_war.png": "/AudioBookWeb/static/media/chip_war.624ad8f971965810bb81.png",
     "index.html": "/AudioBookWeb/index.html",
-    "main.2bfd765a.css.map": "/AudioBookWeb/static/css/main.2bfd765a.css.map",
-    "main.a1052ac4.js.map": "/AudioBookWeb/static/js/main.a1052ac4.js.map",
+    "main.59ac914e.css.map": "/AudioBookWeb/static/css/main.59ac914e.css.map",
+    "main.93915946.js.map": "/AudioBookWeb/static/js/main.93915946.js.map",
     "453.f3bb842a.chunk.js.map": "/AudioBookWeb/static/js/453.f3bb842a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2bfd765a.css",
-    "static/js/main.a1052ac4.js"
+    "static/css/main.59ac914e.css",
+    "static/js/main.93915946.js"
   ]
 }
