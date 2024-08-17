@@ -1,15 +1,15 @@
-import * as React from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
-import Forward30Icon from '@mui/icons-material/Forward30';
-import Replay30Icon from '@mui/icons-material/Replay30';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import { Typography } from '@mui/material';
 import './ContinuousSlider.css';
+import Forward30Icon from '@mui/icons-material/Forward30';
+import Replay30Icon from '@mui/icons-material/Replay30';
 
 const formatTime = (seconds: number) => {
   if (isNaN(seconds) || !seconds) {
@@ -29,13 +29,19 @@ export type ContinuousSliderRef = {
 
 export type SliderProps = Readonly<{
   ref?: React.LegacyRef<ContinuousSliderRef>;
-  audio?: any;
   title?: string;
   isHide: boolean;
   setIsHide?: any;
   playing: boolean;
   setPlaying?: any;
+  handlePlayPause?: any;
   coverImage?: any;
+  currentTime: number;
+  duration: number;
+  onTimeUpdate?: any;
+  onDurationChange?: any;
+  value?: number;
+  onValueUpdated?: any;
 }>;
 
 export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
@@ -43,108 +49,45 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
   SliderProps
 >(
   (
-    { audio, title, isHide, setIsHide, playing, setPlaying, coverImage },
+    {
+      title,
+      isHide,
+      setIsHide,
+      playing,
+      setPlaying,
+      handlePlayPause,
+      currentTime,
+      coverImage,
+      duration,
+      onTimeUpdate,
+      onDurationChange,
+      value,
+      onValueUpdated,
+    },
     ref
   ) => {
-    const [value, setValue] = React.useState<number>(0);
-    const [rotationDegree, setRotationDegree] = React.useState<number>(0);
     const [lastUpdateTime, setLastUpdateTime] = React.useState<number | null>(
       null
     );
 
-    const audioRef = React.useRef<HTMLAudioElement>(null);
-    const [duration, setDuration] = React.useState<number>(0); // Duration of the audio
-    const [volume, setVolume] = React.useState<number>(50); // Default volume level at 50%
-
-    const handleAudioEnded = () => {
-      setPlaying(false);
-      setValue(0); // Optionally reset the slider to the start
-    };
-
-    // Update the current time of the audio as it plays
-    const handleTimeUpdate = () => {
-      if (audioRef.current) {
-        if (
-          audioRef.current.duration &&
-          !isNaN(audioRef.current.currentTime / audioRef.current.duration)
-        ) {
-          setValue(
-            (audioRef.current.currentTime / audioRef.current.duration) * 100
-          );
-        }
-      }
-    };
-
-    const handleChange = (event: Event, newValue: number | number[]) => {
-      const newTime = ((newValue as number) / 100) * duration;
-      if (audioRef.current) {
-        audioRef.current.currentTime = newTime;
-        // Update value as a percentage
-        setValue((audioRef.current.currentTime / duration) * 100);
-      }
-    };
-
-    const handleVolumeUp = () => {
-      const newVolume = Math.min(volume + 10, 100); // Ensures volume does not exceed 100%
-      setVolume(newVolume);
-    };
-
-    // Set the duration once the metadata is loaded
-    const handleLoadedMetadata = () => {
-      if (audioRef.current) {
-        setDuration(audioRef.current.duration);
-      }
-    };
-
-    const handlePlayPause = () => {
-      if (audioRef.current) {
-        if (playing) {
-          audioRef.current.pause();
-          updateRotationDegree();
-        } else {
-          setLastUpdateTime(Date.now());
-          audioRef.current.play();
-        }
-        setPlaying(!playing);
-      } else {
-        setPlaying(false);
-      }
-    };
-
-    const hanldeClose = () => {
-      handleStop();
-      setIsHide(true);
-    };
-
-    const handleStop = () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-      setPlaying(false);
-      setValue(0);
-      setRotationDegree(0);
-      // Reset the rotation degree
-    };
-
     const handleForward30 = () => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = Math.min(
-          audioRef.current.currentTime + 30,
-          duration
-        );
-        updateRotationDegree();
-      }
+      // if (audioRef.current) {
+      //   audioRef.current.currentTime = Math.min(
+      //     audioRef.current.currentTime + 30,
+      //     duration
+      //   );
+      //   updateRotationDegree();
+      // }
     };
 
     const handleBack30 = () => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = Math.max(
-          audioRef.current.currentTime - 30,
-          0
-        );
-        updateRotationDegree();
-      }
+      // if (audioRef.current) {
+      //   audioRef.current.currentTime = Math.max(
+      //     audioRef.current.currentTime - 30,
+      //     0
+      //   );
+      //   updateRotationDegree();
+      // }
     };
 
     const updateRotationDegree = () => {
@@ -155,42 +98,23 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
       }
       setLastUpdateTime(now);
     };
+    const [rotationDegree, setRotationDegree] = React.useState<number>(0);
 
-    React.useEffect(() => {
-      setValue(0);
-      if (audioRef.current) {
-        setDuration(audioRef.current.duration);
-        audioRef.current.play();
-        setPlaying(true);
-        setLastUpdateTime(Date.now());
-        audioRef.current.addEventListener('ended', handleAudioEnded);
-        // Return a cleanup function that removes the event listener
-        return () => {
-          if (audioRef.current)
-            audioRef.current.removeEventListener('ended', handleAudioEnded);
-        };
-      }
-      setDuration(0);
-      setVolume(50);
-    }, [audio]);
+    const handleChange = (event: Event, newValue: number | number[]) => {
+      const newTime = ((newValue as number) / 100) * duration;
+      onTimeUpdate(newTime);
+      onValueUpdated((newTime / duration) * 100);
+    };
 
-    React.useEffect(() => {
-      if (audioRef.current) {
-        audioRef.current.volume = volume / 100; // Convert percentage to a scale from 0 to 1
-      }
-    }, [volume]);
-
-    // Expose handlePlayPause to the parent component
-    React.useImperativeHandle(ref, () => ({
-      handlePlayPause,
-    }));
+    // const handleClose = () => {
+    //   setIsHide(true);
+    //   handlePlayPause();
+    // }
 
     React.useEffect(() => {
       let interval: number | undefined;
       if (playing) {
-        interval = window.setInterval(() => {
-          updateRotationDegree();
-        }, 1000);
+        interval = window.setInterval(() => {}, 1000);
       }
       return () => {
         if (interval) {
@@ -219,8 +143,8 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
             >
               {title}
             </Box>
-            <IconButton
-              onClick={hanldeClose}
+            {/* <IconButton
+              // onClick={handleClose}
               sx={{
                 height: 10,
                 width: 10,
@@ -228,7 +152,7 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
               }}
             >
               <CloseIcon sx={{ color: 'white', scale: '0.8' }} />
-            </IconButton>
+            </IconButton> */}
           </Box>
 
           <Stack
@@ -305,7 +229,6 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
             <IconButton
               onClick={handlePlayPause}
               sx={{ height: 10, width: 10, margin: 0.5, scale: '1.2' }}
-              disabled={!audio}
             >
               {playing ? (
                 <StopIcon sx={{ color: 'white' }} />
@@ -321,13 +244,6 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
               <Forward30Icon sx={{ color: 'white' }} />
             </IconButton>
           </Stack>
-          <audio
-            ref={audioRef}
-            src={audio}
-            onLoadedMetadata={handleLoadedMetadata}
-            onTimeUpdate={handleTimeUpdate}
-            preload="metadata"
-          />
 
           <Stack
             direction="row"
@@ -342,12 +258,8 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
             }}
           >
             <Typography sx={{ fontSize: 15, margin: 1 }}>
-              {formatTime(
-                audioRef.current
-                  ? Math.min(duration, audioRef.current.currentTime)
-                  : 0
-              )}{' '}
-              / {formatTime(duration)}
+              {formatTime(Math.min(duration, currentTime))} /{' '}
+              {formatTime(duration)}
             </Typography>
           </Stack>
         </Box>
