@@ -143,6 +143,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
             if (isCurrent) {
               handleTriggerPlayPause();
             } else {
+              console.log('audio change');
               handleAudioChange();
             }
           }}

@@ -125,7 +125,17 @@ export const ContinuousSlider: React.FC<SliderProps> = React.forwardRef<
 
     if (!isHide) {
       return (
-        <Box sx={{ width: 350, zIndex: 3 }}>
+        <Box
+          sx={{
+            width: 350,
+            zIndex: 3,
+            color: 'white',
+            position: 'absolute',
+            left: '50%',
+            top: '100%',
+            transform: 'translateX(-50%)',
+          }}
+        >
           <Box
             display="flex"
             sx={{

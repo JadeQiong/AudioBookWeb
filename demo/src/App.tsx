@@ -9,8 +9,8 @@ import Carousel from './components/Carousel';
 import { CarouselItem } from './components/Carousel';
 import { CarouselRef } from './components/Carousel';
 import BookInfoPanel from './components/BookInfoPanel';
+import Player, { PlayerRef } from './components/Player';
 
-import ContinuousSlider from './components/ContinuousSlider';
 import './App.css';
 
 import educatedImage from './assets/images/educated.png';
@@ -43,7 +43,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from './components/Footer';
 import dotsIcon from './assets/images/dots.png';
 import WaitlistPopup from './components/WaitlistPopup';
-import HoverSlider, { HoverSliderRef } from './components/HoverSlider';
+
 import LibraryView from './components/LibraryView';
 
 const theme = createTheme({
@@ -100,17 +100,12 @@ for (let i = 0; i < 4; i++) {
 }
 
 function App() {
-  const [isHide, setIsHide] = React.useState(true);
+  const [sliderIsHide, setSliderIsHide] = React.useState(true);
   const carouselRef = React.createRef<CarouselRef>();
-  const hoverSliderRef = useRef<HoverSliderRef>(null);
+
   const [sliderIndex, setSliderIndex] = useState(0);
   const [playing, setPlaying] = React.useState<boolean>(false);
   const [audioIndex, setAudioIndex] = useState(-1);
-
-  const [hoverIsHide, setHoverIsHide] = useState(true);
-  const [value, setValue] = React.useState<number>(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
 
   const [view, setView] = useState<'carousel' | 'library'>('carousel');
 
@@ -125,30 +120,29 @@ function App() {
     console.log('Play book:', book.title);
   };
 
-  const handlePlayPause = () => {
+  const playerRef = useRef<PlayerRef>(null);
+
+  const togglePlayPause = () => {
     setPlaying(!playing);
-    if (hoverSliderRef.current) {
-      hoverSliderRef.current.handlePlayPause();
-    }
+    // console.log("handle player pause")
+    // playerRef.current?.handlePlayPause();
   };
 
   const handleAudioChange = () => {
-    setIsHide(false);
-    setHoverIsHide(false);
+    setSliderIsHide(false);
+    // setHoversliderIsHide(false);
     setAudioIndex(sliderIndex);
   };
+
+  useEffect(() => {
+    if (sliderIndex != -1) {
+      setPlaying(true);
+    }
+  }, [sliderIndex]);
 
   const handleIndexChange = (index: number) => {
     setSliderIndex(index);
   };
-
-  const handleTimeUpdate = useCallback((time: number) => {
-    setCurrentTime(time);
-  }, []);
-
-  const handleDurationChange = useCallback((newDuration: number) => {
-    setDuration(newDuration);
-  }, []);
 
   const [popupOpen, setPopupOpen] = useState(false);
 
@@ -173,7 +167,12 @@ function App() {
           description={repeatedContentsArray[index].description}
           link={repeatedContentsArray[index].link}
           handleAudioChange={handleAudioChange}
-          handleTriggerPlayPause={handlePlayPause}
+          handleTriggerPlayPause={togglePlayPause}
+          // handleTriggerPlayPause={() => {
+          //   if (playing) {
+          //     setSliderIsHide(false);
+          //   }
+          // }}
           playing={playing}
           isCurrent={audioIndex === sliderIndex}
         />
@@ -182,23 +181,16 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <HoverSlider
-        ref={hoverSliderRef}
-        audio={repeatedAudiosArray[audioIndex]}
-        title={repeatedContentsArray[audioIndex]?.title}
-        isHide={isHide}
-        setIsHide={setIsHide}
+      <Player
+        sliderIsHide={sliderIsHide}
+        setSliderIsHide={setSliderIsHide}
         playing={playing}
         setPlaying={setPlaying}
-        handlePlayPause={handlePlayPause}
-        coverImage={repeatedImagesArray[audioIndex]}
-        currentTime={currentTime}
-        duration={duration}
-        onTimeUpdate={handleTimeUpdate}
-        onDurationChange={handleDurationChange}
-        value={value}
-        onValueUpdated={setValue}
-      ></HoverSlider>
+        repeatedAudiosArray={repeatedAudiosArray}
+        audioIndex={audioIndex}
+        repeatedContentsArray={repeatedContentsArray}
+        repeatedImagesArray={repeatedImagesArray}
+      ></Player>
 
       <div className="App">
         <div className="App-header">
@@ -343,22 +335,6 @@ function App() {
                   ></Carousel>
 
                   <Box sx={{ height: 150 }}></Box>
-
-                  <ContinuousSlider
-                    title={repeatedContentsArray[audioIndex]?.title}
-                    isHide={hoverIsHide}
-                    setIsHide={setHoverIsHide}
-                    playing={playing}
-                    setPlaying={setPlaying}
-                    handlePlayPause={handlePlayPause}
-                    coverImage={repeatedImagesArray[audioIndex]}
-                    currentTime={currentTime}
-                    duration={duration}
-                    onTimeUpdate={handleTimeUpdate}
-                    onDurationChange={handleDurationChange}
-                    value={value}
-                    onValueUpdated={setValue}
-                  ></ContinuousSlider>
                 </Stack>
               </Stack>
 

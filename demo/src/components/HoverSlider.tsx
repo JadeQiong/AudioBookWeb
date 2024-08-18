@@ -57,8 +57,6 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
       setIsHide,
       playing,
       setPlaying,
-      handlePlayPause,
-      coverImage,
       currentTime,
       duration,
       onTimeUpdate,
@@ -68,12 +66,31 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
     },
     ref
   ) => {
+    useEffect(() => {
+      let isMounted = true; // Flag to track whether component is mounted
+      console.log('mounted ', audioRef, audio);
+      return () => {
+        isMounted = false; // Set flag to false when the component unmounts
+      };
+    }, []);
+
+    useEffect(() => {
+      if (audioRef.current) {
+        audioRef.current.play();
+      }
+    }, []); // Empty dependency array to run only after the first render
+
     const [rotationDegree, setRotationDegree] = React.useState<number>(0);
     const [lastUpdateTime, setLastUpdateTime] = React.useState<number | null>(
       null
     );
-
+    const [isReady, setIsReady] = useState(false);
     const audioRef = React.useRef<HTMLAudioElement>(null);
+
+    useEffect(() => {
+      console.log('Audio Ref on Mount:', audioRef.current); // Check ref assignment
+    }, []);
+
     const [volume, setVolume] = React.useState<number>(50); // Default volume level at 50%
 
     const handleAudioEnded = () => {
@@ -143,6 +160,7 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
     };
 
     React.useEffect(() => {
+      console.log('hover playing = ', playing, audioRef.current, audioRef);
       // Listen for changes in the playing prop
       if (playing && audioRef.current && audioRef.current.paused) {
         audioRef.current.play();
@@ -150,6 +168,25 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
         audioRef.current.pause();
       }
     }, [playing]);
+
+    React.useEffect(() => {
+      onValueUpdated(0);
+      setIsReady(false);
+      console.log('audio is changed', audio);
+      if (audioRef.current) {
+        onDurationChange(audioRef.current.duration);
+        audioRef.current.play();
+        setPlaying(true);
+        setLastUpdateTime(Date.now());
+        audioRef.current.addEventListener('ended', handleAudioEnded);
+        return () => {
+          if (audioRef.current)
+            audioRef.current.removeEventListener('ended', handleAudioEnded);
+        };
+      }
+      onDurationChange(0);
+      setVolume(50);
+    }, [audio]);
 
     const hanldeClose = () => {
       handleStop();
@@ -196,23 +233,6 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
     };
 
     React.useEffect(() => {
-      onValueUpdated(0);
-      if (audioRef.current) {
-        onDurationChange(audioRef.current.duration);
-        audioRef.current.play();
-        setPlaying(true);
-        setLastUpdateTime(Date.now());
-        audioRef.current.addEventListener('ended', handleAudioEnded);
-        return () => {
-          if (audioRef.current)
-            audioRef.current.removeEventListener('ended', handleAudioEnded);
-        };
-      }
-      onDurationChange(0);
-      setVolume(50);
-    }, [audio]);
-
-    React.useEffect(() => {
       if (audioRef.current) {
         audioRef.current.volume = volume / 100; // Convert percentage to a scale from 0 to 1
       }
@@ -234,7 +254,7 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
 
     const handleClose = () => {
       setIsHide(true);
-      handlePlayPause();
+      setPlaying(false);
     };
 
     if (!isHide) {
@@ -288,7 +308,9 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
             alignItems="center"
           >
             <IconButton
-              onClick={handlePlayPause}
+              onClick={() => {
+                setPlaying(!playing);
+              }}
               sx={{ height: 10, width: 10, margin: 0.5, scale: '1.5' }}
             >
               {playing ? (

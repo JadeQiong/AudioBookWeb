@@ -1,36 +1,28 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Slider from '@mui/material/Slider';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import StopIcon from '@mui/icons-material/Stop';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import { Typography } from '@mui/material';
-import './Player.css';
-import Forward30Icon from '@mui/icons-material/Forward30';
-import Replay30Icon from '@mui/icons-material/Replay30';
-
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  useImperativeHandle,
+} from 'react';
+import HoverSlider, { HoverSliderRef } from './HoverSlider';
+import ContinuousSlider from './ContinuousSlider';
+import { hover } from '@testing-library/user-event/dist/hover';
 
 export type PlayerRef = {
   handlePlayPause: () => void;
 };
 
 export type SliderProps = Readonly<{
-  ref?: React.LegacyRef<PlayerRef>;
-  title?: string;
-  isHide: boolean;
-  setIsHide?: any;
+  sliderIsHide: boolean;
+  setSliderIsHide?: any;
   playing: boolean;
   setPlaying?: any;
   handlePlayPause?: any;
-  coverImage?: any;
-  currentTime: number;
-  duration: number;
-  onTimeUpdate?: any;
-  onDurationChange?: any;
-  value?: number;
-  onValueUpdated?: any;
+  repeatedAudiosArray?: any;
+  audioIndex: number;
+  repeatedContentsArray?: any;
+  repeatedImagesArray?: any;
 }>;
 
 export const Player: React.FC<SliderProps> = React.forwardRef<
@@ -39,29 +31,87 @@ export const Player: React.FC<SliderProps> = React.forwardRef<
 >(
   (
     {
-      title,
-      isHide,
-      setIsHide,
+      sliderIsHide,
+      setSliderIsHide,
       playing,
       setPlaying,
-      handlePlayPause,
-      currentTime,
-      coverImage,
-      duration,
-      onTimeUpdate,
-      onDurationChange,
-      value,
-      onValueUpdated,
+      repeatedAudiosArray,
+      audioIndex,
+      repeatedContentsArray,
+      repeatedImagesArray,
     },
     ref
   ) => {
-   
+    const hoverSliderRef = useRef<HoverSliderRef>(null);
+    const [hoverIsHide, setHoverIsHide] = useState(true);
+    const [value, setValue] = React.useState<number>(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
 
-      return (
-        <Box sx={{ width: 350, zIndex: 3 }}>
-        </Box>
-      );
+    const handleTimeUpdate = useCallback((time: number) => {
+      setCurrentTime(time);
+    }, []);
 
+    const handleDurationChange = useCallback((newDuration: number) => {
+      setDuration(newDuration);
+    }, []);
+
+    const handlePlayPause = () => {
+      setPlaying(!playing);
+    };
+
+    useEffect(() => {
+      console.log('current playing ', playing);
+      if (playing) {
+        setHoverIsHide(false);
+      } else {
+        if (hoverSliderRef.current) {
+          hoverSliderRef.current.handlePlayPause();
+        }
+      }
+    }, [playing]);
+
+    // Expose handlePlayPause to parent components using the ref
+    useImperativeHandle(ref, () => ({
+      handlePlayPause,
+    }));
+    return (
+      <>
+        <HoverSlider
+          //   ref={hoverSliderRef}
+          audio={repeatedAudiosArray[audioIndex]}
+          title={repeatedContentsArray[audioIndex]?.title}
+          isHide={hoverIsHide}
+          setIsHide={setHoverIsHide}
+          playing={playing}
+          setPlaying={setPlaying}
+          //   handlePlayPause={handlePlayPause}
+          //   coverImage={repeatedImagesArray[audioIndex]}
+          currentTime={currentTime}
+          duration={duration}
+          onTimeUpdate={handleTimeUpdate}
+          onDurationChange={handleDurationChange}
+          value={value}
+          onValueUpdated={setValue}
+        ></HoverSlider>
+
+        <ContinuousSlider
+          title={repeatedContentsArray[audioIndex]?.title}
+          isHide={sliderIsHide}
+          setIsHide={setSliderIsHide}
+          playing={playing}
+          setPlaying={setPlaying}
+          handlePlayPause={handlePlayPause}
+          coverImage={repeatedImagesArray[audioIndex]}
+          currentTime={currentTime}
+          duration={duration}
+          onTimeUpdate={handleTimeUpdate}
+          onDurationChange={handleDurationChange}
+          value={value}
+          onValueUpdated={setValue}
+        ></ContinuousSlider>
+      </>
+    );
   }
 );
 
