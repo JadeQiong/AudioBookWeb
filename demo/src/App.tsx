@@ -35,6 +35,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from './components/Footer';
 import dotsIcon from './assets/images/dots.png';
 
+import TextToSpeech from './components/TextToSpeech'; 
+
 const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat, Arial, sans-serif',
@@ -126,6 +128,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <div className="App-header">
+        <TextToSpeech />
           <Stack
             direction="row"
             sx={{ margin: 2, alignItems: 'center', width: '90%' }}
@@ -300,7 +303,7 @@ function App() {
             </Stack>
           </div>
 
-          <div>
+         <div>
             <Footer></Footer>
           </div>
         </div>
