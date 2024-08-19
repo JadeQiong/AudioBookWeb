@@ -95,7 +95,7 @@ export const Player: React.FC<SliderProps> = React.forwardRef<
           onValueUpdated={setValue}
         ></HoverSlider>
 
-        <ContinuousSlider
+        {/* <ContinuousSlider
           title={repeatedContentsArray[audioIndex]?.title}
           isHide={sliderIsHide}
           setIsHide={setSliderIsHide}
@@ -109,7 +109,7 @@ export const Player: React.FC<SliderProps> = React.forwardRef<
           onDurationChange={handleDurationChange}
           value={value}
           onValueUpdated={setValue}
-        ></ContinuousSlider>
+        ></ContinuousSlider> */}
       </>
     );
   }

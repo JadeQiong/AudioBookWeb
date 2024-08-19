@@ -111,6 +111,7 @@ function App() {
 
   const handleLibraryClick = () => {
     setView('library');
+    setSliderIsHide(true);
   };
   const handleHomeClick = () => {
     setView('carousel');

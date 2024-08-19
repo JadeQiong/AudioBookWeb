@@ -30,11 +30,13 @@ const LibraryView: React.FC = () => {
   const [itemsPerPage] = useState<number>(10);
   const [totalPages, setTotalPages] = useState<number>(0);
 
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+
   useEffect(() => {
     const fetchBooks = () => {
       const categoryParam =
         selectedTab === 'All' ? '' : `&category=${selectedTab}`;
-      const url = `http://localhost:3000/books-new?page=${currentPage}&limit=${itemsPerPage}${categoryParam}`;
+      const url = `${baseUrl}/books-new?page=${currentPage}&limit=${itemsPerPage}${categoryParam}`;
 
       axios
         .get(url)
@@ -49,11 +51,14 @@ const LibraryView: React.FC = () => {
   }, [currentPage, itemsPerPage, selectedTab]);
 
   useEffect(() => {
+    const apiUrl = `${baseUrl}/books-categories`;
     axios
-      .get('http://localhost:3000/books-categories')
+      .get(apiUrl)
       .then((response) => {
         // Assuming the API returns an array of categories
-        setCategories(['All', ...response.data.categories]);
+        if (response.data) {
+          setCategories(['All', ...response.data.categories]);
+        }
       })
       .catch((error) => console.error('Error fetching categories:', error));
   }, []);
