@@ -178,12 +178,12 @@ async function generatePodcastScript(bookTitle, author) {
   // Generate the initial greeting and the first topic
   const initialPrompt = `
     Generate a podcast transcript discussing the book '${bookTitle}' by '${author}'.
-    Start with an introduction where Emma greets the audience and introduces the guest, Michael.
+    Start with an introduction where Emma greets the audience and introduces the guest, Michael, the podcast name is BookTalks.
     Then discuss the first topic: ${topics[0]}.
     Requirements:
     1. Emma is the host and Michael is the guest.
     2. Michael should have a humorous tone.
-    3. The generated transcript should be at least 500 words.
+    3. The generated transcript should be at least 350-450 words.
     4. Do not include "[Opening music plays]" or "[End of transcript]" or any other start or end-of-transcript markers.
     5. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
   `;
@@ -202,7 +202,7 @@ async function generatePodcastScript(bookTitle, author) {
       1. Emma should continue without greeting the audience again and should not reintroduce the book. She should start directly with a question about the topic.
       2. The conversation between Emma and Michael should be back-and-forth, focusing on discussing the topic without any transition into ending remarks.
       3. Include specific examples from the book in the conversation.
-      4. The generated transcript should be about 150 words.
+      4. The generated transcript should be about 120 words.
       5. Do not include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". The conversation should feel ongoing and leave room for further discussion without implying the end of the podcast.
       6. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
       7. The transcript should maintain a conversational tone and flow naturally without wrapping up the discussion.
@@ -224,7 +224,7 @@ async function generatePodcastScript(bookTitle, author) {
     Requirements:
     1. Emma should thank Michael for joining the podcast.
     2. The segment should include a closing statement inviting listeners to suggest books for the next discussion.
-    3. The generated transcript should be at most 100 words.
+    3. The generated transcript should be at most 80 words.
     4. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
     5. Do not include "[End of transcript]" or any other end-of-transcript markers.
   `;
