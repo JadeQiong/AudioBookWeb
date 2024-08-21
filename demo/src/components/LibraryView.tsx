@@ -15,6 +15,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import axios from 'axios';
 import Pagination from '@mui/material/Pagination';
 import { tab } from '@testing-library/user-event/dist/tab';
+import DailyBook from './DailyBook';
 
 interface Book {
   title: string;
@@ -27,11 +28,14 @@ const LibraryView: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [categories, setCategories] = useState<string[]>(['All']);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(10);
+  const [itemsPerPage] = useState<number>(16);
   const [totalPages, setTotalPages] = useState<number>(0);
 
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  // TODO
+  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  const baseUrl = 'http://localhost:3000';
 
+  console.log('base ', baseUrl);
   useEffect(() => {
     const fetchBooks = () => {
       const categoryParam =
@@ -74,12 +78,21 @@ const LibraryView: React.FC = () => {
       : books.filter((book) => book.category === selectedTab);
 
   return (
-    <Stack direction="column">
+    <Stack direction="column" display="flex" alignItems="center">
       <Stack
         direction="column"
         spacing={1}
-        sx={{ width: 1300, height: 900, backgroundColor: 'white' }}
+        sx={{ width: 1300, height: 300, padding: '40px' }}
       >
+        <DailyBook
+          book={
+            books && books.length
+              ? books[0]
+              : { title: '', cover_url: '', category: '' }
+          }
+        ></DailyBook>
+      </Stack>
+      <Stack direction="column" spacing={1} sx={{ width: '90%', height: 700 }}>
         <Tabs
           value={selectedTab}
           onChange={handleChange}
@@ -87,17 +100,23 @@ const LibraryView: React.FC = () => {
           scrollButtons="auto"
         >
           {categories.map((category) => (
-            <Tab key={category} label={category} value={category} />
+            <Tab
+              sx={{ color: 'white' }}
+              key={category}
+              label={category}
+              value={category}
+            />
           ))}
         </Tabs>
         <Grid container spacing={2}>
           {filteredBooks.map((book, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={2.4} key={index}>
+            <Grid item xs={4} sm={3} md={2} lg={1.5} key={index} sx={{}}>
               <Card>
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    height="300"
+                    height="200"
+                    width="100"
                     image={book.cover_url}
                     alt={book.title}
                     sx={{ position: 'relative' }}
@@ -118,15 +137,15 @@ const LibraryView: React.FC = () => {
                 <CardContent>
                   <Typography
                     gutterBottom
-                    variant="body2"
                     component="div"
                     sx={{
-                      height: '3.6em',
+                      height: '1.6em',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       display: '-webkit-box',
                       WebkitLineClamp: 2,
                       WebkitBoxOrient: 'vertical',
+                      fontSize: 14,
                     }}
                   >
                     {book.title}
@@ -136,18 +155,18 @@ const LibraryView: React.FC = () => {
             </Grid>
           ))}
         </Grid>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(event, page) => setCurrentPage(page)}
+          color="primary"
+          sx={{
+            marginTop: 2,
+            alignSelf: 'center',
+            '& .MuiPaginationItem-root': { color: 'white' },
+          }}
+        />
       </Stack>
-      <Pagination
-        count={totalPages}
-        page={currentPage}
-        onChange={(event, page) => setCurrentPage(page)}
-        color="primary"
-        sx={{
-          marginTop: 2,
-          alignSelf: 'center',
-          '& .MuiPaginationItem-root': { color: 'white' },
-        }}
-      />
     </Stack>
   );
 };

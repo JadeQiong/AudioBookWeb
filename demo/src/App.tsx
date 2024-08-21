@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import logo from './assets/images/logo.png';
-import wailtlistLogo from './assets/images/waitlist.png';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -41,7 +41,7 @@ import { zeroToOneContet } from './types/hardcoded';
 import { EducatedContent } from './types/hardcoded';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from './components/Footer';
-import dotsIcon from './assets/images/dots.png';
+import Home from './views/Home';
 import WaitlistPopup from './components/WaitlistPopup';
 
 import LibraryView from './components/LibraryView';
@@ -99,22 +99,33 @@ for (let i = 0; i < 4; i++) {
   repeatedContentsArray = [...repeatedContentsArray, ...contentsMap];
 }
 
+const CAROUSEL = 'carousel';
+const LIBRARY = 'library';
+const WAITLIST = 'waitlist';
+
 function App() {
   const [sliderIsHide, setSliderIsHide] = React.useState(true);
-  const carouselRef = React.createRef<CarouselRef>();
-
-  const [sliderIndex, setSliderIndex] = useState(0);
-  const [playing, setPlaying] = React.useState<boolean>(false);
   const [audioIndex, setAudioIndex] = useState(-1);
+  const [playing, setPlaying] = React.useState<boolean>(false);
+  const [sliderIndex, setSliderIndex] = useState(0);
 
-  const [view, setView] = useState<'carousel' | 'library'>('carousel');
+  const handleIndexChange = (index: number) => {
+    setSliderIndex(index);
+  };
+
+  useEffect(() => {
+    if (sliderIndex != -1) {
+      setPlaying(true);
+    }
+  }, [sliderIndex]);
+
+  const [view, setView] = useState<string>(CAROUSEL);
 
   const handleLibraryClick = () => {
-    setView('library');
-    setSliderIsHide(true);
+    setView(LIBRARY);
   };
   const handleHomeClick = () => {
-    setView('carousel');
+    setView(CAROUSEL);
   };
 
   const handlePlayBook = (book: Book) => {
@@ -125,24 +136,12 @@ function App() {
 
   const togglePlayPause = () => {
     setPlaying(!playing);
-    // console.log("handle player pause")
-    // playerRef.current?.handlePlayPause();
   };
 
   const handleAudioChange = () => {
     setSliderIsHide(false);
     // setHoversliderIsHide(false);
     setAudioIndex(sliderIndex);
-  };
-
-  useEffect(() => {
-    if (sliderIndex != -1) {
-      setPlaying(true);
-    }
-  }, [sliderIndex]);
-
-  const handleIndexChange = (index: number) => {
-    setSliderIndex(index);
   };
 
   const [popupOpen, setPopupOpen] = useState(false);
@@ -210,7 +209,7 @@ function App() {
                 variant="contained"
                 size="large"
                 sx={
-                  view === 'carousel'
+                  view === CAROUSEL
                     ? {
                         color: '#292929',
                         backgroundColor: 'white',
@@ -231,7 +230,7 @@ function App() {
                 variant="contained"
                 size="large"
                 sx={
-                  view === 'carousel'
+                  view === CAROUSEL
                     ? {
                         color: 'white',
                         borderRadius: '12px',
@@ -259,7 +258,7 @@ function App() {
               <Button
                 size="large"
                 onClick={() => {
-                  setPopupOpen(true);
+                  setView(WAITLIST);
                 }}
                 sx={{
                   color: 'white',
@@ -271,122 +270,23 @@ function App() {
               </Button>
             </Stack>
           </Stack>
-          {view !== 'carousel' && (
+          {view === LIBRARY && (
             <div className="container_background">
               <LibraryView />
             </div>
           )}
 
-          {view === 'carousel' && (
-            <>
-              <div className="container_background">
-                <Stack
-                  direction="column"
-                  sx={{ width: '100%', marginBottom: '5%' }}
-                >
-                  <Typography
-                    variant="h4"
-                    component="h1"
-                    gutterBottom
-                    sx={{
-                      fontSize: 48,
-                      fontWeight: 'bold',
-                      fontFamily: 'Montserrat, Arial, sans-serif',
-                      background:
-                        'linear-gradient(to bottom, #ebebec, #979797)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      display: 'inline',
-                      marginTop: '10%',
-                    }}
-                  >
-                    Transform your books into AI-driven podcasts
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    sx={{
-                      fontSize: 24,
-                      background: '#c1c1c1',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      display: 'inline',
-                    }}
-                  >
-                    Engaging, Captivating, Premium
-                  </Typography>
-                </Stack>
-              </div>
-
-              <Stack
-                spacing={2}
-                sx={{ height: 750, width: '100%', overflow: 'hidden' }}
-              >
-                <Stack
-                  direction="column"
-                  sx={{ height: 750, overflow: 'hidden', alignItems: 'center' }}
-                >
-                  <Carousel
-                    ref={carouselRef}
-                    items={items}
-                    slideOnClick
-                    showControls={false}
-                    onIndexChange={handleIndexChange}
-                    autoPlay={true}
-                  ></Carousel>
-
-                  <Box sx={{ height: 150 }}></Box>
-                </Stack>
-              </Stack>
-
-              <div className="container_background">
-                <Stack
-                  direction="column"
-                  sx={{ width: '60%', marginTop: '5%' }}
-                >
-                  <Stack direction="row">
-                    <Stack direction="column" sx={{ width: '45%' }}>
-                      <Typography
-                        variant="h4"
-                        gutterBottom
-                        sx={{ textAlign: 'left', fontWeight: 'bolder' }}
-                      >
-                        Immersive book talks.
-                      </Typography>
-                      <img src={dotsIcon} width={46} height={15} />
-                    </Stack>
-                    <Stack sx={{ width: '5%' }}></Stack>
-                    <Stack direction="column" sx={{ width: '50%' }}>
-                      <Typography
-                        variant="body1"
-                        gutterBottom
-                        sx={{ textAlign: 'left' }}
-                      >
-                        No more dry summaries—AI-Powered BookTalks delivers a
-                        vibrant audio experience that brings literature to life,
-                        connecting readers with books in a profound and modern
-                        way. Experience the future of reading with AI-Powered
-                        BookTalks, where every book becomes a captivating
-                        conversation.
-                      </Typography>
-
-                      <div className="container">
-                        {/* <div className="border-box"> */}
-                        <img src={wailtlistLogo} width={273} height={29} />
-                        {/* <div className="content">Join Our Waitlist</div> */}
-
-                        {/* </div> */}
-                      </div>
-                      <WaitlistPopup
-                        open={popupOpen}
-                        handleClose={handleClosePopup}
-                      />
-                    </Stack>
-                  </Stack>
-                </Stack>
-              </div>
-            </>
+          {view === CAROUSEL && (
+            <Home
+              items={items}
+              handleIndexChange={handleIndexChange}
+              onWaitlistClicked={() => {
+                setView(WAITLIST);
+              }}
+            />
           )}
+
+          {view === WAITLIST && <WaitlistPopup></WaitlistPopup>}
 
           <Footer></Footer>
         </div>
