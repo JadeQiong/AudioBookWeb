@@ -100,35 +100,6 @@ app.post('/generate_audio', async (req, res) => {
   }
 });
 
-// // Generate podcast script using OpenAI
-// async function generatePodcastScript(booktitle) {
-//   const openai = getOpenAIClient();
-//   const prompt = `
-//     Give me a transcript of podcasts that last for 7000 words for the book:
-//     1. ${booktitle} by Elie Wiesel
-//     Please follow these requirements: 
-//     1. One host naming Emma, one guest naming Michael, who is humorous, for each podcast. 
-//     2. Coming up about 7 topics in the book, and discuss them in the podcast. Each time one person should talk more than 3 sentences.
-//     3. Be clear, and close to reality. Remember this is a podcast in a causual style.
-//     4. In the end, the host will ask the audience, "What book would you like to know about next time?".
-//     5. Format the transcript exactly like 
-//     "Emma: Hello everyone, and welcome back to Book talks! I'm your host, Emma. Today, we have our guest Michael. Welcome, Michael!
-
-//     Michael: Thank you, Emma. I'm excited to be here.
-
-//     Emma: So, Michael, you're known for your quick wit and sense of humor."
-//   `;
-
-
-//     // Use GPT to generate content based on the input text
-//     const gptResponse = await openai.chat.completions.create({
-//     model: 'gpt-4', // Replace with the desired model, like 'text-davinci-003'
-//     messages: [{ role: 'user', content: prompt }],
-//   });
-//   let gptGeneratedText = gptResponse.choices[0].message.content.trim();
-//   gptGeneratedText = cleanUpScript(gptGeneratedText);
-//   return gptGeneratedText;
-// }
 
 
 
@@ -137,7 +108,7 @@ async function processAndMergeExistingMusic() {
 
   // Read all files from the output directory
   const files = fs.readdirSync(outputDir)
-    .filter(file => file.endsWith('.mp3')) // Only include MP3 files
+    .filter(file => file.endsWith('.wav')) // Only include MP3 files
     .sort((a, b) => {
       // Extract the numeric part from filenames like 'michael_44.mp3' and sort them
       const numA = parseInt(a.match(/\d+/), 10);
@@ -147,18 +118,27 @@ async function processAndMergeExistingMusic() {
 
   // Create file paths from the sorted files
   const filePaths = files.map(file => path.join(outputDir, file));
-  console.log('filePaths:', filePaths);
-
   const combinedPodcastPath = path.join(__dirname, 'output', 'combined_podcast.mp3');
   combineAudioFiles(filePaths, combinedPodcastPath);
 
+  // Path to the starting music
   const startingMusicPath = path.join(__dirname, 'music', 'start_music.mp3');
-  const finalCombinedFilePath = path.join(__dirname, 'output', 'combined_podcast2.mp3');
+
+  // Define the final output path after combining the start music with the podcast
+  const finalCombinedFilePath = path.join(__dirname, 'output', 'combined_podcast_with_start.mp3');
 
   console.log('Combining start music with podcast...');
+  // Combine the starting music with the podcast
   combineAudioFilesWithConcatFilter([startingMusicPath, combinedPodcastPath], finalCombinedFilePath);
 
   return finalCombinedFilePath;
+  // // Define the output file path
+  // const combinedPodcastPath = path.join(__dirname, 'output', 'combined_podcast.mp3');
+
+  // // Combine the MP3 files
+  // combineAudioFiles(filePaths, combinedPodcastPath);
+
+  // return combinedPodcastPath;
 }
 
 async function generatePodcastScript(bookTitle, author) {
@@ -178,7 +158,7 @@ async function generatePodcastScript(bookTitle, author) {
   // Generate the initial greeting and the first topic
   const initialPrompt = `
     Generate a podcast transcript discussing the book '${bookTitle}' by '${author}'.
-    Start with an introduction where Emma greets the audience and introduces the guest, Michael, the podcast name is BookTalks.
+    Start with an introduction where Emma greets the audience and welcomes them to the podcast "BookTalks," where she introduces Michael as the regular guest.
     Then discuss the first topic: ${topics[0]}.
     Requirements:
     1. Emma is the host and Michael is the guest.
@@ -186,6 +166,7 @@ async function generatePodcastScript(bookTitle, author) {
     3. The generated transcript should be at least 350-450 words.
     4. Do not include "[Opening music plays]" or "[End of transcript]" or any other start or end-of-transcript markers.
     5. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
+    6. Do **NOT** include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". **Do not imply the end of the podcast at all.**
   `;
   const initialResponse = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
@@ -202,8 +183,8 @@ async function generatePodcastScript(bookTitle, author) {
       1. Emma should continue without greeting the audience again and should not reintroduce the book. She should start directly with a question about the topic.
       2. The conversation between Emma and Michael should be back-and-forth, focusing on discussing the topic without any transition into ending remarks.
       3. Include specific examples from the book in the conversation.
-      4. The generated transcript should be about 120 words.
-      5. Do not include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". The conversation should feel ongoing and leave room for further discussion without implying the end of the podcast.
+      4. The generated transcript should be about 150 words.
+      5. Do **NOT** include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". **Do not imply the end of the podcast at all.**
       6. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
       7. The transcript should maintain a conversational tone and flow naturally without wrapping up the discussion.
     `;
@@ -214,7 +195,15 @@ async function generatePodcastScript(bookTitle, author) {
       messages: [{ role: 'user', content: prompt }],
     });
 
-    fullScript += response.choices[0].message.content.trim() + "\n\n";
+    // // Process the response to exclude the last line
+    // const transcript = response.choices[0].message.content.trim();
+    // const lines = transcript.split('\n');
+
+    // // Exclude the last line
+    // const filteredTranscript = lines.slice(0, -1).join('\n');
+
+    // fullScript += filteredTranscript + "\n\n";
+    fullScript += response.choices[0].message.content.trim();
   }
 
     // Generate the final thoughts and closing segment separately
@@ -273,54 +262,97 @@ async function processAndMerge(scriptPath) {
 
 // Add end music to the combined podcast
 async function addEndMusic(inputFile) {
-  const endMusicPath = path.join(__dirname, 'music', 'end_music.mp3');
-  const finalOutputPath = path.join(__dirname, 'output', 'final_podcast.mp3');
+  try {
+    // Ensure input file exists
+    if (!fs.existsSync(inputFile)) {
+      throw new Error(`Input file not found: ${inputFile}`);
+    }
 
-  const durationCommand = `ffprobe -i ${inputFile} -show_entries format=duration -v quiet -of csv="p=0"`;
-  const duration = parseFloat(execSync(durationCommand).toString().trim());
-  const delay = Math.floor(duration * 990); // Convert to milliseconds
-  console.log("Calculated Delay (milliseconds):", delay);
+    const endMusicPath = path.join(__dirname, 'music', 'end_music.mp3');
+    const finalOutputPath = path.join(__dirname, 'output', 'final_podcast.mp3');
 
-  const command = `ffmpeg -y -i ${inputFile} -i ${endMusicPath} -filter_complex "[1]adelay=${delay}|${delay}[delayed]; [0:a][delayed]amix=inputs=2:duration=longest:dropout_transition=2" -acodec libmp3lame ${finalOutputPath}`;
-  execSync(command, { stdio: 'inherit' });
+    // Ensure end music file exists
+    if (!fs.existsSync(endMusicPath)) {
+      throw new Error(`End music file not found: ${endMusicPath}`);
+    }
 
-  console.log(`Final podcast with end music saved to ${finalOutputPath}`);
-  return finalOutputPath;
+    // Get the duration of the input file
+    const durationCommand = `ffprobe -i "${inputFile}" -show_entries format=duration -v quiet -of csv="p=0"`;
+    const durationOutput = execSync(durationCommand).toString().trim();
+
+    if (!durationOutput) {
+      throw new Error('Failed to retrieve the duration of the input file.');
+    }
+
+    const duration = parseFloat(durationOutput);
+    const delay = Math.floor(duration * 970); // Convert to milliseconds
+
+    console.log('Calculated Delay (milliseconds):', delay);
+
+    // Construct the ffmpeg command
+    const command = `ffmpeg -y -i "${inputFile}" -i "${endMusicPath}" -filter_complex "[1]adelay=${delay}|${delay}[delayed]; [0:a][delayed]amix=inputs=2:duration=longest:dropout_transition=2" -acodec libmp3lame "${finalOutputPath}"`;
+
+    // Execute the ffmpeg command
+    execSync(command, { stdio: 'inherit' });
+
+    console.log(`Final podcast with end music saved to ${finalOutputPath}`);
+    return finalOutputPath;
+
+  } catch (error) {
+    console.error('Error adding end music:', error.message);
+    return null;
+  }
 }
 
 // Process the script to generate audio files
 async function processScript(filePath) {
   const script = fs.readFileSync(filePath, 'utf8');
   const lines = script.split('\n').filter(line => line.trim() !== '');
-  let fileIndex = 1;
-  const tasks = lines.map(line => async () => {
-    const [speaker, ...speechArray] = line.split(':');
-    const speech = speechArray.join(':').trim();
 
-    const ttsRequest = {
-      input: { text: speech },
-      voice: { languageCode: 'en-US', ssmlGender: speaker.trim() === 'Emma' ? 'FEMALE' : 'MALE', name: speaker.trim() === 'Emma' ? 'en-US-Journey-F' : 'en-US-Journey-D' },
-      audioConfig: { audioEncoding: 'MP3' },
-    };
+  // Split the lines into two halves
+  const middleIndex = Math.ceil(lines.length / 2);
+  const firstHalf = lines.slice(0, middleIndex);
+  const secondHalf = lines.slice(middleIndex);
 
-    const outputDir = path.join(__dirname, 'output');
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir);
-    }
+  // Function to process a set of lines
+  const processLines = async (lines, startIndex) => {
+    let fileIndex = startIndex;
+    const tasks = lines.map(line => async () => {
+      const [speaker, ...speechArray] = line.split(':');
+      const speech = speechArray.join(':').trim();
 
-    const fileName = `${speaker.trim().toLowerCase()}_${fileIndex}.mp3`;
-    const filePath = path.join(outputDir, fileName);
-    fileIndex++;
+      const ttsRequest = {
+        input: { text: speech },
+        voice: { languageCode: 'en-US', ssmlGender: speaker.trim() === 'Emma' ? 'FEMALE' : 'MALE', name: speaker.trim() === 'Emma' ? 'en-US-Journey-F' : 'en-US-Journey-D' },
+        audioConfig: { audioEncoding: 'LINEAR16' },
+      };
 
-    const [ttsResponse] = await ttsClient.synthesizeSpeech(ttsRequest);
-    await util.promisify(fs.writeFile)(filePath, ttsResponse.audioContent, 'binary');
-    console.log(`Generated ${fileName}`);
-    return filePath;
-  });
+      const outputDir = path.join(__dirname, 'output');
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir);
+      }
 
-  const filePaths = await Promise.all(tasks.map(task => task()));
-  return filePaths;
+      const fileName = `${speaker.trim().toLowerCase()}_${fileIndex}.wav`;
+      const filePath = path.join(outputDir, fileName);
+      fileIndex++;
+
+      const [ttsResponse] = await ttsClient.synthesizeSpeech(ttsRequest);
+      await util.promisify(fs.writeFile)(filePath, ttsResponse.audioContent, 'binary');
+      console.log(`Generated ${fileName}`);
+      return filePath;
+    });
+
+    return Promise.all(tasks.map(task => task()));
+  };
+
+  // Process the first half
+  const firstHalfPaths = await processLines(firstHalf, 1);
+  // Process the second half
+  const secondHalfPaths = await processLines(secondHalf, middleIndex + 1);
+
+  return [...firstHalfPaths, ...secondHalfPaths];
 }
+
 
 function cleanUpScript(script) {
   // Remove lines with just "---"
@@ -331,22 +363,43 @@ function cleanUpScript(script) {
   return cleanedScript;
 }
 
-// Combine multiple audio files into one
+// Example function to combine audio files (in MP3 format)
 function combineAudioFiles(filePaths, outputFile) {
-  const command = `ffmpeg -y -i "concat:${filePaths.join('|')}" -acodec copy ${outputFile}`;
-  execSync(command, { stdio: 'inherit' });
-  console.log(`Combined audio saved to ${outputFile}`);
+  const listFile = path.join(__dirname, 'filelist.txt');
+  const fileListContent = filePaths.map(filePath => `file '${filePath}'`).join('\n');
+  fs.writeFileSync(listFile, fileListContent);
+  console.log('List file created:', listFile);
+  try {
+    // Use libmp3lame codec for MP3 output
+    const command = `ffmpeg -y -f concat -safe 0 -i ${listFile} -acodec libmp3lame -q:a 2 ${outputFile}`;
+    execSync(command, { stdio: 'inherit' });
+    console.log(`Combined audio saved to ${outputFile}`);
+  } catch (error) {
+    console.error('Error combining audio files:', error);
+  } finally {
+    fs.unlinkSync(listFile);
+  }
 }
 
 // Combine audio files using concat filter
 function combineAudioFilesWithConcatFilter(inputFiles, outputFile) {
+  // Generate the input files portion of the command
   const concatFilter = inputFiles.map(file => `-i ${file}`).join(' ');
-  const filterComplex = `-filter_complex "[0:0][1:0]concat=n=${inputFiles.length}:v=0:a=1[out]" -map "[out]"`;
-  
+
+  // Generate the filter_complex portion dynamically based on the number of input files
+  const inputIndexes = inputFiles.map((_, index) => `[${index}:0]`).join('');
+  const filterComplex = `-filter_complex "${inputIndexes}concat=n=${inputFiles.length}:v=0:a=1[out]" -map "[out]"`;
+
+  // Final ffmpeg command
   const command = `ffmpeg -y ${concatFilter} ${filterComplex} -acodec libmp3lame ${outputFile}`;
-  
-  execSync(command, { stdio: 'inherit' });
-  console.log(`Combined audio saved to ${outputFile}`);
+
+  // Execute the command
+  try {
+    execSync(command, { stdio: 'inherit' });
+    console.log(`Combined audio saved to ${outputFile}`);
+  } catch (error) {
+    console.error('Error combining audio files:', error);
+  }
 }
 
 app.listen(port, () => {
