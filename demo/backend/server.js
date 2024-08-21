@@ -285,7 +285,7 @@ async function addEndMusic(inputFile) {
     }
 
     const duration = parseFloat(durationOutput);
-    const delay = Math.floor(duration * 970); // Convert to milliseconds
+    const delay = Math.floor(duration * 985); // Convert to milliseconds
 
     console.log('Calculated Delay (milliseconds):', delay);
 
