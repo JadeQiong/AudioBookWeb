@@ -161,7 +161,7 @@ async function generatePodcastScript(bookTitle, author) {
     Start with an introduction where Emma greets the audience and welcomes them to the podcast "BookTalks," where she introduces Michael as the regular guest.
     Then discuss the first topic: ${topics[0]}.
     Requirements:
-    1. Emma is the host and Michael is the guest.
+    1. Emma is the host and Michael is the guest, starting with Emma, and end with Michael's response. Even number of turns.
     2. Michael should have a humorous tone.
     3. The generated transcript should be at least 350-450 words.
     4. Do not include "[Opening music plays]" or "[End of transcript]" or any other start or end-of-transcript markers.
@@ -181,7 +181,7 @@ async function generatePodcastScript(bookTitle, author) {
       The host Emma should smoothly transition into the next topic: ${topics[i]}.
       Requirements:
       1. Emma should continue without greeting the audience again and should not reintroduce the book. She should start directly with a question about the topic.
-      2. The conversation between Emma and Michael should be back-and-forth, focusing on discussing the topic without any transition into ending remarks.
+      2. The conversation between Emma and Michael should be back-and-forth, focusing on discussing the topic without any transition into ending remarks, starting with Emma, and end with Michael's response. Even number of turns.
       3. Include specific examples from the book in the conversation.
       4. The generated transcript should be about 150 words.
       5. Do **NOT** include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". **Do not imply the end of the podcast at all.**
@@ -211,19 +211,29 @@ async function generatePodcastScript(bookTitle, author) {
     Generate the final segment of the podcast discussing the book '${bookTitle}'.
     Emma should ask Michael for his final thoughts on the book and then wrap up the discussion.
     Requirements:
-    1. Emma should thank Michael for joining the podcast.
-    2. The segment should include a closing statement inviting listeners to suggest books for the next discussion.
-    3. The generated transcript should be at most 80 words.
+    1. The segment should have exactly two turns: Emma starts by asking for final thoughts, Michael responds, and Emma gives a brief closing statement.
+    2. Include a closing statement inviting listeners to suggest books for the next discussion.
+    3. The generated transcript should be concise and within 80 words.
     4. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
     5. Do not include "[End of transcript]" or any other end-of-transcript markers.
   `;
-
-    const closingResponse = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: closingPrompt }],
-    });
-
-    fullScript += closingResponse.choices[0].message.content.trim() + "\n\n";
+  
+  const closingResponse = await openai.chat.completions.create({
+    model: 'gpt-3.5-turbo',
+    messages: [{ role: 'user', content: closingPrompt }],
+  });
+  
+  // Process the response to ensure each dialogue line is on a separate line with a blank line in between
+  const lines = closingResponse.choices[0].message.content.trim()
+    .split('\n')
+    .filter(line => line.trim() !== ''); // Remove any extra empty lines
+  
+  // Format with a blank line between Emma and Michael
+  const formattedDialogue = lines.join('\n\n'); // Join with double line breaks for separation
+  
+  fullScript += formattedDialogue + "\n\n";
+  
+  
 
 
 
