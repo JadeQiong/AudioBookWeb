@@ -14,28 +14,50 @@ import {
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import axios from 'axios';
 import Pagination from '@mui/material/Pagination';
-import { tab } from '@testing-library/user-event/dist/tab';
 import DailyBook from './DailyBook';
 
 interface Book {
   title: string;
   cover_url: string;
   category: string;
+  author: string; // Add author field
 }
 
 const LibraryView: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<string>('All');
   const [books, setBooks] = useState<Book[]>([]);
+  const [dailyBook, setDailyBook] = useState({
+    title: '',
+    author: '',
+    category: '',
+    cover_url: '',
+  });
   const [categories, setCategories] = useState<string[]>(['All']);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(16);
   const [totalPages, setTotalPages] = useState<number>(0);
 
   // TODO
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-//   const baseUrl = 'http://localhost:3000';
+  //const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  const baseUrl = 'http://localhost:3000';
 
   console.log('base ', baseUrl);
+
+  useEffect(() => {
+    const fetchDailyBook = async () => {
+      const dailyBookUrl = `${baseUrl}/book-of-the-day`;
+
+      try {
+        const dailyBookResponse = await axios.get(dailyBookUrl);
+        setDailyBook(dailyBookResponse.data);
+      } catch (error) {
+        console.error('Error fetching the daily book:', error);
+      }
+    };
+
+    fetchDailyBook();
+  }, []);
+
   useEffect(() => {
     const fetchBooks = () => {
       const categoryParam =
@@ -82,15 +104,9 @@ const LibraryView: React.FC = () => {
       <Stack
         direction="column"
         spacing={1}
-        sx={{ width: 1300, height: 300, padding: '40px' }}
+        sx={{ width: 1600, height: 300, padding: '40px' }}
       >
-        <DailyBook
-          book={
-            books && books.length
-              ? books[0]
-              : { title: '', cover_url: '', category: '' }
-          }
-        ></DailyBook>
+        <DailyBook book={dailyBook}></DailyBook>
       </Stack>
       <Stack direction="column" spacing={1} sx={{ width: '90%', height: 700 }}>
         <Tabs
@@ -108,10 +124,14 @@ const LibraryView: React.FC = () => {
             />
           ))}
         </Tabs>
-        <Grid container spacing={2}>
+        <Grid container spacing={3} minHeight="550px">
           {filteredBooks.map((book, index) => (
             <Grid item xs={4} sm={3} md={2} lg={1.5} key={index} sx={{}}>
-              <Card>
+              <Card
+                sx={{
+                  backgroundColor: '#101010',
+                }}
+              >
                 <CardActionArea>
                   <CardMedia
                     component="img"
@@ -121,7 +141,7 @@ const LibraryView: React.FC = () => {
                     alt={book.title}
                     sx={{ position: 'relative' }}
                   />
-                  <IconButton
+                  {/* <IconButton
                     sx={{
                       scale: 3,
                       position: 'absolute',
@@ -132,25 +152,28 @@ const LibraryView: React.FC = () => {
                     }}
                   >
                     <PlayCircleOutlineIcon fontSize="large" />
-                  </IconButton>
+                  </IconButton> */}
                 </CardActionArea>
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    component="div"
-                    sx={{
-                      height: '1.6em',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      fontSize: 14,
-                    }}
-                  >
-                    {book.title}
-                  </Typography>
-                </CardContent>
+                {/* <CardContent> */}
+                <Typography
+                  gutterBottom
+                  component="div"
+                  sx={{
+                    padding: 0.5,
+                    backgroundColor: ' #101010',
+                    height: '2.6em',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    fontSize: 14,
+                    color: 'white',
+                  }}
+                >
+                  {book.title}
+                </Typography>
+                {/* </CardContent> */}
               </Card>
             </Grid>
           ))}

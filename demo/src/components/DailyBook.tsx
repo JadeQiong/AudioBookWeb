@@ -1,12 +1,13 @@
 import React from 'react';
 import { Stack, Typography, Button, Box } from '@mui/material';
 import '../App.css';
+import startButton from '../assets/images/start_listening.png';
 
 interface Book {
   title: string;
   cover_url: string;
   category: string;
-  author?: string;
+  author: string;
 }
 
 type DailyBookProps = {
@@ -16,6 +17,8 @@ type DailyBookProps = {
 function DailyBook({ book }: DailyBookProps) {
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-US');
+
+  const handleStartListening = () => {};
 
   return (
     <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
@@ -28,19 +31,50 @@ function DailyBook({ book }: DailyBookProps) {
           {' '}
           Daily Fresh {formattedDate}
         </Typography>
-        <Typography sx={{ fontWeight: 'bold', fontSize: 44 }}>
+
+        <Typography
+          sx={
+            book.title.length < 30
+              ? { fontWeight: 'bold', fontSize: 44, maxHeight: '100px' }
+              : {
+                  fontWeight: 'bold',
+                  fontSize: 28,
+                  maxHeight: '100px',
+                }
+          }
+        >
           {book.title}
         </Typography>
-        <Typography sx={{ color: '#A7A7A7', fontSize: 32 }}>
-          {book.category}
-        </Typography>
-        <Button
-          variant="outlined"
-          sx={{ color: 'white', fontSize: 24, margin: 2 }}
-          onClick={() => console.log('Start Listening')}
+
+        <Typography
+          sx={
+            book.title.length < 30
+              ? { color: '#A7A7A7', fontSize: 32 }
+              : {
+                  color: '#A7A7A7',
+                  fontSize: 18,
+                }
+          }
         >
-          Start Listening
-        </Button>
+          By {book.author}
+        </Typography>
+        <Stack
+          margin={3}
+          display="flex"
+          sx={{
+            alignContent: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <img
+            src={startButton}
+            width={231}
+            height={46}
+            onClick={handleStartListening}
+            style={{ cursor: 'pointer' }}
+          />
+        </Stack>
       </Box>
 
       {/* Right panel */}

@@ -43,7 +43,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from './components/Footer';
 import Home from './views/Home';
 import WaitlistPopup from './components/WaitlistPopup';
-
+import waitlistButton from './assets/images/home_join_waitlist.png';
 import LibraryView from './components/LibraryView';
 
 const theme = createTheme({
@@ -205,21 +205,33 @@ function App() {
               alignItems="center"
             >
               <img src={logo} width={195} height={59} />
+            </Stack>
+            <Stack width={'50%'}></Stack>
+            <Stack
+              direction="row"
+              spacing={2}
+              marginRight={5}
+              alignItems="center"
+            >
               <Button
                 variant="contained"
                 size="large"
                 sx={
                   view === CAROUSEL
                     ? {
-                        color: '#292929',
-                        backgroundColor: 'white',
-                        borderRadius: '12px',
-                        borderColor: 'lightgray',
+                        fontWeight: 'bold',
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
+                        color: 'white',
                       }
                     : {
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
                         color: 'white',
-                        borderRadius: '12px',
-                        borderColor: 'lightgray',
                       }
                 }
                 onClick={handleHomeClick}
@@ -232,42 +244,34 @@ function App() {
                 sx={
                   view === CAROUSEL
                     ? {
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
                         color: 'white',
-                        borderRadius: '12px',
-                        borderColor: 'lightgray',
                       }
                     : {
-                        color: '#292929',
-                        backgroundColor: 'white',
-                        borderRadius: '12px',
-                        borderColor: 'lightgray',
+                        fontWeight: 'bold',
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
+                        color: 'white',
                       }
                 }
                 onClick={handleLibraryClick}
               >
                 library
               </Button>
-            </Stack>
-            <Box sx={{ flexGrow: 1 }} />{' '}
-            <Stack
-              direction="row"
-              spacing={2}
-              marginRight={5}
-              alignItems="center"
-            >
-              <Button
-                size="large"
+              <img
+                src={waitlistButton}
+                width={160}
+                height={46}
                 onClick={() => {
                   setView(WAITLIST);
                 }}
-                sx={{
-                  color: 'white',
-                  borderRadius: '12px',
-                  borderColor: 'lightgray',
-                }}
-              >
-                Join Waitlist
-              </Button>
+                style={{ cursor: 'pointer' }}
+              />
             </Stack>
           </Stack>
           {view === LIBRARY && (
