@@ -38,8 +38,8 @@ const LibraryView: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(0);
 
   // TODO
-  //const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  const baseUrl = 'http://localhost:3000';
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  //   const baseUrl = 'http://localhost:3000';
 
   console.log('base ', baseUrl);
 

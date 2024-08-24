@@ -6,6 +6,7 @@ import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import waitlistButton from '../assets/images/waitlist_button.png';
+import axios from 'axios';
 
 interface WaitlistPopupProps {
   //   open: boolean;
@@ -16,7 +17,7 @@ function isValidEmail(email: string): boolean {
   const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   return regex.test(email);
 }
-
+const baseUrl = `${window.location.protocol}//${window.location.host}`;
 const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
   const [fullName, setFullName] = useState<string>('');
   const [content, setContent] = useState<string>('');
@@ -24,6 +25,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState('');
   const [open, setOpen] = React.useState(false);
+  const [msg, setMsg] = useState<string>('');
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -49,10 +51,24 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
     </React.Fragment>
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (isValidEmail(email)) {
       setOpen(true);
       console.log('Submit', { fullName, userName, email });
+      try {
+        const response = await axios.post(`${baseUrl}/add-to-waitlist`, {
+          name: fullName,
+          email: email,
+          question: content,
+        });
+        console.log(response.data);
+        setOpen(true);
+        setMsg('Thank you for joining our waitlist!');
+      } catch (error) {
+        setOpen(true);
+        setMsg('Something went wrong, please try again.');
+        console.log(error);
+      }
     } else {
       setEmailError('Please enter a valid email address.');
     }
@@ -74,7 +90,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="Thank you for joining our waitlist!"
+        message={msg}
         action={action}
       />
 
