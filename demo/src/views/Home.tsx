@@ -97,10 +97,10 @@ const Home: React.FC<HomeProps> = ({
                 gutterBottom
                 sx={{ textAlign: 'left' }}
               >
-                No more dry summaries—AI-Powered BookTalks delivers a vibrant
+                No more dry summaries—AI-driven BookTalks delivers a vibrant
                 audio experience that brings literature to life, connecting
                 readers with books in a profound and modern way. Experience the
-                future of reading with AI-Powered BookTalks, where every book
+                future of reading with AI-driven BookTalks, where every book
                 becomes a captivating conversation.
               </Typography>
 

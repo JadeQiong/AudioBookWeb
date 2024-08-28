@@ -7,6 +7,8 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import waitlistButton from '../assets/images/waitlist_button.png';
 import axios from 'axios';
+import arrowIcon from '../assets/images/arrow.png';
+import { Padding } from '@mui/icons-material';
 
 interface WaitlistPopupProps {
   //   open: boolean;
@@ -107,7 +109,15 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
           display: 'flex',
         }}
       >
-        <Box sx={{ flex: 1, mr: 2, padding: '20px', paddingTop: 0 }}>
+        <Box
+          sx={{
+            flex: 1,
+            mr: 2,
+            padding: '50px',
+            paddingTop: 0,
+            paddingRight: 0,
+          }}
+        >
           <Typography
             variant="h4"
             component="h2"
@@ -142,9 +152,32 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
             <Typography sx={{ mb: 1, textAlign: 'left' }}>
               Have additional questions?
             </Typography>
-            <Typography sx={{ textAlign: 'left', color: '#AEAEAE' }}>
-              email us directly
-            </Typography>
+            <a
+              href="mailto:link@booktalks.ai"
+              style={{
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              <Typography
+                sx={{
+                  textAlign: 'left',
+                  color: '#AEAEAE',
+                  displa: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                email us directly
+                <img
+                  src={arrowIcon}
+                  width={65}
+                  height={5}
+                  style={{ padding: 2, margin: 2, cursor: 'pointer' }}
+                />
+              </Typography>
+            </a>
           </Box>
         </Box>
 
@@ -152,13 +185,12 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
           orientation="vertical"
           flexItem
           color="grey"
-          sx={{ marginLeft: '70px', marginRight: '70px' }}
+          sx={{ marginLeft: '60px', marginRight: '70px' }}
         />
         <Box
           sx={{
             flex: 1,
             padding: '50px',
-            paddingTop: '50px',
             color: '#5E626D',
           }}
         >
@@ -254,9 +286,6 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
           />
           <Stack
             sx={{
-              display: 'flex',
-              justifyContent: 'right', // This will align the button to the right
-              alignItems: 'center', // Adjusts vertical alignment
               marginTop: '20px',
             }}
           >
@@ -265,7 +294,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
               width={231}
               height={46}
               onClick={handleSubmit}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', marginLeft: '400px' }}
             />
           </Stack>
         </Box>

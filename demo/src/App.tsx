@@ -196,23 +196,29 @@ function App() {
         <div className="App-header">
           <Stack
             direction="row"
-            sx={{ margin: 2, alignItems: 'center', width: '90%' }}
+            sx={{
+              margin: 2,
+              alignItems: 'center',
+              width: '90%',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
           >
             <Stack
-              direction="row"
-              marginLeft={5}
-              spacing={2}
-              alignItems="center"
+              display="flex"
+              sx={{ alignItems: 'center', justifyContent: 'center' }}
             >
-              <img src={logo} width={195} height={59} />
+              <img
+                src={logo}
+                width={190}
+                height={59}
+                onClick={() => {
+                  setView(CAROUSEL);
+                }}
+                style={{ cursor: 'pointer' }}
+              />
             </Stack>
-            <Stack width={'50%'}></Stack>
-            <Stack
-              direction="row"
-              spacing={2}
-              marginRight={5}
-              alignItems="center"
-            >
+            <Stack direction="row" spacing={2} alignItems="center">
               <Button
                 variant="contained"
                 size="large"
@@ -274,6 +280,7 @@ function App() {
               />
             </Stack>
           </Stack>
+
           {view === LIBRARY && (
             <div className="container_background">
               <LibraryView />
