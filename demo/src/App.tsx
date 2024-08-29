@@ -29,10 +29,10 @@ import elonMuskAudio from './assets/audios/elon_musk.mp3';
 import chipWarAudio from './assets/audios/chip_war.mp3';
 import zeroToOneAudio from './assets/audios/zero_to_one.mp3';
 import hackersPaintersAudio from './assets/audios/hacker_painter.mp3';
-import nightAudio from './assets/audios/elon_musk.mp3';
-import weShouldBeFeministsAudio from './assets/audios/chip_war.mp3';
-import sapienAudio from './assets/audios/zero_to_one.mp3';
-import gumsAudio from './assets/audios/hacker_painter.mp3';
+import nightAudio from './assets/audios/night.mp3';
+import weShouldBeFeministsAudio from './assets/audios//we_should_all_be_feminists.mp3';
+import sapienAudio from './assets/audios/sapiens.mp3';
+import gumsAudio from './assets/audios/guns.mp3';
 
 import { elonMaskContent } from './types/hardcoded';
 import { chipWarContent } from './types/hardcoded';
