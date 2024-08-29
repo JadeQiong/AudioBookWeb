@@ -39,6 +39,10 @@ import { chipWarContent } from './types/hardcoded';
 import { hackersPaintersContent } from './types/hardcoded';
 import { zeroToOneContet } from './types/hardcoded';
 import { EducatedContent } from './types/hardcoded';
+import { gumsContent } from './types/hardcoded';
+import { nightContent } from './types/hardcoded';
+import { weShouldBeFeministsContent } from './types/hardcoded';
+import { sapienContent } from './types/hardcoded';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from './components/Footer';
 import Home from './views/Home';
@@ -77,10 +81,14 @@ const picturesMap = [
 ];
 
 const contentsMap = [
-  elonMaskContent,
   chipWarContent,
-  hackersPaintersContent,
+  elonMaskContent,
   zeroToOneContet,
+  hackersPaintersContent,
+  gumsContent,
+  nightContent,
+  sapienContent,
+  weShouldBeFeministsContent,
   EducatedContent,
 ];
 
@@ -107,17 +115,11 @@ function App() {
   const [sliderIsHide, setSliderIsHide] = React.useState(true);
   const [audioIndex, setAudioIndex] = useState(-1);
   const [playing, setPlaying] = React.useState<boolean>(false);
-  const [sliderIndex, setSliderIndex] = useState(0);
+  const [sliderIndex, setSliderIndex] = useState(-1);
 
   const handleIndexChange = (index: number) => {
     setSliderIndex(index);
   };
-
-  useEffect(() => {
-    if (sliderIndex != -1) {
-      setPlaying(true);
-    }
-  }, [sliderIndex]);
 
   const [view, setView] = useState<string>(CAROUSEL);
 
@@ -141,6 +143,7 @@ function App() {
   const handleAudioChange = () => {
     setSliderIsHide(false);
     // setHoversliderIsHide(false);
+    setPlaying(true);
     setAudioIndex(sliderIndex);
   };
 
@@ -244,7 +247,7 @@ function App() {
               >
                 Home
               </Button>
-              <Button
+              {/* <Button
                 variant="contained"
                 size="large"
                 sx={
@@ -268,7 +271,7 @@ function App() {
                 onClick={handleLibraryClick}
               >
                 library
-              </Button>
+              </Button> */}
               <img
                 src={waitlistButton}
                 width={160}

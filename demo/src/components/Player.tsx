@@ -49,6 +49,7 @@ export const Player: React.FC<SliderProps> = React.forwardRef<
     const [duration, setDuration] = useState(0);
 
     const handleTimeUpdate = useCallback((time: number) => {
+      console.log('time update , ', time);
       setCurrentTime(time);
     }, []);
 
