@@ -1,26 +1,31 @@
 {
   "files": {
-    "main.css": "/AudioBookWeb/static/css/main.59ac914e.css",
-    "main.js": "/AudioBookWeb/static/js/main.93915946.js",
-    "static/js/453.f3bb842a.chunk.js": "/AudioBookWeb/static/js/453.f3bb842a.chunk.js",
-    "static/media/elon_musk.mp3": "/AudioBookWeb/static/media/elon_musk.e661fcf3d55ac6450dee.mp3",
-    "static/media/hacker_painter.mp3": "/AudioBookWeb/static/media/hacker_painter.fe19c909266daa20b1ea.mp3",
-    "static/media/educated.mp3": "/AudioBookWeb/static/media/educated.676c49e40b46fc9ba108.mp3",
-    "static/media/zero_to_one.mp3": "/AudioBookWeb/static/media/zero_to_one.0899caca82f3c41a9d3a.mp3",
-    "static/media/chip_war.mp3": "/AudioBookWeb/static/media/chip_war.1c51f944942a26a32678.mp3",
-    "static/media/zero_to_one.png": "/AudioBookWeb/static/media/zero_to_one.57b9bab386be9b429ee7.png",
-    "static/media/hackers_painters.png": "/AudioBookWeb/static/media/hackers_painters.c76fc287607e0fc7a94e.png",
-    "static/media/educated.png": "/AudioBookWeb/static/media/educated.8e2167903805b5a7e8ca.png",
-    "static/media/elon_musk.png": "/AudioBookWeb/static/media/elon_musk.a9243f4f79a2f422e483.png",
-    "static/media/background.png": "/AudioBookWeb/static/media/background.c503ccb2992c96bc089f.png",
-    "static/media/chip_war.png": "/AudioBookWeb/static/media/chip_war.624ad8f971965810bb81.png",
-    "index.html": "/AudioBookWeb/index.html",
-    "main.59ac914e.css.map": "/AudioBookWeb/static/css/main.59ac914e.css.map",
-    "main.93915946.js.map": "/AudioBookWeb/static/js/main.93915946.js.map",
-    "453.f3bb842a.chunk.js.map": "/AudioBookWeb/static/js/453.f3bb842a.chunk.js.map"
+    "main.css": "./static/css/main.b12d5076.css",
+    "main.js": "./static/js/main.c4ac6e87.js",
+    "static/js/453.f3bb842a.chunk.js": "./static/js/453.f3bb842a.chunk.js",
+    "static/media/hacker_painter.mp3": "./static/media/hacker_painter.4a765277bc17baf75ce3.mp3",
+    "static/media/zero_to_one.mp3": "./static/media/zero_to_one.2bcacd6a10b58cdef154.mp3",
+    "static/media/chip_war.mp3": "./static/media/chip_war.59671c435b86726afeb3.mp3",
+    "static/media/educated.mp3": "./static/media/educated.a746b66a0ac88a936795.mp3",
+    "static/media/elon_musk.mp3": "./static/media/elon_musk.aeb3041eed2e72a9a61a.mp3",
+    "static/media/zero_to_one.png": "./static/media/zero_to_one.57b9bab386be9b429ee7.png",
+    "static/media/hackers_painters.png": "./static/media/hackers_painters.c76fc287607e0fc7a94e.png",
+    "static/media/educated.png": "./static/media/educated.8e2167903805b5a7e8ca.png",
+    "static/media/elon_musk.png": "./static/media/elon_musk.a9243f4f79a2f422e483.png",
+    "static/media/gums.png": "./static/media/gums.f8497a25d765f358a3d1.png",
+    "static/media/we_should_be_feminists.png": "./static/media/we_should_be_feminists.165e5d939058fff8523e.png",
+    "static/media/night.png": "./static/media/night.906d7ac263de32617ba8.png",
+    "static/media/background.png": "./static/media/background.c503ccb2992c96bc089f.png",
+    "static/media/sapiens.png": "./static/media/sapiens.a4095e5fa099b95ada08.png",
+    "static/media/chip_war.png": "./static/media/chip_war.624ad8f971965810bb81.png",
+    "static/media/start_listening.png": "./static/media/start_listening.bdaec3c4f6232a504e57.png",
+    "index.html": "./index.html",
+    "main.b12d5076.css.map": "./static/css/main.b12d5076.css.map",
+    "main.c4ac6e87.js.map": "./static/js/main.c4ac6e87.js.map",
+    "453.f3bb842a.chunk.js.map": "./static/js/453.f3bb842a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.59ac914e.css",
-    "static/js/main.93915946.js"
+    "static/css/main.b12d5076.css",
+    "static/js/main.c4ac6e87.js"
   ]
 }
