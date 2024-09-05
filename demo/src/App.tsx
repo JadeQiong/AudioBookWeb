@@ -57,7 +57,6 @@ const theme = createTheme({
 });
 
 const audiosMap = [
-  chipWarAudio,
   elonMuskAudio,
   zeroToOneAudio,
   hackersPaintersAudio,
@@ -66,10 +65,10 @@ const audiosMap = [
   sapienAudio,
   weShouldBeFeministsAudio,
   educatedAudio,
+  chipWarAudio,
 ];
 
 const picturesMap = [
-  chipWarImage,
   elonMuskImage,
   zeroToOneImage,
   hackersPaintersImage,
@@ -78,10 +77,10 @@ const picturesMap = [
   sapiensImage,
   weShouldBeFeministsImage,
   educatedImage,
+  chipWarImage,
 ];
 
 const contentsMap = [
-  chipWarContent,
   elonMaskContent,
   zeroToOneContet,
   hackersPaintersContent,
@@ -90,20 +89,21 @@ const contentsMap = [
   sapienContent,
   weShouldBeFeministsContent,
   EducatedContent,
+  chipWarContent,
 ];
 
 let repeatedImagesArray: any[] = [];
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 2; i++) {
   repeatedImagesArray = [...repeatedImagesArray, ...picturesMap];
 }
 
 let repeatedAudiosArray: any[] = [];
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 2; i++) {
   repeatedAudiosArray = [...repeatedAudiosArray, ...audiosMap];
 }
 
 let repeatedContentsArray: any[] = [];
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 2; i++) {
   repeatedContentsArray = [...repeatedContentsArray, ...contentsMap];
 }
 
@@ -126,6 +126,7 @@ function App() {
   const handleLibraryClick = () => {
     setView(LIBRARY);
   };
+
   const handleHomeClick = () => {
     setView(CAROUSEL);
   };
@@ -157,7 +158,7 @@ function App() {
     setPopupOpen(false);
   };
 
-  const items: CarouselItem[] = Array(20)
+  const items: CarouselItem[] = Array(18)
     .fill('')
     .map((_: string, index: number) => ({
       alt: 'A random photo',
