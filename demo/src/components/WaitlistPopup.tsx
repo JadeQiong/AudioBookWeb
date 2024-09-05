@@ -153,7 +153,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
               Have additional questions?
             </Typography>
             <a
-              href="mailto:link@booktalks.ai"
+              href="mailto:info.booktalks.ai@gmail.com"
               style={{
                 textDecoration: 'none',
                 display: 'flex',
