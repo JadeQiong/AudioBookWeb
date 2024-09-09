@@ -107,6 +107,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
           borderStyle: 'solid',
           p: 4,
           display: 'flex',
+          backgroundColor: '#131313',
         }}
       >
         <Box
@@ -114,7 +115,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
             flex: 1,
             mr: 2,
             padding: '50px',
-            paddingTop: 0,
+            paddingTop: 3,
             paddingRight: 0,
           }}
         >
@@ -128,7 +129,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               display: 'inline',
-              fontSize: 38,
+              fontSize: 37,
               fontWeight: 'bold',
               margin: '30px',
             }}

@@ -254,7 +254,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
               >
                 <img
                   src={item.image}
-                  style={{ width: '26rem', height: '39rem' }}
+                  style={{ width: '26rem', height: '39rem', cursor: 'pointer' }}
                   alt={item.alt}
                 />
                 <Box sx={{ height: '2rem' }}></Box>

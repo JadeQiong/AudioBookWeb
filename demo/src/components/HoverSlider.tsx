@@ -315,6 +315,7 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
               width: '100%',
               marginLeft: 2,
               marginRight: 2,
+              zIndex: 10,
               '& .MuiSlider-thumb': {
                 height: 12, // Control button height
                 width: 12, // Control button width
@@ -350,7 +351,7 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
             marginTop: -2,
           }}
         >
-          <Typography sx={{ fontSize: 15, margin: 1 }}>
+          <Typography sx={{ fontSize: 15, margin: 1, zIndex: -1 }}>
             {formatTime(Math.min(duration, (value / 100.0) * duration))} /{' '}
             {formatTime(duration)}
           </Typography>

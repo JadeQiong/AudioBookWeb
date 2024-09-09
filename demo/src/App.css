@@ -25,7 +25,7 @@ h1 {
 }
 
 .App-header {
-  background: radial-gradient(circle at center bottom, #162b56, #101010 20%);
+  background: radial-gradient(circle at center, #162b56, #101010 60%);
   /* background-color: #101010; */
   min-height: 100vh;
   display: flex;
@@ -64,8 +64,8 @@ h1 {
 }
 
 .container_background {
-  /* background: radial-gradient(circle at center bottom, #162b56, #101010 50%); */
-  /* height: 30vh; */
+  /* background: radial-gradient(circle at center bottom, #162b56, #101010 50%); 
+   height: 30vh; */
   display: flex;
   justify-content: center;
   align-items: center;

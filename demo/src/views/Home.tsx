@@ -38,7 +38,7 @@ const Home: React.FC<HomeProps> = ({
               marginTop: '10%',
             }}
           >
-            Transform your books into AI-driven podcasts
+            Transform Your Books Into AI-Driven Podcasts
           </Typography>
           <Typography
             variant="h6"
@@ -97,10 +97,10 @@ const Home: React.FC<HomeProps> = ({
                 gutterBottom
                 sx={{ textAlign: 'left' }}
               >
-                No more dry summaries—AI-driven BookTalks delivers a vibrant
+                No more dry summaries—AI-Driven BookTalks delivers a vibrant
                 audio experience that brings literature to life, connecting
                 readers with books in a profound and modern way. Experience the
-                future of reading with AI-driven BookTalks, where every book
+                future of reading with AI-Driven BookTalks, where every book
                 becomes a captivating conversation.
               </Typography>
 
@@ -111,6 +111,7 @@ const Home: React.FC<HomeProps> = ({
                   width={273}
                   height={29}
                   onClick={onWaitlistClicked}
+                  style={{ cursor: 'pointer' }}
                 />
                 {/* <div className="content">Join Our Waitlist</div> */}
 
