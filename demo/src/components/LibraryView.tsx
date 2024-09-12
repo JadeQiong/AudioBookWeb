@@ -39,8 +39,7 @@ const LibraryView: React.FC = () => {
 
   // TODO
   const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  //   const baseUrl = 'https://localhost:3000';
-
+  //   const baseUrl = 'http://localhost:3001';
   console.log('base ', baseUrl);
 
   useEffect(() => {

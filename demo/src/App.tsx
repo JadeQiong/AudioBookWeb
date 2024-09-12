@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import logo from './assets/images/logo.png';
-
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -23,7 +23,7 @@ import weShouldBeFeministsImage from './assets/images/we_should_be_feminists.png
 import sapiensImage from './assets/images/sapiens.png';
 import gumsImage from './assets/images/gums.png';
 
-import IconButton from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import educatedAudio from './assets/audios/educated.mp3';
 import elonMuskAudio from './assets/audios/elon_musk.mp3';
 import chipWarAudio from './assets/audios/chip_war.mp3';
@@ -112,6 +112,7 @@ const LIBRARY = 'library';
 const WAITLIST = 'waitlist';
 
 function App() {
+  const navigate = useNavigate();
   const [sliderIsHide, setSliderIsHide] = React.useState(true);
   const [audioIndex, setAudioIndex] = useState(-1);
   const [playing, setPlaying] = React.useState<boolean>(false);
@@ -124,10 +125,12 @@ function App() {
   const [view, setView] = useState<string>(CAROUSEL);
 
   const handleLibraryClick = () => {
+    navigate('/library');
     setView(LIBRARY);
   };
 
   const handleHomeClick = () => {
+    navigate('/');
     setView(CAROUSEL);
   };
 
@@ -217,6 +220,7 @@ function App() {
                 width={190}
                 height={59}
                 onClick={() => {
+                  navigate('/');
                   setView(CAROUSEL);
                 }}
                 style={{ cursor: 'pointer' }}
@@ -248,7 +252,7 @@ function App() {
               >
                 Home
               </Button>
-              {/* <Button
+              <Button
                 variant="contained"
                 size="large"
                 sx={
@@ -272,12 +276,13 @@ function App() {
                 onClick={handleLibraryClick}
               >
                 library
-              </Button> */}
+              </Button>
               <img
                 src={waitlistButton}
                 width={160}
                 height={46}
                 onClick={() => {
+                  navigate('/waitlist');
                   setView(WAITLIST);
                 }}
                 style={{ cursor: 'pointer' }}
@@ -285,7 +290,43 @@ function App() {
             </Stack>
           </Stack>
 
-          {view === LIBRARY && (
+          <div className="App">
+            {/* <header className="App-header">
+            <nav>
+              <Stack direction="row" spacing={2}>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                  <Button variant="outlined">Home</Button>
+                </Link>
+                <Link to="/library" style={{ textDecoration: 'none' }}>
+                  <Button variant="outlined">Library</Button>
+                </Link>
+                <Link to="/waitlist" style={{ textDecoration: 'none' }}>
+                  <Button variant="outlined">Waitlist</Button>
+                </Link>
+              </Stack>
+            </nav>
+          </header> */}
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Home
+                    items={items}
+                    handleIndexChange={handleIndexChange}
+                    onWaitlistClicked={() => {
+                      navigate('/waitlist');
+                      setView(WAITLIST);
+                    }}
+                  />
+                }
+              />
+              <Route path="/library" element={<LibraryView />} />
+              <Route path="/waitlist" element={<WaitlistPopup />} />
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </div>
+
+          {/* {view === LIBRARY && (
             <div className="container_background">
               <LibraryView />
             </div>
@@ -301,7 +342,7 @@ function App() {
             />
           )}
 
-          {view === WAITLIST && <WaitlistPopup></WaitlistPopup>}
+          {view === WAITLIST && <WaitlistPopup></WaitlistPopup>} */}
 
           <Footer></Footer>
         </div>
