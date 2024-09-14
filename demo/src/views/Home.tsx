@@ -20,7 +20,7 @@ const Home: React.FC<HomeProps> = ({
 }) => {
   const carouselRef = React.createRef<CarouselRef>();
   return (
-    <>
+    <Stack>
       <div className="container_background">
         <Stack direction="column" sx={{ width: '100%', marginBottom: '5%' }}>
           <Typography
@@ -121,7 +121,7 @@ const Home: React.FC<HomeProps> = ({
           </Stack>
         </Stack>
       </div>
-    </>
+    </Stack>
   );
 };
 export default Home;

@@ -306,6 +306,7 @@ function App() {
               </Stack>
             </nav>
           </header> */}
+
             <Routes>
               <Route
                 path="/"
@@ -325,24 +326,6 @@ function App() {
               <Route path="*" element={<Home />} />
             </Routes>
           </div>
-
-          {/* {view === LIBRARY && (
-            <div className="container_background">
-              <LibraryView />
-            </div>
-          )}
-
-          {view === CAROUSEL && (
-            <Home
-              items={items}
-              handleIndexChange={handleIndexChange}
-              onWaitlistClicked={() => {
-                setView(WAITLIST);
-              }}
-            />
-          )}
-
-          {view === WAITLIST && <WaitlistPopup></WaitlistPopup>} */}
 
           <Footer></Footer>
         </div>

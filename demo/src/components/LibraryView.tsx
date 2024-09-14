@@ -38,8 +38,8 @@ const LibraryView: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(0);
 
   // TODO
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  //   const baseUrl = 'http://localhost:3001';
+  //   const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  const baseUrl = 'http://localhost:3001';
   console.log('base ', baseUrl);
 
   useEffect(() => {
@@ -99,15 +99,24 @@ const LibraryView: React.FC = () => {
       : books.filter((book) => book.category === selectedTab);
 
   return (
-    <Stack direction="column" display="flex" alignItems="center">
+    <Stack
+      direction="column"
+      display="flex"
+      alignItems="center"
+      sx={{ backgroundColor: '#101010' }}
+    >
       <Stack
         direction="column"
         spacing={1}
-        sx={{ width: 1600, height: 300, padding: '40px' }}
+        sx={{ width: 1600, height: 'auto', padding: '40px' }}
       >
         <DailyBook book={dailyBook}></DailyBook>
       </Stack>
-      <Stack direction="column" spacing={1} sx={{ width: '90%', height: 700 }}>
+      <Stack
+        direction="column"
+        spacing={1}
+        sx={{ width: '90vw', height: '65vh' }}
+      >
         <Tabs
           value={selectedTab}
           onChange={handleChange}
@@ -123,60 +132,55 @@ const LibraryView: React.FC = () => {
             />
           ))}
         </Tabs>
-        <Grid container spacing={3} minHeight="550px">
+        <Grid container spacing={3} sx={{ height: '62vh' }}>
           {filteredBooks.map((book, index) => (
-            <Grid item xs={4} sm={3} md={2} lg={1.5} key={index} sx={{}}>
+            <Grid item xs={4} sm={3} md={2} lg={1.5} key={index}>
               <Card
                 sx={{
                   backgroundColor: '#101010',
+                  width: '8vw', // 20% of the viewport width
+                  height: '25vh', // 30% of the viewport height
                 }}
               >
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    height="200"
-                    width="100"
+                    sx={{
+                      height: '20vh', // Set only height or width, not both
+                      width: 'auto', // Let the width be automatic
+                      maxWidth: '100%', // Ensure it doesn't overflow its container
+                      objectFit: 'contain', // This prevents cropping by fitting the image within the dimensions
+                      position: 'relative',
+                    }}
                     image={book.cover_url}
                     alt={book.title}
-                    sx={{ position: 'relative' }}
                   />
-                  {/* <IconButton
-                    sx={{
-                      scale: 3,
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      color: 'white',
-                    }}
-                  >
-                    <PlayCircleOutlineIcon fontSize="large" />
-                  </IconButton> */}
                 </CardActionArea>
-                {/* <CardContent> */}
                 <Typography
                   gutterBottom
                   component="div"
                   sx={{
-                    padding: 0.5,
-                    backgroundColor: ' #101010',
-                    height: '2.6em',
+                    padding: 1,
+                    // Define an explicit height or max-height to ensure the box can contain exactly two lines
+                    maxHeight: '5.5vh', // Adjust this value based on your font size and line height
                     overflow: 'hidden',
-                    textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
-                    fontSize: 14,
+                    fontSize: '1.5vh',
                     color: 'white',
+                    textAlign: 'left',
+                    lineHeight: '2.5vh', // Adjust line height to fit the container's height
+                    textOverflow: 'ellipsis', // This should already be handled by WebkitLineClamp, but it's good to specify
                   }}
                 >
                   {book.title}
                 </Typography>
-                {/* </CardContent> */}
               </Card>
             </Grid>
           ))}
         </Grid>
+
         <Pagination
           count={totalPages}
           page={currentPage}
