@@ -6,6 +6,8 @@
   position: relative;
   margin: 0 auto;
   perspective: 62.5rem;
+  margin-right: 5%;
+  margin-left: 1%;
 }
 
 .carousel__container {
@@ -14,6 +16,7 @@
   position: absolute;
   transform-style: preserve-3d;
   transition: transform 1s;
+  background-color: aliceblue;
 }
 
 .carousel__slide__disable-hover {

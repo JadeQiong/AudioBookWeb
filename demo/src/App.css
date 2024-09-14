@@ -25,8 +25,6 @@ h1 {
 }
 
 .App-header {
-  background: radial-gradient(circle at center, #162b56, #101010 60%);
-  /* background-color: #101010; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;

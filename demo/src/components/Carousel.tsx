@@ -84,6 +84,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
         Math.round((itemWidth / 2 / Math.tan(Math.PI / len)) * radiusFactor),
       [itemWidth, len]
     );
+    console.log('radius is ', radius);
 
     const ref = useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = useState(
@@ -117,12 +118,12 @@ export const Carousel: FC<CarouselProps> = forwardRef(
           style.transform = `rotateY(${cellAngle}deg) translateZ(${radius}px)`;
 
           if (index === getPrevNIndex(1) || index === getNextNIndex(1)) {
-            const additionalRotation = index === getPrevNIndex(1) ? 40 : -40;
+            const additionalRotation = index === getPrevNIndex(1) ? 50 : -50;
             style.transform += ` rotateY(${additionalRotation}deg)`;
           }
 
           if (index === getPrevNIndex(2) || index === getNextNIndex(2)) {
-            const additionalRotation = index === getPrevNIndex(2) ? 50 : -50;
+            const additionalRotation = index === getPrevNIndex(2) ? 40 : -40;
             style.transform += ` rotateY(${additionalRotation}deg)`;
           }
         } else {
@@ -260,7 +261,7 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                 <Box sx={{ height: '2rem' }}></Box>
                 {Math.min(
                   Math.abs(selectedIndex - index),
-                  20 - Math.abs(selectedIndex - index)
+                  18 - Math.abs(selectedIndex - index)
                 ) <= 2 && (
                   <>
                     <img
