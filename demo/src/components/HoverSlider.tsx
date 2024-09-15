@@ -84,7 +84,27 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
     const [lastUpdateTime, setLastUpdateTime] = React.useState<number | null>(
       null
     );
+    const [error, setError] = React.useState('');
     const audioRef = React.useRef<HTMLAudioElement>(null);
+    React.useEffect(() => {
+      // Reset error state whenever the source changes
+      setError('');
+
+      const handleAudioError = () => {
+        setError('The audio file could not be played.');
+      };
+
+      if (audioRef.current) {
+        audioRef.current.addEventListener('error', handleAudioError);
+      }
+
+      return () => {
+        // Clean up the event listener when the component unmounts or the source changes
+        if (audioRef.current) {
+          audioRef.current.removeEventListener('error', handleAudioError);
+        }
+      };
+    }, [audio]);
 
     useEffect(() => {
       console.log('Audio Ref on Mount:', audioRef.current); // Check ref assignment
@@ -135,13 +155,26 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
     };
 
     React.useEffect(() => {
-      // Listen for changes in the playing prop
       if (playing && audioRef.current && audioRef.current.paused) {
-        audioRef.current.play();
+        if (!error) {
+          audioRef.current.play().catch((e) => {
+            console.error('Error playing the audio:', e);
+            setError('Failed to play audio.');
+          });
+        }
       } else if (!playing && audioRef.current && !audioRef.current.paused) {
         audioRef.current.pause();
       }
-    }, [playing]);
+    }, [playing, error]);
+
+    // React.useEffect(() => {
+    //   // Listen for changes in the playing prop
+    //   if (playing && audioRef.current && audioRef.current.paused) {
+    //     audioRef.current.play();
+    //   } else if (!playing && audioRef.current && !audioRef.current.paused) {
+    //     audioRef.current.pause();
+    //   }
+    // }, [playing]);
 
     React.useLayoutEffect(() => {
       console.log(audioRef, audioRef.current);

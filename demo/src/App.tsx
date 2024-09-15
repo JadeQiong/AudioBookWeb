@@ -49,10 +49,23 @@ import Home from './views/Home';
 import WaitlistPopup from './components/WaitlistPopup';
 import waitlistButton from './assets/images/home_join_waitlist.png';
 import LibraryView from './components/LibraryView';
+import { Book } from './types/book';
 
 const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat, Arial, sans-serif',
+  },
+  components: {
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          height: '0.5px',
+          border: 1,
+          backgroundImage:
+            'linear-gradient(to right, #162b56, white 50%, #162b56)',
+        },
+      },
+    },
   },
 });
 
@@ -115,8 +128,32 @@ function App() {
   const navigate = useNavigate();
   const [sliderIsHide, setSliderIsHide] = React.useState(true);
   const [audioIndex, setAudioIndex] = useState(-1);
+  const newBook: Book = {
+    title: 'The Great Gatsby',
+    cover_url: 'https://example.com/gatsby.jpg',
+    category: 'Classic Fiction',
+    author: 'F. Scott Fitzgerald',
+    audio: 'https://example.com/gatsby.mp3',
+  };
+
+  const [book, setBook] = useState(newBook);
   const [playing, setPlaying] = React.useState<boolean>(false);
   const [sliderIndex, setSliderIndex] = useState(-1);
+
+  useEffect(() => {
+    if (audioIndex >= 0) {
+      const newBook: Book = {
+        title: repeatedContentsArray[audioIndex]?.title,
+        // TODO: this fields are not corrent...
+        cover_url: 'https://example.com/gatsby.jpg',
+        category: 'Classic Fiction',
+        author: 'F. Scott Fitzgerald',
+        // Optional fields can be omitted or included as needed
+        audio: repeatedAudiosArray[audioIndex],
+      };
+      setBook(newBook);
+    }
+  }, [audioIndex]);
 
   const handleIndexChange = (index: number) => {
     setSliderIndex(index);
@@ -194,7 +231,7 @@ function App() {
         playing={playing}
         setPlaying={setPlaying}
         repeatedAudiosArray={repeatedAudiosArray}
-        audioIndex={audioIndex}
+        book={book}
         repeatedContentsArray={repeatedContentsArray}
         repeatedImagesArray={repeatedImagesArray}
       ></Player>
@@ -290,43 +327,27 @@ function App() {
             </Stack>
           </Stack>
 
-          <div className="App">
-            {/* <header className="App-header">
-            <nav>
-              <Stack direction="row" spacing={2}>
-                <Link to="/" style={{ textDecoration: 'none' }}>
-                  <Button variant="outlined">Home</Button>
-                </Link>
-                <Link to="/library" style={{ textDecoration: 'none' }}>
-                  <Button variant="outlined">Library</Button>
-                </Link>
-                <Link to="/waitlist" style={{ textDecoration: 'none' }}>
-                  <Button variant="outlined">Waitlist</Button>
-                </Link>
-              </Stack>
-            </nav>
-          </header> */}
-
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Home
-                    items={items}
-                    handleIndexChange={handleIndexChange}
-                    onWaitlistClicked={() => {
-                      navigate('/waitlist');
-                      setView(WAITLIST);
-                    }}
-                  />
-                }
-              />
-              <Route path="/library" element={<LibraryView />} />
-              <Route path="/waitlist" element={<WaitlistPopup />} />
-              <Route path="*" element={<Home />} />
-            </Routes>
-          </div>
-
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Home
+                  items={items}
+                  handleIndexChange={handleIndexChange}
+                  onWaitlistClicked={() => {
+                    navigate('/waitlist');
+                    setView(WAITLIST);
+                  }}
+                />
+              }
+            />
+            <Route
+              path="/library"
+              element={<LibraryView setBook={setBook} />}
+            />
+            <Route path="/waitlist" element={<WaitlistPopup />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
           <Footer></Footer>
         </div>
       </div>

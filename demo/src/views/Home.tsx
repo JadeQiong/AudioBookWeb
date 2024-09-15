@@ -6,6 +6,16 @@ import Typography from '@mui/material/Typography';
 import Carousel, { CarouselRef } from '../components/Carousel';
 import wailtlistLogo from '../assets/images/waitlist.png';
 import dotsIcon from '../assets/images/dots.png';
+import { ThemeProvider, createMuiTheme } from '@mui/material';
+
+const THEME = createMuiTheme({
+  typography: {
+    fontFamily: 'Montserrat, Arial, sans-serif',
+    h4: {
+      fontWeight: 1000,
+    },
+  },
+});
 
 export type HomeProps = Readonly<{
   items?: any;
@@ -23,28 +33,27 @@ const Home: React.FC<HomeProps> = ({
     <Stack>
       <div className="container_background">
         <Stack direction="column" sx={{ width: '100%', marginBottom: '5%' }}>
-          <Typography
-            variant="h4"
-            component="h1"
-            gutterBottom
-            sx={{
-              fontSize: 48,
-              fontWeight: 'bold',
-              fontFamily: 'Montserrat, Arial, sans-serif',
-              background: 'linear-gradient(to bottom, #ebebec, #979797)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              display: 'inline',
-              marginTop: '10%',
-            }}
-          >
-            Transform Your Books Into AI-Driven Podcasts
-          </Typography>
+          <ThemeProvider theme={THEME}>
+            <Typography
+              variant="h4"
+              gutterBottom
+              sx={{
+                fontSize: 54,
+                background: 'linear-gradient(to bottom, #ebebec, #979797)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                display: 'inline',
+                marginTop: '8%',
+              }}
+            >
+              Transform Your Books Into AI-Driven Podcasts
+            </Typography>
+          </ThemeProvider>
           <Typography
             variant="h6"
             gutterBottom
             sx={{
-              fontSize: 24,
+              fontSize: 28,
               background: '#c1c1c1',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
