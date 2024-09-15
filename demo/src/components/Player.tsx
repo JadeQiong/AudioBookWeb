@@ -8,6 +8,7 @@ import React, {
 import HoverSlider, { HoverSliderRef } from './HoverSlider';
 import ContinuousSlider from './ContinuousSlider';
 import { hover } from '@testing-library/user-event/dist/hover';
+import { Book } from '../types/book';
 
 export type PlayerRef = {
   handlePlayPause: () => void;
@@ -20,7 +21,7 @@ export type SliderProps = Readonly<{
   setPlaying?: any;
   handlePlayPause?: any;
   repeatedAudiosArray?: any;
-  audioIndex: number;
+  book: Book;
   repeatedContentsArray?: any;
   repeatedImagesArray?: any;
 }>;
@@ -36,7 +37,7 @@ export const Player: React.FC<SliderProps> = React.forwardRef<
       playing,
       setPlaying,
       repeatedAudiosArray,
-      audioIndex,
+      book,
       repeatedContentsArray,
       repeatedImagesArray,
     },
@@ -80,8 +81,8 @@ export const Player: React.FC<SliderProps> = React.forwardRef<
       <>
         <HoverSlider
           //   ref={hoverSliderRef}
-          audio={repeatedAudiosArray[audioIndex]}
-          title={repeatedContentsArray[audioIndex]?.title}
+          audio={book.audio}
+          title={book.title}
           isHide={hoverIsHide}
           setIsHide={setHoverIsHide}
           playing={playing}

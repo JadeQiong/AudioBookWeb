@@ -3,36 +3,29 @@ import { Stack, Typography, Button, Box } from '@mui/material';
 import '../App.css';
 import startButton from '../assets/images/start_listening.png';
 import { ThemeProvider, createMuiTheme } from '@mui/material';
+import { Book } from '../types/book';
 
 const THEME = createMuiTheme({
   typography: {
     fontFamily: 'Montserrat, Arial, sans-serif',
-    // "lineHeight": 1.5,
-    // "letterSpacing": 0.32,
-    // useNextVariants: true,
-    // suppressDeprecationWarnings: true,
     h6: {
       fontWeight: 600,
     },
   },
 });
 
-interface Book {
-  title: string;
-  cover_url: string;
-  category: string;
-  author: string;
-}
-
 type DailyBookProps = {
   book: Book;
+  startListening: any;
 };
 
-function DailyBook({ book }: DailyBookProps) {
+function DailyBook({ book, startListening }: DailyBookProps) {
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-US');
 
-  const handleStartListening = () => {};
+  const handleStartListening = () => {
+    startListening(book?._id);
+  };
 
   return (
     <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
@@ -43,9 +36,10 @@ function DailyBook({ book }: DailyBookProps) {
           display: 'flex',
           flexDirection: 'column',
           textAlign: 'left',
+          justifyContent: 'center',
         }}
         padding={5}
-        paddingLeft="10%"
+        paddingLeft="18%"
       >
         <Typography sx={{ color: '#01DF6B', fontSize: 24 }}>
           {' '}
@@ -91,7 +85,7 @@ function DailyBook({ book }: DailyBookProps) {
         sx={{
           flex: 1,
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'left',
           alignItems: 'center',
         }}
       >
