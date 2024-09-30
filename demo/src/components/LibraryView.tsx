@@ -39,8 +39,8 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
   const [showAlert, setShowAlert] = useState(false);
 
   // TODO
-    const baseUrl = `${window.location.protocol}//${window.location.host}`;
-//   const baseUrl = 'http://localhost:3001';
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+    // const baseUrl = 'http://localhost:3001';
 
   useEffect(() => {
     const fetchDailyBook = async () => {
@@ -200,14 +200,14 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
             />
           ))}
         </Tabs>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {filteredBooks.map((book, index) => (
             <Grid item xs={4} sm={3} md={2} lg={1.5} key={index}>
               <Card
                 sx={{
                   backgroundColor: '#101010',
-                  width: '8vw', // 20% of the viewport width
-                  height: '26vh', // 30% of the viewport height
+                  width: '120px', // 20% of the viewport width
+                  height: '230px', // 30% of the viewport height
                 }}
                 onClick={() => fetchBookAudio(book?._id)}
               >
@@ -215,7 +215,7 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
                   <CardMedia
                     component="img"
                     sx={{
-                      height: '20vh', // Set only height or width, not both
+                      height: '177px', // Set only height or width, not both
                       width: 'auto', // Let the width be automatic
                       maxWidth: '100%', // Ensure it doesn't overflow its container
                       objectFit: 'contain', // This prevents cropping by fitting the image within the dimensions
@@ -235,7 +235,7 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
                   gutterBottom
                   component="div"
                   sx={{
-                    padding: 1,
+                    // padding: 1,
                     paddingLeft: 0,
                     // Define an explicit height or max-height to ensure the box can contain exactly two lines
                     maxHeight: '5.5vh', // Adjust this value based on your font size and line height
