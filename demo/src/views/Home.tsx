@@ -18,12 +18,14 @@ const THEME = createMuiTheme({
 });
 
 export type HomeProps = Readonly<{
+    isDebug:boolean;
   items?: any;
   handleIndexChange?: any;
   onWaitlistClicked?: any;
 }>;
 
 const Home: React.FC<HomeProps> = ({
+    isDebug,
   items,
   handleIndexChange,
   onWaitlistClicked,
@@ -46,7 +48,7 @@ const Home: React.FC<HomeProps> = ({
                 marginTop: '8%',
               }}
             >
-              Transform Your Books Into AI-Driven Podcasts
+              Transform Your Books Into AI-Driven Podcasts {isDebug?"[DEBUG]":""}
             </Typography>
           </ThemeProvider>
           <Typography
@@ -100,7 +102,7 @@ const Home: React.FC<HomeProps> = ({
               <img src={dotsIcon} width={46} height={15} />
             </Stack>
             <Stack sx={{ width: '5%' }}></Stack>
-            <Stack direction="column" sx={{ width: '50%' }}>
+            <Stack direction="column" sx={{ width: '50%' }} spacing={4}>
               <Typography
                 variant="body1"
                 gutterBottom
@@ -113,19 +115,13 @@ const Home: React.FC<HomeProps> = ({
                 becomes a captivating conversation.
               </Typography>
 
-              <div className="container">
-                {/* <div className="border-box"> */}
-                <img
-                  src={wailtlistLogo}
-                  width={273}
-                  height={29}
-                  onClick={onWaitlistClicked}
-                  style={{ cursor: 'pointer' }}
-                />
-                {/* <div className="content">Join Our Waitlist</div> */}
-
-                {/* </div> */}
-              </div>
+              <img
+                src={wailtlistLogo}
+                width={273}
+                height={29}
+                onClick={onWaitlistClicked}
+                style={{ cursor: 'pointer' }}
+              />
             </Stack>
           </Stack>
         </Stack>

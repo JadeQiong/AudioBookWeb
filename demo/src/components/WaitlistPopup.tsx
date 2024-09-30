@@ -80,7 +80,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
     <Stack
       direction="column"
       sx={{
-        width: 1300,
+        width: '90vw',
         height: 900,
         display: 'flex',
         alignItems: 'center',
@@ -99,8 +99,8 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
       <Box
         padding={5}
         sx={{
-          width: 1461,
-          height: 554,
+          width: '85vw',
+          height: 'auto',
           borderRadius: 10,
           borderColor: '#2D2E2F',
           borderWidth: 2,
@@ -186,11 +186,12 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
           orientation="vertical"
           flexItem
           color="grey"
-          sx={{ marginLeft: '60px', marginRight: '70px' }}
+          sx={{ marginLeft: '2vw', marginRight: '2vw' }}
         />
         <Box
           sx={{
             flex: 1,
+            width: '50%',
             padding: '50px',
             color: '#5E626D',
           }}
@@ -285,19 +286,22 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
               },
             }}
           />
-          <Stack
+          <Box
             sx={{
-              marginTop: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'right',
             }}
+            marginTop={3}
           >
             <img
               src={waitlistButton}
               width={231}
               height={46}
               onClick={handleSubmit}
-              style={{ cursor: 'pointer', marginLeft: '400px' }}
+              style={{ cursor: 'pointer' }}
             />
-          </Stack>
+          </Box>
         </Box>
       </Box>
     </Stack>

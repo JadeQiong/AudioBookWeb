@@ -49,7 +49,15 @@ import Home from './views/Home';
 import WaitlistPopup from './components/WaitlistPopup';
 import waitlistButton from './assets/images/home_join_waitlist.png';
 import LibraryView from './components/LibraryView';
+import LoginView from './views/Login';
 import { Book } from './types/book';
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from '@clerk/clerk-react';
+import { useUser } from '@clerk/clerk-react';
 
 const theme = createTheme({
   typography: {
@@ -124,10 +132,19 @@ const CAROUSEL = 'carousel';
 const LIBRARY = 'library';
 const WAITLIST = 'waitlist';
 
-function App() {
+export type AppProps = Readonly<{
+  isDebug: boolean
+}>;
+
+const App: React.FC<AppProps> = ({isDebug}) => {
   const navigate = useNavigate();
   const [sliderIsHide, setSliderIsHide] = React.useState(true);
   const [audioIndex, setAudioIndex] = useState(-1);
+  const { isSignedIn, user, isLoaded } = useUser();
+
+  useEffect(() => {
+    console.log('user = ', user);
+  }, [user]);
   const newBook: Book = {
     title: 'The Great Gatsby',
     cover_url: 'https://example.com/gatsby.jpg',
@@ -289,7 +306,7 @@ function App() {
               >
                 Home
               </Button>
-              <Button
+              {isDebug && <Button
                 variant="contained"
                 size="large"
                 sx={
@@ -313,7 +330,16 @@ function App() {
                 onClick={handleLibraryClick}
               >
                 library
-              </Button>
+              </Button>}
+              {isDebug &&               <header>
+                <SignedOut>
+                  <SignInButton />
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </header>}
+
               <img
                 src={waitlistButton}
                 width={160}
@@ -332,6 +358,7 @@ function App() {
               path="/"
               element={
                 <Home
+                isDebug={isDebug}
                   items={items}
                   handleIndexChange={handleIndexChange}
                   onWaitlistClicked={() => {
@@ -345,8 +372,25 @@ function App() {
               path="/library"
               element={<LibraryView setBook={setBook} />}
             />
+            {/* <Route
+              path="/auth"
+              element={<LoginView />}
+            /> */}
             <Route path="/waitlist" element={<WaitlistPopup />} />
-            <Route path="*" element={<Home />} />
+            <Route
+              path="*"
+              element={
+                <Home
+                isDebug={isDebug}
+                  items={items}
+                  handleIndexChange={handleIndexChange}
+                  onWaitlistClicked={() => {
+                    navigate('/waitlist');
+                    setView(WAITLIST);
+                  }}
+                />
+              }
+            />
           </Routes>
           <Footer></Footer>
         </div>
