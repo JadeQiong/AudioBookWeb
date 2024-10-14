@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import logo from './assets/images/logo.png';
-import wailtlistLogo from './assets/images/waitlist.png';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -39,11 +39,15 @@ import { chipWarContent } from './types/hardcoded';
 import { hackersPaintersContent } from './types/hardcoded';
 import { zeroToOneContet } from './types/hardcoded';
 import { EducatedContent } from './types/hardcoded';
+import { gumsContent } from './types/hardcoded';
+import { nightContent } from './types/hardcoded';
+import { weShouldBeFeministsContent } from './types/hardcoded';
+import { sapienContent } from './types/hardcoded';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from './components/Footer';
-import dotsIcon from './assets/images/dots.png';
+import Home from './views/Home';
 import WaitlistPopup from './components/WaitlistPopup';
-
+import waitlistButton from './assets/images/home_join_waitlist.png';
 import LibraryView from './components/LibraryView';
 
 const theme = createTheme({
@@ -77,10 +81,14 @@ const picturesMap = [
 ];
 
 const contentsMap = [
-  elonMaskContent,
   chipWarContent,
-  hackersPaintersContent,
+  elonMaskContent,
   zeroToOneContet,
+  hackersPaintersContent,
+  gumsContent,
+  nightContent,
+  sapienContent,
+  weShouldBeFeministsContent,
   EducatedContent,
 ];
 
@@ -99,21 +107,27 @@ for (let i = 0; i < 4; i++) {
   repeatedContentsArray = [...repeatedContentsArray, ...contentsMap];
 }
 
+const CAROUSEL = 'carousel';
+const LIBRARY = 'library';
+const WAITLIST = 'waitlist';
+
 function App() {
   const [sliderIsHide, setSliderIsHide] = React.useState(true);
-  const carouselRef = React.createRef<CarouselRef>();
-
-  const [sliderIndex, setSliderIndex] = useState(0);
-  const [playing, setPlaying] = React.useState<boolean>(false);
   const [audioIndex, setAudioIndex] = useState(-1);
+  const [playing, setPlaying] = React.useState<boolean>(false);
+  const [sliderIndex, setSliderIndex] = useState(-1);
 
-  const [view, setView] = useState<'carousel' | 'library'>('carousel');
+  const handleIndexChange = (index: number) => {
+    setSliderIndex(index);
+  };
+
+  const [view, setView] = useState<string>(CAROUSEL);
 
   const handleLibraryClick = () => {
-    setView('library');
+    setView(LIBRARY);
   };
   const handleHomeClick = () => {
-    setView('carousel');
+    setView(CAROUSEL);
   };
 
   const handlePlayBook = (book: Book) => {
@@ -124,24 +138,13 @@ function App() {
 
   const togglePlayPause = () => {
     setPlaying(!playing);
-    // console.log("handle player pause")
-    // playerRef.current?.handlePlayPause();
   };
 
   const handleAudioChange = () => {
     setSliderIsHide(false);
     // setHoversliderIsHide(false);
+    setPlaying(true);
     setAudioIndex(sliderIndex);
-  };
-
-  useEffect(() => {
-    if (sliderIndex != -1) {
-      setPlaying(true);
-    }
-  }, [sliderIndex]);
-
-  const handleIndexChange = (index: number) => {
-    setSliderIndex(index);
   };
 
   const [popupOpen, setPopupOpen] = useState(false);
@@ -196,196 +199,108 @@ function App() {
         <div className="App-header">
           <Stack
             direction="row"
-            sx={{ margin: 2, alignItems: 'center', width: '90%' }}
+            sx={{
+              margin: 2,
+              alignItems: 'center',
+              width: '90%',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
           >
             <Stack
-              direction="row"
-              marginLeft={5}
-              spacing={2}
-              alignItems="center"
+              display="flex"
+              sx={{ alignItems: 'center', justifyContent: 'center' }}
             >
-              <img src={logo} width={195} height={59} />
+              <img
+                src={logo}
+                width={190}
+                height={59}
+                onClick={() => {
+                  setView(CAROUSEL);
+                }}
+                style={{ cursor: 'pointer' }}
+              />
+            </Stack>
+            <Stack direction="row" spacing={2} alignItems="center">
               <Button
                 variant="contained"
                 size="large"
                 sx={
-                  view === 'carousel'
+                  view === CAROUSEL
                     ? {
-                        color: '#292929',
-                        backgroundColor: 'white',
-                        borderRadius: '12px',
-                        borderColor: 'lightgray',
+                        fontWeight: 'bold',
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
+                        color: 'white',
                       }
                     : {
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
                         color: 'white',
-                        borderRadius: '12px',
-                        borderColor: 'lightgray',
                       }
                 }
                 onClick={handleHomeClick}
               >
                 Home
               </Button>
-              <Button
+              {/* <Button
                 variant="contained"
                 size="large"
                 sx={
-                  view === 'carousel'
+                  view === CAROUSEL
                     ? {
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
                         color: 'white',
-                        borderRadius: '12px',
-                        borderColor: 'lightgray',
                       }
                     : {
-                        color: '#292929',
-                        backgroundColor: 'white',
-                        borderRadius: '12px',
-                        borderColor: 'lightgray',
+                        fontWeight: 'bold',
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
+                        color: 'white',
                       }
                 }
                 onClick={handleLibraryClick}
               >
                 library
-              </Button>
-            </Stack>
-            <Box sx={{ flexGrow: 1 }} />{' '}
-            <Stack
-              direction="row"
-              spacing={2}
-              marginRight={5}
-              alignItems="center"
-            >
-              <Button
-                size="large"
+              </Button> */}
+              <img
+                src={waitlistButton}
+                width={160}
+                height={46}
                 onClick={() => {
-                  setPopupOpen(true);
+                  setView(WAITLIST);
                 }}
-                sx={{
-                  color: 'white',
-                  borderRadius: '12px',
-                  borderColor: 'lightgray',
-                }}
-              >
-                Join Waitlist
-              </Button>
+                style={{ cursor: 'pointer' }}
+              />
             </Stack>
           </Stack>
-          {view !== 'carousel' && (
+
+          {view === LIBRARY && (
             <div className="container_background">
               <LibraryView />
             </div>
           )}
 
-          {view === 'carousel' && (
-            <>
-              <div className="container_background">
-                <Stack
-                  direction="column"
-                  sx={{ width: '100%', marginBottom: '5%' }}
-                >
-                  <Typography
-                    variant="h4"
-                    component="h1"
-                    gutterBottom
-                    sx={{
-                      fontSize: 48,
-                      fontWeight: 'bold',
-                      fontFamily: 'Montserrat, Arial, sans-serif',
-                      background:
-                        'linear-gradient(to bottom, #ebebec, #979797)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      display: 'inline',
-                      marginTop: '10%',
-                    }}
-                  >
-                    Transform your books into AI-driven podcasts
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    sx={{
-                      fontSize: 24,
-                      background: '#c1c1c1',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      display: 'inline',
-                    }}
-                  >
-                    Engaging, Captivating, Premium
-                  </Typography>
-                </Stack>
-              </div>
-
-              <Stack
-                spacing={2}
-                sx={{ height: 750, width: '100%', overflow: 'hidden' }}
-              >
-                <Stack
-                  direction="column"
-                  sx={{ height: 750, overflow: 'hidden', alignItems: 'center' }}
-                >
-                  <Carousel
-                    ref={carouselRef}
-                    items={items}
-                    slideOnClick
-                    showControls={false}
-                    onIndexChange={handleIndexChange}
-                    autoPlay={true}
-                  ></Carousel>
-
-                  <Box sx={{ height: 150 }}></Box>
-                </Stack>
-              </Stack>
-
-              <div className="container_background">
-                <Stack
-                  direction="column"
-                  sx={{ width: '60%', marginTop: '5%' }}
-                >
-                  <Stack direction="row">
-                    <Stack direction="column" sx={{ width: '45%' }}>
-                      <Typography
-                        variant="h4"
-                        gutterBottom
-                        sx={{ textAlign: 'left', fontWeight: 'bolder' }}
-                      >
-                        Immersive book talks.
-                      </Typography>
-                      <img src={dotsIcon} width={46} height={15} />
-                    </Stack>
-                    <Stack sx={{ width: '5%' }}></Stack>
-                    <Stack direction="column" sx={{ width: '50%' }}>
-                      <Typography
-                        variant="body1"
-                        gutterBottom
-                        sx={{ textAlign: 'left' }}
-                      >
-                        No more dry summaries—AI-Powered BookTalks delivers a
-                        vibrant audio experience that brings literature to life,
-                        connecting readers with books in a profound and modern
-                        way. Experience the future of reading with AI-Powered
-                        BookTalks, where every book becomes a captivating
-                        conversation.
-                      </Typography>
-
-                      <div className="container">
-                        {/* <div className="border-box"> */}
-                        <img src={wailtlistLogo} width={273} height={29} />
-                        {/* <div className="content">Join Our Waitlist</div> */}
-
-                        {/* </div> */}
-                      </div>
-                      <WaitlistPopup
-                        open={popupOpen}
-                        handleClose={handleClosePopup}
-                      />
-                    </Stack>
-                  </Stack>
-                </Stack>
-              </div>
-            </>
+          {view === CAROUSEL && (
+            <Home
+              items={items}
+              handleIndexChange={handleIndexChange}
+              onWaitlistClicked={() => {
+                setView(WAITLIST);
+              }}
+            />
           )}
+
+          {view === WAITLIST && <WaitlistPopup></WaitlistPopup>}
 
           <Footer></Footer>
         </div>

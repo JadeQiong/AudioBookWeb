@@ -14,27 +14,55 @@ import {
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import axios from 'axios';
 import Pagination from '@mui/material/Pagination';
-import { tab } from '@testing-library/user-event/dist/tab';
+import DailyBook from './DailyBook';
 
 interface Book {
   title: string;
   cover_url: string;
   category: string;
+  author: string; // Add author field
 }
 
 const LibraryView: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<string>('All');
   const [books, setBooks] = useState<Book[]>([]);
+  const [dailyBook, setDailyBook] = useState({
+    title: '',
+    author: '',
+    category: '',
+    cover_url: '',
+  });
   const [categories, setCategories] = useState<string[]>(['All']);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage] = useState<number>(10);
+  const [itemsPerPage] = useState<number>(16);
   const [totalPages, setTotalPages] = useState<number>(0);
+
+  // TODO
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  //   const baseUrl = 'https://localhost:3000';
+
+  console.log('base ', baseUrl);
+
+  useEffect(() => {
+    const fetchDailyBook = async () => {
+      const dailyBookUrl = `${baseUrl}/book-of-the-day`;
+
+      try {
+        const dailyBookResponse = await axios.get(dailyBookUrl);
+        setDailyBook(dailyBookResponse.data);
+      } catch (error) {
+        console.error('Error fetching the daily book:', error);
+      }
+    };
+
+    fetchDailyBook();
+  }, []);
 
   useEffect(() => {
     const fetchBooks = () => {
       const categoryParam =
         selectedTab === 'All' ? '' : `&category=${selectedTab}`;
-      const url = `http://localhost:3000/books-new?page=${currentPage}&limit=${itemsPerPage}${categoryParam}`;
+      const url = `${baseUrl}/books-new?page=${currentPage}&limit=${itemsPerPage}${categoryParam}`;
 
       axios
         .get(url)
@@ -49,11 +77,14 @@ const LibraryView: React.FC = () => {
   }, [currentPage, itemsPerPage, selectedTab]);
 
   useEffect(() => {
+    const apiUrl = `${baseUrl}/books-categories`;
     axios
-      .get('http://localhost:3000/books-categories')
+      .get(apiUrl)
       .then((response) => {
         // Assuming the API returns an array of categories
-        setCategories(['All', ...response.data.categories]);
+        if (response.data) {
+          setCategories(['All', ...response.data.categories]);
+        }
       })
       .catch((error) => console.error('Error fetching categories:', error));
   }, []);
@@ -69,12 +100,15 @@ const LibraryView: React.FC = () => {
       : books.filter((book) => book.category === selectedTab);
 
   return (
-    <Stack direction="column">
+    <Stack direction="column" display="flex" alignItems="center">
       <Stack
         direction="column"
         spacing={1}
-        sx={{ width: 1300, height: 900, backgroundColor: 'white' }}
+        sx={{ width: 1600, height: 300, padding: '40px' }}
       >
+        <DailyBook book={dailyBook}></DailyBook>
+      </Stack>
+      <Stack direction="column" spacing={1} sx={{ width: '90%', height: 700 }}>
         <Tabs
           value={selectedTab}
           onChange={handleChange}
@@ -82,22 +116,32 @@ const LibraryView: React.FC = () => {
           scrollButtons="auto"
         >
           {categories.map((category) => (
-            <Tab key={category} label={category} value={category} />
+            <Tab
+              sx={{ color: 'white' }}
+              key={category}
+              label={category}
+              value={category}
+            />
           ))}
         </Tabs>
-        <Grid container spacing={2}>
+        <Grid container spacing={3} minHeight="550px">
           {filteredBooks.map((book, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={2.4} key={index}>
-              <Card>
+            <Grid item xs={4} sm={3} md={2} lg={1.5} key={index} sx={{}}>
+              <Card
+                sx={{
+                  backgroundColor: '#101010',
+                }}
+              >
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    height="300"
+                    height="200"
+                    width="100"
                     image={book.cover_url}
                     alt={book.title}
                     sx={{ position: 'relative' }}
                   />
-                  <IconButton
+                  {/* <IconButton
                     sx={{
                       scale: 3,
                       position: 'absolute',
@@ -108,41 +152,44 @@ const LibraryView: React.FC = () => {
                     }}
                   >
                     <PlayCircleOutlineIcon fontSize="large" />
-                  </IconButton>
+                  </IconButton> */}
                 </CardActionArea>
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="body2"
-                    component="div"
-                    sx={{
-                      height: '3.6em',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                    }}
-                  >
-                    {book.title}
-                  </Typography>
-                </CardContent>
+                {/* <CardContent> */}
+                <Typography
+                  gutterBottom
+                  component="div"
+                  sx={{
+                    padding: 0.5,
+                    backgroundColor: ' #101010',
+                    height: '2.6em',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    fontSize: 14,
+                    color: 'white',
+                  }}
+                >
+                  {book.title}
+                </Typography>
+                {/* </CardContent> */}
               </Card>
             </Grid>
           ))}
         </Grid>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={(event, page) => setCurrentPage(page)}
+          color="primary"
+          sx={{
+            marginTop: 2,
+            alignSelf: 'center',
+            '& .MuiPaginationItem-root': { color: 'white' },
+          }}
+        />
       </Stack>
-      <Pagination
-        count={totalPages}
-        page={currentPage}
-        onChange={(event, page) => setCurrentPage(page)}
-        color="primary"
-        sx={{
-          marginTop: 2,
-          alignSelf: 'center',
-          '& .MuiPaginationItem-root': { color: 'white' },
-        }}
-      />
     </Stack>
   );
 };

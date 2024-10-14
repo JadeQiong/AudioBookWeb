@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Divider, Stack } from '@mui/material';
-import LogoIcon from '../assets/images/footer.png';
+import LogoIcon from '../assets/images/logo.png';
 
 const Footer = () => {
   return (

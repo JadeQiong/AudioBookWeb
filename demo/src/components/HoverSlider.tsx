@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Slider from '@mui/material/Slider';
@@ -74,17 +80,10 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
       };
     }, []);
 
-    useEffect(() => {
-      if (audioRef.current) {
-        audioRef.current.play();
-      }
-    }, []); // Empty dependency array to run only after the first render
-
     const [rotationDegree, setRotationDegree] = React.useState<number>(0);
     const [lastUpdateTime, setLastUpdateTime] = React.useState<number | null>(
       null
     );
-    const [isReady, setIsReady] = useState(false);
     const audioRef = React.useRef<HTMLAudioElement>(null);
 
     useEffect(() => {
@@ -104,9 +103,8 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
           audioRef.current.duration &&
           !isNaN(audioRef.current.currentTime / audioRef.current.duration)
         ) {
-          onValueUpdated(
-            (audioRef.current.currentTime / audioRef.current.duration) * 100
-          );
+          const time = audioRef.current.currentTime;
+          onValueUpdated((time / audioRef.current.duration) * 100);
         }
       }
     };
@@ -116,29 +114,6 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
         audioRef.current.currentTime = currentTime;
       }
     }, [currentTime]);
-
-    useEffect(() => {
-      const handleLoadedMetadata = () => {
-        if (audioRef.current) {
-          onDurationChange(audioRef.current.duration);
-        }
-      };
-
-      const handleTimeUpdate = () => {
-        if (audioRef.current) {
-          onTimeUpdate(audioRef.current.currentTime);
-        }
-      };
-
-      const audioElem = audioRef.current;
-      audioElem?.addEventListener('loadedmetadata', handleLoadedMetadata);
-      audioElem?.addEventListener('timeupdate', handleTimeUpdate);
-
-      return () => {
-        audioElem?.removeEventListener('loadedmetadata', handleLoadedMetadata);
-        audioElem?.removeEventListener('timeupdate', handleTimeUpdate);
-      };
-    }, [onTimeUpdate, onDurationChange]);
 
     const handleChange = (event: Event, newValue: number | number[]) => {
       const newTime = ((newValue as number) / 100) * duration;
@@ -160,7 +135,6 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
     };
 
     React.useEffect(() => {
-      console.log('hover playing = ', playing, audioRef.current, audioRef);
       // Listen for changes in the playing prop
       if (playing && audioRef.current && audioRef.current.paused) {
         audioRef.current.play();
@@ -169,23 +143,27 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
       }
     }, [playing]);
 
-    React.useEffect(() => {
-      onValueUpdated(0);
-      setIsReady(false);
-      console.log('audio is changed', audio);
+    React.useLayoutEffect(() => {
+      console.log(audioRef, audioRef.current);
       if (audioRef.current) {
-        onDurationChange(audioRef.current.duration);
-        audioRef.current.play();
-        setPlaying(true);
-        setLastUpdateTime(Date.now());
-        audioRef.current.addEventListener('ended', handleAudioEnded);
+        onValueUpdated(0);
+
+        const handleCanPlay = () => {
+          if (audioRef.current) onDurationChange(audioRef.current.duration);
+          setVolume(50);
+          if (audioRef.current) audioRef.current.play();
+          setPlaying(true);
+          setLastUpdateTime(Date.now());
+        };
+
+        audioRef.current.addEventListener('canplay', handleCanPlay);
+        onDurationChange(0);
         return () => {
-          if (audioRef.current)
-            audioRef.current.removeEventListener('ended', handleAudioEnded);
+          if (audioRef.current) {
+            audioRef.current.removeEventListener('canplay', handleCanPlay);
+          }
         };
       }
-      onDurationChange(0);
-      setVolume(50);
     }, [audio]);
 
     const hanldeClose = () => {
@@ -257,131 +235,128 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
       setPlaying(false);
     };
 
-    if (!isHide) {
-      return (
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          right: '20px',
+          bottom: '20px',
+          width: '400px',
+          height: '72px',
+          backgroundColor: '#333333',
+          padding: 2,
+          zIndex: 10,
+          color: 'white',
+          visibility: isHide ? 'hidden' : 'visible',
+        }}
+      >
         <Box
+          display="flex"
           sx={{
-            position: 'fixed',
-            right: '20px',
-            bottom: '20px',
-            width: '400px',
-            height: '72px',
-            backgroundColor: '#333333',
-            padding: 2,
-            zIndex: 10,
-            color: 'white',
+            height: 20,
+            fontSize: 12,
+            fontWeight: 'bold',
+            paddingLeft: 5,
+            paddingRight: 5,
+          }}
+          alignItems="flex-start"
+          justifyContent="space-between"
+        >
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+            {title}
+          </Box>
+          <IconButton
+            onClick={handleClose}
+            sx={{
+              height: 10,
+              width: 10,
+              marginRight: -5,
+            }}
+          >
+            <CloseIcon sx={{ color: 'white', scale: '0.8' }} />
+          </IconButton>
+        </Box>
+
+        <Stack
+          direction="row"
+          sx={{ zIndex: 2 }}
+          padding={0}
+          alignItems="center"
+        >
+          <IconButton
+            onClick={() => {
+              setPlaying(!playing);
+            }}
+            sx={{ height: 10, width: 10, margin: 0.5, scale: '1.5' }}
+          >
+            {playing ? (
+              <StopIcon sx={{ color: 'white' }} />
+            ) : (
+              <PlayArrowIcon sx={{ color: 'white' }} />
+            )}
+          </IconButton>
+
+          <audio
+            ref={audioRef}
+            src={audio}
+            onLoadedMetadata={handleLoadedMetadata}
+            onTimeUpdate={handleTimeUpdate}
+            preload="metadata"
+            style={{ display: isHide ? 'none' : 'block' }}
+          />
+
+          <Slider
+            aria-label="Audio Progress"
+            value={value}
+            onChange={handleChange}
+            min={0}
+            max={100}
+            sx={{
+              width: '100%',
+              marginLeft: 2,
+              marginRight: 2,
+              '& .MuiSlider-thumb': {
+                height: 12, // Control button height
+                width: 12, // Control button width
+                borderRadius: '40%', // Control button shape
+                backgroundColor: 'transparent',
+              },
+              '& .MuiSlider-track': {
+                border: 'none',
+                marginLeft: 0.5,
+                marginRight: 0.5,
+                height: 3, // Track height
+                borderRadius: 4, // Track border radius
+                background: 'linear-gradient(to right, #00008b, #fff)', // Gradient color
+              },
+              '& .MuiSlider-rail': {
+                height: 12, // Rail height
+                borderRadius: 4, // Rail border radius
+                backgroundColor: '#b3b3b3', // Rail color
+              },
+            }}
+          />
+        </Stack>
+
+        <Stack
+          direction="row"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            marginTop: -2,
           }}
         >
-          <Box
-            display="flex"
-            sx={{
-              height: 20,
-              fontSize: 12,
-              fontWeight: 'bold',
-              paddingLeft: 5,
-              paddingRight: 5,
-            }}
-            alignItems="flex-start"
-            justifyContent="space-between"
-          >
-            <Box
-              sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}
-            >
-              {title}
-            </Box>
-            <IconButton
-              onClick={handleClose}
-              sx={{
-                height: 10,
-                width: 10,
-                marginRight: -5,
-              }}
-            >
-              <CloseIcon sx={{ color: 'white', scale: '0.8' }} />
-            </IconButton>
-          </Box>
-
-          <Stack
-            direction="row"
-            sx={{ zIndex: 2 }}
-            padding={0}
-            alignItems="center"
-          >
-            <IconButton
-              onClick={() => {
-                setPlaying(!playing);
-              }}
-              sx={{ height: 10, width: 10, margin: 0.5, scale: '1.5' }}
-            >
-              {playing ? (
-                <StopIcon sx={{ color: 'white' }} />
-              ) : (
-                <PlayArrowIcon sx={{ color: 'white' }} />
-              )}
-            </IconButton>
-
-            <audio
-              ref={audioRef}
-              src={audio}
-              onLoadedMetadata={handleLoadedMetadata}
-              onTimeUpdate={handleTimeUpdate}
-              preload="metadata"
-            />
-
-            <Slider
-              aria-label="Audio Progress"
-              value={value}
-              onChange={handleChange}
-              min={0}
-              max={100}
-              sx={{
-                width: '100%',
-                marginLeft: 2,
-                marginRight: 2,
-                '& .MuiSlider-thumb': {
-                  height: 12, // Control button height
-                  width: 12, // Control button width
-                  borderRadius: '40%', // Control button shape
-                  backgroundColor: 'transparent',
-                },
-                '& .MuiSlider-track': {
-                  border: 'none',
-                  marginLeft: 0.5,
-                  marginRight: 0.5,
-                  height: 3, // Track height
-                  borderRadius: 4, // Track border radius
-                  background: 'linear-gradient(to right, #00008b, #fff)', // Gradient color
-                },
-                '& .MuiSlider-rail': {
-                  height: 12, // Rail height
-                  borderRadius: 4, // Rail border radius
-                  backgroundColor: '#b3b3b3', // Rail color
-                },
-              }}
-            />
-          </Stack>
-
-          <Stack
-            direction="row"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'absolute',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              marginTop: -2,
-            }}
-          >
-            <Typography sx={{ fontSize: 15, margin: 1 }}>
-              {formatTime(Math.min(duration, currentTime))} /{' '}
-              {formatTime(duration)}
-            </Typography>
-          </Stack>
-        </Box>
-      );
-    }
-    return <></>;
+          <Typography sx={{ fontSize: 15, margin: 1 }}>
+            {formatTime(Math.min(duration, (value / 100.0) * duration))} /{' '}
+            {formatTime(duration)}
+          </Typography>
+        </Stack>
+      </Box>
+    );
   }
 );
 
