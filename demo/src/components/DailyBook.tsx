@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack, Typography, Button, Box } from '@mui/material';
 import '../App.css';
-import startButton from '../assets/images/start_listening.png';
+import startButton from '../assets/images/start_listening.svg';
 import { ThemeProvider, createMuiTheme } from '@mui/material';
 import { Book } from '../types/book';
 
@@ -36,7 +36,6 @@ function DailyBook({ book, startListening }: DailyBookProps) {
           display: 'flex',
           flexDirection: 'column',
           textAlign: 'left',
-          justifyContent: 'center',
         }}
         padding={5}
         paddingLeft="18%"
@@ -76,7 +75,7 @@ function DailyBook({ book, startListening }: DailyBookProps) {
           width={231}
           height={46}
           onClick={handleStartListening}
-          style={{ cursor: 'pointer', marginTop: '3%' }}
+          style={{ cursor: 'pointer', marginTop: '10%' }}
         />
       </Box>
 
@@ -87,6 +86,7 @@ function DailyBook({ book, startListening }: DailyBookProps) {
           display: 'flex',
           justifyContent: 'left',
           alignItems: 'center',
+          padding: 5,
         }}
       >
         <img

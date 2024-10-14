@@ -14,7 +14,7 @@ import {
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import axios from 'axios';
 import Pagination from '@mui/material/Pagination';
-import DailyBook from './DailyBook';
+import DailyBook from '../components/DailyBook';
 import { Book } from '../types/book';
 import { Alert, AlertTitle, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -40,7 +40,7 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
 
   // TODO
   const baseUrl = `${window.location.protocol}//${window.location.host}`;
-    // const baseUrl = 'http://localhost:3001';
+  // const baseUrl = 'http://localhost:3001';
 
   useEffect(() => {
     const fetchDailyBook = async () => {
@@ -184,7 +184,8 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
       >
         <DailyBook book={dailyBook} startListening={fetchBookAudio}></DailyBook>
       </Stack>
-      <Stack direction="column" spacing={1} sx={{ width: '90vw' }}>
+
+      <Stack direction="column" spacing={1} sx={{ width: '90vw' }} margin={5}>
         <Tabs
           value={selectedTab}
           onChange={handleChange}
