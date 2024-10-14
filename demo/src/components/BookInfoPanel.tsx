@@ -40,8 +40,8 @@ const BookInfoPanel: React.FC<BookInfo> = ({
       sx={{
         position: 'relative',
         color: 'white',
-        width: '20rem',
-        height: '30rem',
+        width: '26rem',
+        height: '39rem',
         maxWidth: '100%',
         backgroundSize: 'cover',
         borderRadius: '8px',
@@ -55,14 +55,14 @@ const BookInfoPanel: React.FC<BookInfo> = ({
           {title}
         </Typography>
         <Typography
-          sx={{ marginBottom: '20px', fontSize: 15, textAlign: 'left' }}
+          sx={{ marginBottom: '10px', fontSize: 15, textAlign: 'left' }}
         >
           by {author}
         </Typography>
 
         <Stack
           direction="row"
-          margin={1}
+          marginBottom={1}
           justifyContent="space-between"
           alignItems="center"
         >
@@ -70,12 +70,11 @@ const BookInfoPanel: React.FC<BookInfo> = ({
             variant="outlined"
             sx={{
               height: 20,
-              width: 90,
+              width: 100,
               borderRadius: '10px',
               borderColor: 'white',
               color: 'white',
               textTransform: 'none',
-              padding: 1,
               fontSize: 16,
               alignItems: 'left',
               display: 'flex',
@@ -108,7 +107,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
           </Button>
         </Stack>
 
-        <Stack direction="row" spacing={1} margin={1}>
+        <Stack direction="row" spacing={1} marginTop={2} marginBottom={2}>
           {categories.map((category, index) => (
             <Chip
               key={index}
@@ -124,14 +123,14 @@ const BookInfoPanel: React.FC<BookInfo> = ({
           ))}
         </Stack>
 
-        <Typography sx={{ margin: 1, fontSize: 15, textAlign: 'left' }}>
+        <Typography sx={{ fontSize: 15, textAlign: 'left' }}>
           {description}
         </Typography>
       </Box>
       <Box
         sx={{
           position: 'absolute',
-          bottom: 16,
+          bottom: '5%',
           left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex',
@@ -148,8 +147,7 @@ const BookInfoPanel: React.FC<BookInfo> = ({
             }
           }}
           sx={{
-            height: 40,
-            width: 40,
+            scale: '1.5',
             borderRadius: '50%',
             backgroundColor: 'rgba(255, 255, 255, 0.3)',
             '&:hover': {

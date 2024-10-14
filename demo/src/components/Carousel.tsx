@@ -78,12 +78,13 @@ export const Carousel: FC<CarouselProps> = forwardRef(
     const len = useMemo(() => data.length, [data.length]);
     const theta = useMemo(() => 360 / len, [len]);
 
-    const radiusFactor = 1.5;
+    const radiusFactor = 1.8;
     const radius = useMemo(
       () =>
         Math.round((itemWidth / 2 / Math.tan(Math.PI / len)) * radiusFactor),
       [itemWidth, len]
     );
+    console.log('radius is ', radius);
 
     const ref = useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = useState(
@@ -117,12 +118,12 @@ export const Carousel: FC<CarouselProps> = forwardRef(
           style.transform = `rotateY(${cellAngle}deg) translateZ(${radius}px)`;
 
           if (index === getPrevNIndex(1) || index === getNextNIndex(1)) {
-            const additionalRotation = index === getPrevNIndex(1) ? 40 : -40;
+            const additionalRotation = index === getPrevNIndex(1) ? 50 : -50;
             style.transform += ` rotateY(${additionalRotation}deg)`;
           }
 
           if (index === getPrevNIndex(2) || index === getNextNIndex(2)) {
-            const additionalRotation = index === getPrevNIndex(2) ? 50 : -50;
+            const additionalRotation = index === getPrevNIndex(2) ? 40 : -40;
             style.transform += ` rotateY(${additionalRotation}deg)`;
           }
         } else {
@@ -254,22 +255,21 @@ export const Carousel: FC<CarouselProps> = forwardRef(
               >
                 <img
                   src={item.image}
-                  style={{ width: '20rem', height: '30rem' }}
+                  style={{ width: '26rem', height: '39rem', cursor: 'pointer' }}
                   alt={item.alt}
                 />
-                <Box sx={{ height: '1rem' }}></Box>
+                <Box sx={{ height: '2rem' }}></Box>
                 {Math.min(
                   Math.abs(selectedIndex - index),
-                  20 - Math.abs(selectedIndex - index)
+                  18 - Math.abs(selectedIndex - index)
                 ) <= 2 && (
                   <>
                     <img
                       src={item.image}
                       style={{
-                        width: '20rem',
-                        height: '30rem',
+                        width: '26rem',
+                        height: '39rem',
                         transform: 'scaleY(-1)',
-                        // opacity: 0.2,
                         pointerEvents: 'none',
                       }}
                       alt={item.alt}
@@ -278,11 +278,11 @@ export const Carousel: FC<CarouselProps> = forwardRef(
                       open={true}
                       className="blurredGlass"
                       style={{
-                        // position: 'absolute',
-                        marginTop: '31rem',
-                        width: '20rem',
-                        height: '30rem',
+                        marginTop: '41rem',
+                        width: '26rem',
+                        height: '39rem',
                         transform: 'scaleY(-1)',
+                        borderRadius: '5px',
                         opacity:
                           Math.min(
                             Math.abs(selectedIndex - index),

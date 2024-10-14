@@ -25,8 +25,6 @@ h1 {
 }
 
 .App-header {
-  background: radial-gradient(circle at center bottom, #162b56, #101010 20%);
-  /* background-color: #101010; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -64,8 +62,8 @@ h1 {
 }
 
 .container_background {
-  /* background: radial-gradient(circle at center bottom, #162b56, #101010 50%); */
-  height: 30vh;
+  /* background: radial-gradient(circle at center bottom, #162b56, #101010 50%); 
+   height: 30vh; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,4 +100,24 @@ h1 {
   align-items: center;
   overflow: hidden;
   padding-top: 10px;
+}
+
+.signInButton {
+  background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
+  border-radius: 3px;
+  border: none;
+  color: white;
+  height: 48px;
+  padding: 0 30px;
+  box-shadow: 0 3px 5px 2px rgba(255, 105, 135, 0.3);
+}
+
+.userButton {
+  background: #333;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.userButton:hover {
+  background: #555;
 }
