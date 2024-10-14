@@ -4,13 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { ClerkProvider } from '@clerk/clerk-react';
-
-const PUBLISHABLE_KEY = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error('Missing Publishable Key');
-}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,19 +11,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
-      <ClerkProvider
-        publishableKey={
-          'pk_test_cHJvcGVyLXRldHJhLTkxLmNsZXJrLmFjY291bnRzLmRldiQ'
-        }
-        afterSignOutUrl="/"
-      >
-             <Routes>
-          <Route path="/test/*" element={<App isDebug={true}/>} /> 
-          <Route path="/*" element={<App isDebug={false}/>} />
-        </Routes>
-        {/* <App /> */}
-        
-      </ClerkProvider>
+      <Routes>
+        <Route path="/test/*" element={<App isDebug={true} />} />
+        <Route path="/*" element={<App isDebug={false} />} />
+      </Routes>
+      {/* <App /> */}
     </Router>
   </React.StrictMode>
 );

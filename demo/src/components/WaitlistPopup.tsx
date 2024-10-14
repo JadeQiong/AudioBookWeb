@@ -9,6 +9,7 @@ import waitlistButton from '../assets/images/waitlist_button.png';
 import axios from 'axios';
 import arrowIcon from '../assets/images/arrow.png';
 import { Padding } from '@mui/icons-material';
+import { TextFieldStyle } from '../styles/commonStyles';
 
 interface WaitlistPopupProps {
   //   open: boolean;
@@ -81,7 +82,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
       direction="column"
       sx={{
         width: '90vw',
-        height: 900,
+        height: '85vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -207,24 +208,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
             onChange={(e) => setFullName(e.target.value)}
             InputLabelProps={{ shrink: true, style: { color: 'white' } }}
             inputProps={{ style: { color: 'white' } }}
-            sx={{
-              mb: 2,
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#2C2E33', // Default border color
-                },
-                '&:hover fieldset': {
-                  borderColor: 'white', // Border color on hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'white', // Border color when the component is focused
-                },
-                backgroundColor: '#1C1C1C',
-              },
-              '& label.Mui-focused': {
-                color: 'white',
-              },
-            }}
+            sx={TextFieldStyle}
           />
 
           <Typography margin={1} align="left">
@@ -242,21 +226,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
             helperText={emailError} // Show error message
             InputLabelProps={{ shrink: true, style: { color: 'white' } }}
             inputProps={{ style: { color: 'white' } }}
-            sx={{
-              mb: 2,
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#2C2E33', // Default border color
-                },
-                '&:hover fieldset': {
-                  borderColor: 'white', // Border color on hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'white', // Border color when the component is focused
-                },
-                backgroundColor: '#1C1C1C',
-              },
-            }}
+            sx={TextFieldStyle}
           />
           <Typography margin={1} align="left">
             What do you find challenging about reading
@@ -270,21 +240,7 @@ const WaitlistPopup: React.FC<WaitlistPopupProps> = ({}) => {
             onChange={(e) => setContent(e.target.value)}
             InputLabelProps={{ shrink: true, style: { color: 'white' } }}
             inputProps={{ style: { color: 'white' } }}
-            sx={{
-              mb: 2,
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#2C2E33', // Default border color
-                },
-                '&:hover fieldset': {
-                  borderColor: 'white', // Border color on hover
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'white', // Border color when the component is focused
-                },
-                backgroundColor: '#1C1C1C',
-              },
-            }}
+            sx={TextFieldStyle}
           />
           <Box
             sx={{

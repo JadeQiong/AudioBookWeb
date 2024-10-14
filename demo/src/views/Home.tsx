@@ -18,14 +18,14 @@ const THEME = createMuiTheme({
 });
 
 export type HomeProps = Readonly<{
-    isDebug:boolean;
+  isDebug: boolean;
   items?: any;
   handleIndexChange?: any;
   onWaitlistClicked?: any;
 }>;
 
 const Home: React.FC<HomeProps> = ({
-    isDebug,
+  isDebug,
   items,
   handleIndexChange,
   onWaitlistClicked,
@@ -48,7 +48,8 @@ const Home: React.FC<HomeProps> = ({
                 marginTop: '8%',
               }}
             >
-              Transform Your Books Into AI-Driven Podcasts {isDebug?"[DEBUG]":""}
+              Transform Your Books Into AI-Driven Podcasts{' '}
+              {isDebug ? '[DEBUG]' : ''}
             </Typography>
           </ThemeProvider>
           <Typography
