@@ -55,6 +55,8 @@ import { supabase } from './utils/supabaseClient';
 import LoginView from './views/LoginView';
 import SignupView from './views/SignupView';
 
+import TextToSpeech from './components/TextToSpeech'; 
+
 const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat, Arial, sans-serif',
@@ -279,6 +281,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
 
       <div className="App">
         <div className="App-header">
+        {/* <TextToSpeech /> */}
           <Stack
             direction="row"
             sx={{
