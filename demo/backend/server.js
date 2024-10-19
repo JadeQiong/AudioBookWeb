@@ -7,9 +7,12 @@ const cors = require('cors');
 const path = require('path');
 const getOpenAIClient = require('./openaiClient'); 
 const { execSync } = require('child_process'); // Import execSync
+const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const app = express();
 const port = 3001;
+const s3Client = new S3Client({ region: 'us-east-2' });
 
 app.use(cors()); // Enable CORS
 app.use(bodyParser.json());
@@ -511,6 +514,28 @@ function combineAudioFilesWithConcatFilter(inputFiles, outputFile) {
     console.error('Error combining audio files:', error);
   }
 }
+
+app.get('/download/:folder/:filename', async(req, res) => {
+  const bucketName = 'booktalks-podcast-library';
+  const folder = req.params.folder;
+  const filename = req.params.filename;
+  const key = `opus_files/${folder}/${filename}`;
+  
+  const params = {
+      Bucket: bucketName,
+      Key: key
+  };
+
+  try {
+    const command = new GetObjectCommand(params);
+    const url = await getSignedUrl(s3Client, command, { expiresIn: 60 });
+    res.json({ url });
+  } catch (err) {
+    console.error('Error generating signed URL:', err);
+    res.status(500).send(`Error generating the signed URL: ${err.message}`);
+  }
+  
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
