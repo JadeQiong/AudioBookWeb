@@ -44,12 +44,12 @@ const LoginView = () => {
   };
 
   return (
-    <Stack sx={{ marginTop: '15%' }} minHeight="85vh">
+    <Stack sx={{ marginTop: '10%' }} minHeight="85vh">
       <Typography sx={{ fontSize: 36, fontWeight: 'bold' }}>
-        Welcome to Booktalks
+        Welcome to BookTalks
       </Typography>
 
-      <Typography sx={{ fontSize: 20, color: '#AFAFAF' }} margin={2}>
+      <Typography sx={{ fontSize: 20, color: '#AFAFAF' }} marginTop={2}>
         Dive into book podcasts made for you.
       </Typography>
 

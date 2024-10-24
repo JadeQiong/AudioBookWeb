@@ -7,6 +7,7 @@ import Carousel, { CarouselRef } from '../components/Carousel';
 import wailtlistLogo from '../assets/images/waitlist.png';
 import dotsIcon from '../assets/images/dots.png';
 import { ThemeProvider, createMuiTheme } from '@mui/material';
+import LibraryView from './LibraryView';
 
 const THEME = createMuiTheme({
   typography: {
@@ -22,6 +23,7 @@ export type HomeProps = Readonly<{
   items?: any;
   handleIndexChange?: any;
   onWaitlistClicked?: any;
+  setBook: any;
 }>;
 
 const Home: React.FC<HomeProps> = ({
@@ -29,6 +31,7 @@ const Home: React.FC<HomeProps> = ({
   items,
   handleIndexChange,
   onWaitlistClicked,
+  setBook,
 }) => {
   const carouselRef = React.createRef<CarouselRef>();
   return (
@@ -127,6 +130,7 @@ const Home: React.FC<HomeProps> = ({
           </Stack>
         </Stack>
       </div>
+      {isDebug && <LibraryView setBook={setBook}></LibraryView>}
     </Stack>
   );
 };

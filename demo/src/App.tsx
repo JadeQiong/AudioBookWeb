@@ -5,13 +5,12 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Carousel from './components/Carousel';
 import { CarouselItem } from './components/Carousel';
 import { CarouselRef } from './components/Carousel';
 import BookInfoPanel from './components/BookInfoPanel';
 import Player, { PlayerRef } from './components/Player';
-
+import { Typography, Menu, MenuItem } from '@mui/material';
 import './App.css';
 
 import educatedImage from './assets/images/educated.png';
@@ -49,13 +48,16 @@ import Footer from './components/Footer';
 import Home from './views/Home';
 import WaitlistPopup from './components/WaitlistPopup';
 import waitlistButton from './assets/images/home_join_waitlist.png';
+import avatarIcon from './assets/images/avatar.svg';
 import LibraryView from './views/LibraryView';
 import { Book } from './types/book';
 import { supabase } from './utils/supabaseClient';
 import LoginView from './views/LoginView';
 import SignupView from './views/SignupView';
+import ContactView from './views/ContactView';
 
-import TextToSpeech from './components/TextToSpeech'; 
+import TextToSpeech from './components/TextToSpeech';
+import SearchBooks from './components/Search';
 
 const theme = createTheme({
   typography: {
@@ -214,6 +216,18 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
     setView(CAROUSEL);
   };
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  // Function to handle the menu opening
+  const handleAvatarClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Function to handle the menu closing
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const handlePlayBook = (book: Book) => {
     console.log('Play book:', book.title);
   };
@@ -281,7 +295,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
 
       <div className="App">
         <div className="App-header">
-        {/* <TextToSpeech /> */}
+          {/* <TextToSpeech /> */}
           <Stack
             direction="row"
             sx={{
@@ -348,7 +362,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
               >
                 Home
               </Button>
-              {isDebug && (
+              {/* {isDebug && (
                 <Button
                   variant="contained"
                   size="large"
@@ -374,7 +388,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 >
                   library
                 </Button>
-              )}
+              )} */}
               {isDebug &&
                 (user ? (
                   <Button
@@ -398,21 +412,84 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                     Sign In
                   </Button>
                 ))}
-
               <img
                 src={waitlistButton}
                 width={160}
                 height={46}
                 onClick={() => {
                   navigate('/waitlist');
-                  setView(WAITLIST);
                 }}
                 style={{ cursor: 'pointer' }}
               />
+              {isDebug && (
+                <div>
+                  <img
+                    src={avatarIcon}
+                    width={46}
+                    height={46}
+                    onClick={handleAvatarClick}
+                    style={{ cursor: 'pointer', marginBottom: 7 }}
+                  />
+
+                  {/* Menu that pops up when the avatar is clicked */}
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>
+                      {user?.email ? user.email : 'No email available'}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
+
+              {isDebug && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={
+                    view === CAROUSEL
+                      ? {
+                          fontWeight: 'bold',
+                          backgroundColor: 'transparent', // Ensures the background is transparent
+                          borderColor: 'transparent', // Ensures no border color
+                          borderWidth: 0, // Ensures no border width
+                          boxShadow: 'none', // Removes any shadow
+                          color: 'white',
+                        }
+                      : {
+                          backgroundColor: 'transparent', // Ensures the background is transparent
+                          borderColor: 'transparent', // Ensures no border color
+                          borderWidth: 0, // Ensures no border width
+                          boxShadow: 'none', // Removes any shadow
+                          color: 'white',
+                        }
+                  }
+                  onClick={() => {
+                    navigate('/contact');
+                  }}
+                >
+                  Contact Us
+                </Button>
+              )}
             </Stack>
           </Stack>
 
           <Routes>
+            <Route
+              path="/text2speech"
+              element={<TextToSpeech></TextToSpeech>}
+            ></Route>
+            <Route path="/search" element={<SearchBooks></SearchBooks>}></Route>
             <Route
               path="/"
               element={
@@ -424,6 +501,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                     navigate('/waitlist');
                     setView(WAITLIST);
                   }}
+                  setBook={setBook}
                 />
               }
             />
@@ -433,6 +511,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
             />
             <Route path="/signin" element={<LoginView />} />
             <Route path="/signup" element={<SignupView />} />
+            <Route path="/contact" element={<ContactView />} />
             <Route path="/waitlist" element={<WaitlistPopup />} />
             <Route
               path="*"
@@ -445,6 +524,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                     navigate('/waitlist');
                     setView(WAITLIST);
                   }}
+                  setBook={setBook}
                 />
               }
             />

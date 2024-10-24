@@ -136,6 +136,42 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
     },
   }));
 
+  function getKeyPath(title: string, category: string) {
+    // opus_files/Psychology_0916_audio/Blink_final.opus
+    // Step 1: Remove quotes if present at the beginning and end
+    title = title.replace(/"/g, '');
+    //Surely_You're_Joking,_Mr._Feynman_final.opus
+
+    title = title.replace(/!/g, '');
+    title = title.split(':')[0].trim();
+    const newTitle = title.split(' ').join('_');
+    return 'opus_files/' + category + '_0916_audio/' + newTitle + '_final.opus';
+  }
+
+  async function playOpusFile(audioKey: string, curBook: Book) {
+    try {
+      console.log(`${baseUrl}/audio/${audioKey}`);
+      console.log(audioKey);
+      const response = await fetch(`${baseUrl}/audio/${audioKey}`);
+      console.log('response = ', response);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      // const audio = new Audio(audioUrl);
+      // audio.play();
+
+      curBook.audio = audioUrl; // Assume audio is a direct link or binary data
+      console.log('I set book here');
+      setBook(curBook); // Assuming setBook updates state for selected book
+      setShowAlert(false);
+    } catch (error) {
+      console.error('Error playing audio file:', error);
+    }
+  }
+
   const fetchBookAudio = async (bookId?: string) => {
     if (bookId == undefined || bookId == null) return;
 
@@ -182,7 +218,17 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
         spacing={1}
         sx={{ width: 1600, padding: '40px' }}
       >
-        <DailyBook book={dailyBook} startListening={fetchBookAudio}></DailyBook>
+        {/* <DailyBook book={dailyBook} startListening={fetchBookAudio}></DailyBook> */}
+        <DailyBook
+          book={dailyBook}
+          startListening={() => {
+            console.log('play opus file', dailyBook);
+            playOpusFile(
+              getKeyPath(dailyBook.title, dailyBook.category),
+              dailyBook
+            );
+          }}
+        ></DailyBook>
       </Stack>
 
       <Stack direction="column" spacing={1} sx={{ width: '90vw' }} margin={5}>
@@ -210,7 +256,10 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
                   width: '120px', // 20% of the viewport width
                   height: '230px', // 30% of the viewport height
                 }}
-                onClick={() => fetchBookAudio(book?._id)}
+                onClick={() => {
+                  playOpusFile(getKeyPath(book.title, book.category), book);
+                }}
+                // onClick={() => fetchBookAudio(book?._id)}
               >
                 <CardActionArea>
                   <CardMedia
