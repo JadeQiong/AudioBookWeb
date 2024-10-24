@@ -17,8 +17,6 @@ const TextToSpeech: React.FC = () => {
     setAuthor(event.target.value);
   };
 
-
-
   const speak = async () => {
     if (!speaking) {
       setSpeaking(true);
@@ -54,7 +52,6 @@ const TextToSpeech: React.FC = () => {
         },
         body: JSON.stringify({ text: text, author: author }), // Send text, title, and author to backend
       });
-
     }
   };
 
@@ -94,8 +91,6 @@ const TextToSpeech: React.FC = () => {
     }
   };
 
-
-
   return (
     <div>
       <textarea
@@ -112,9 +107,7 @@ const TextToSpeech: React.FC = () => {
         placeholder="Enter author name"
       />
       <br />
-      <button onClick={speak}>
-        {speaking ? 'Stop' : 'Speak'}
-      </button>
+      <button onClick={speak}>{speaking ? 'Stop' : 'Speak'}</button>
       <button onClick={combineMusic} disabled={processing}>
         {processing ? 'Processing...' : 'Combine Music'}
       </button>
