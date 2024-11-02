@@ -9,6 +9,14 @@ interface Book {
   thumbnail: string;
 }
 
+// Extend the global window interface to include gtag
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
+
+
 const SearchBooks: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [books, setBooks] = useState<Book[]>([]);
@@ -18,6 +26,14 @@ const SearchBooks: React.FC = () => {
   const API_KEY = 'AIzaSyDo7BB8UuGnGuL6Kvzcirit3AKaBQs2sd4'; // Replace with your Google Books API Key
 
   const searchBooks = async (query: string) => {
+    if (query.trim()) {
+      if (window.gtag) {
+        window.gtag('event', 'search', {
+          search_term: query,
+        });
+      }
+    }
+
     setLoading(true);
     setError(null);
     try {
