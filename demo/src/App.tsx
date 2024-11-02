@@ -1,3 +1,6 @@
+import ReactGA from 'react-ga'; //Import and initialize react-ga in App.tsx:
+ReactGA.initialize('GTM-W56XXNG2'); 
+
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import logo from './assets/images/logo.svg';
 import text from './assets/images/text.svg';
@@ -58,6 +61,17 @@ import ContactView from './views/ContactView';
 
 import TextToSpeech from './components/TextToSpeech';
 import SearchBooks from './components/Search';
+
+// Add a function to handle the click event of the play button and send the event to Google Analytics:
+const handlePlayClick = (bookTitle) => {
+  ReactGA.event({
+    category: 'Book',
+    action: 'Play',
+    label: bookTitle,
+  });
+};
+
+
 
 const theme = createTheme({
   typography: {
@@ -449,7 +463,12 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                       {user?.email ? user.email : 'No email available'}
                     </MenuItem>
                   </Menu>
-                </div>
+
+<button onClick={() => handlePlayClick('Elon Musk')}>Play Elon Musk</button>  
+<button onClick={() => handlePlayClick('Chip War')}>Play Chip War</button>
+<button onClick={() => handlePlayClick('Hackers & Painters')}>Play Hackers & Painters</button>
+
+</div>
               )}
 
               {isDebug && (
