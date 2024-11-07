@@ -7,7 +7,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
 // Initialize GA with the Measurement ID from the environment variable
-ReactGA.initialize(process.env.REACT_APP_GA_MEASUREMENT_ID);
+const gaMeasurementId = process.env.REACT_APP_GA_MEASUREMENT_ID;
+if (gaMeasurementId) {
+  ReactGA.initialize(gaMeasurementId);
+} else {
+  console.error('GA Measurement ID is not defined');
+}
+console.log('GA Measurement ID:', process.env.REACT_APP_GA_MEASUREMENT_ID);
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
