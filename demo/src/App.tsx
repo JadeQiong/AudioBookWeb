@@ -61,6 +61,7 @@ import GenerateView from './views/GenerateView';
 
 import usePageTracking from './hooks/usePageTracking';
 import HomeView from './views/Home';
+import ReactGA from 'react-ga';
 
 const theme = createTheme({
   typography: {
@@ -258,6 +259,14 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
     setPopupOpen(false);
   };
 
+  const handlePlay = (book: Book) => {
+    ReactGA.event({
+      category: 'Audio',
+      action: 'Play',
+      label: book.title, // Use the book's title as the label
+    });
+  };
+
   const items: CarouselItem[] = Array(18)
     .fill('')
     .map((_: string, index: number) => ({
@@ -322,6 +331,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 onClick={() => {
                   navigate('/');
                   setView(CAROUSEL);
+                  handlePlay(book);
                 }}
                 style={{ cursor: 'pointer' }}
               />

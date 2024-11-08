@@ -26,7 +26,7 @@ const ShareTestView: React.FC = () => {
     <div style={{ display: 'flex', gap: '10px' }}>
       <FacebookShareButton
         url={shareUrl}
-        quote={title}
+        title={title}
         onClick={() => handleShare('Facebook')}
       >
         <FacebookIcon size={32} round />
