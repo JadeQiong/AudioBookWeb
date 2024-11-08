@@ -57,7 +57,7 @@ import SignupView from './views/SignupView';
 import ContactView from './views/ContactView';
 
 import TextToSpeech from './components/TextToSpeech';
-import SearchBooks from './components/Search';
+import GenerateView from './views/GenerateView';
 
 const theme = createTheme({
   typography: {
@@ -489,7 +489,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
               path="/text2speech"
               element={<TextToSpeech></TextToSpeech>}
             ></Route>
-            <Route path="/search" element={<SearchBooks></SearchBooks>}></Route>
+            <Route path="/generate" element={<GenerateView setBook={setBook} ></GenerateView>}></Route>
             <Route
               path="/"
               element={
