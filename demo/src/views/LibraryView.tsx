@@ -18,6 +18,8 @@ import DailyBook from '../components/DailyBook';
 import { Book } from '../types/book';
 import { Alert, AlertTitle, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import ReactGA from 'react-ga';
+import AudioPlayer from '../components/AudioPlayer';
 
 interface LibraryViewProps {
   setBook: React.Dispatch<React.SetStateAction<Book>>;

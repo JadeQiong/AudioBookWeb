@@ -59,6 +59,10 @@ import ContactView from './views/ContactView';
 import TextToSpeech from './components/TextToSpeech';
 import GenerateView from './views/GenerateView';
 
+import usePageTracking from './hooks/usePageTracking';
+import HomeView from './views/Home';
+
+
 const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat, Arial, sans-serif',
@@ -533,6 +537,18 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
         </div>
       </div>
     </ThemeProvider>
+  );
+
+  usePageTracking();
+
+  return (
+    <Routes>
+      <Route
+        path="/library"
+        element={<LibraryView setBook={setBook} />}
+      />
+      {/* ... other routes */}
+    </Routes>
   );
 };
 

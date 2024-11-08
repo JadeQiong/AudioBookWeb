@@ -13,6 +13,14 @@ interface Book {
   description: string;
 }
 
+// Extend the global window interface to include gtag
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
+
+
 const SearchBooks: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [books, setBooks] = useState<Book[]>([]);
@@ -30,6 +38,14 @@ const SearchBooks: React.FC = () => {
   const handleGenerate = () => {};
 
   const searchBooks = async (query: string) => {
+    if (query.trim()) {
+      if (window.gtag) {
+        window.gtag('event', 'search', {
+          search_term: query,
+        });
+      }
+    }
+
     setLoading(true);
     setError(null);
     try {
