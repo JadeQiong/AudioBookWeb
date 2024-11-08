@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import ReactGA from 'react-ga';
+import { Book } from '../types/book';
 
 interface AudioPlayerProps {
   book: Book;
@@ -35,9 +36,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ book }) => {
   return (
     <div>
       <audio ref={audioRef} src={book.audioSrc} />
-      <button onClick={handlePlayPause}>
-        {isPlaying ? 'Pause' : 'Play'}
-      </button>
+      <button onClick={handlePlayPause}>{isPlaying ? 'Pause' : 'Play'}</button>
       <p>Play Count: {playCount}</p>
     </div>
   );

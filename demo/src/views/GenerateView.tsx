@@ -213,7 +213,7 @@ const GenerateView: React.FC<GenerateViewProps> = ({ setBook }) => {
           Sorry, this book's audio is not available.
         </Alert>
       )}
-  <SearchBooks></SearchBooks>
+      <SearchBooks></SearchBooks>
       <Stack direction="column" spacing={1} sx={{ width: '90vw' }} margin={5}>
         <Grid container spacing={2}>
           {filteredBooks.map((book, index) => (

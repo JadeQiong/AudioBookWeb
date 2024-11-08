@@ -62,7 +62,6 @@ import GenerateView from './views/GenerateView';
 import usePageTracking from './hooks/usePageTracking';
 import HomeView from './views/Home';
 
-
 const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat, Arial, sans-serif',
@@ -284,6 +283,8 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
       ),
     }));
 
+  usePageTracking();
+
   return (
     <ThemeProvider theme={theme}>
       <Player
@@ -493,7 +494,10 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
               path="/text2speech"
               element={<TextToSpeech></TextToSpeech>}
             ></Route>
-            <Route path="/generate" element={<GenerateView setBook={setBook} ></GenerateView>}></Route>
+            <Route
+              path="/generate"
+              element={<GenerateView setBook={setBook}></GenerateView>}
+            ></Route>
             <Route
               path="/"
               element={
@@ -539,14 +543,9 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
     </ThemeProvider>
   );
 
-  usePageTracking();
-
   return (
     <Routes>
-      <Route
-        path="/library"
-        element={<LibraryView setBook={setBook} />}
-      />
+      <Route path="/library" element={<LibraryView setBook={setBook} />} />
       {/* ... other routes */}
     </Routes>
   );

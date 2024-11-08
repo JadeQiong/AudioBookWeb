@@ -15,7 +15,6 @@ if (gaMeasurementId) {
 }
 console.log('GA Measurement ID:', process.env.REACT_APP_GA_MEASUREMENT_ID);
 
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

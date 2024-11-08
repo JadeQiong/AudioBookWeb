@@ -20,7 +20,6 @@ declare global {
   }
 }
 
-
 const SearchBooks: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [books, setBooks] = useState<Book[]>([]);
@@ -30,7 +29,6 @@ const SearchBooks: React.FC = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showResults, setShowResults] = useState<boolean>(false);
-
 
   const API_KEY = 'AIzaSyDo7BB8UuGnGuL6Kvzcirit3AKaBQs2sd4';
   // Replace with your Google Books API Key
@@ -105,10 +103,14 @@ const SearchBooks: React.FC = () => {
     if (books.length === 0) return;
 
     if (e.key === 'ArrowDown') {
-      setHoveredIndex((prev) => (prev === null ? 0 : (prev + 1) % books.length));
+      setHoveredIndex((prev) =>
+        prev === null ? 0 : (prev + 1) % books.length
+      );
     } else if (e.key === 'ArrowUp') {
       setHoveredIndex((prev) =>
-        prev === null ? books.length - 1 : (prev - 1 + books.length) % books.length
+        prev === null
+          ? books.length - 1
+          : (prev - 1 + books.length) % books.length
       );
     } else if (e.key === 'Enter' && hoveredIndex !== null) {
       setSelectedIndex(hoveredIndex);
@@ -117,7 +119,12 @@ const SearchBooks: React.FC = () => {
 
   return (
     <Stack sx={{ width: '60%' }} onKeyDown={handleKeyDown} tabIndex={0}>
-      <Stack sx={{ textAlign: 'left' }} margin={3} marginLeft={0} marginRight={0}>
+      <Stack
+        sx={{ textAlign: 'left' }}
+        margin={3}
+        marginLeft={0}
+        marginRight={0}
+      >
         <img src={helloButton} width="214px" height="78px" />
         <Typography fontSize={24} sx={{ opacity: 0.6 }}>
           {' '}
@@ -126,7 +133,7 @@ const SearchBooks: React.FC = () => {
       </Stack>
 
       <input
-       ref={inputRef}
+        ref={inputRef}
         type="text"
         value={query}
         onFocus={handleFocus}
@@ -138,7 +145,8 @@ const SearchBooks: React.FC = () => {
           paddingLeft: 20,
           border: '2px solid transparent', // Set transparent border
           borderRadius: '9px',
-          backgroundImage: 'linear-gradient(#101010, #101010), linear-gradient(90deg, #0162F3 8%, #FFFFFF 50%, #5494F7 90%)', // Gradient border
+          backgroundImage:
+            'linear-gradient(#101010, #101010), linear-gradient(90deg, #0162F3 8%, #FFFFFF 50%, #5494F7 90%)', // Gradient border
           backgroundOrigin: 'border-box',
           backgroundClip: 'padding-box, border-box', // Clips background to the border
           color: 'white',
@@ -147,94 +155,121 @@ const SearchBooks: React.FC = () => {
 
       <Stack margin={2} marginLeft={0}>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-          <Typography fontSize={16} sx={{ opacity: 0.6, textAlign: 'left' }}>
-           {loading ? "Loading...": books.length + " results" } 
-          </Typography>
-
+        <Typography fontSize={16} sx={{ opacity: 0.6, textAlign: 'left' }}>
+          {loading ? 'Loading...' : books.length + ' results'}
+        </Typography>
       </Stack>
 
       <ClickAwayListener onClickAway={handleClickAway}>
-      {showResults ? <Stack sx={{ overflow: 'auto', height: '508px', width: '100%',
-          '&::-webkit-scrollbar': {
-            width: '6px',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            borderRadius: '4px', 
-            backgroundColor: 'rgba(255, 255, 255, 0.2)', 
-          },
-          '&::-webkit-scrollbar-track': {
-            backgroundColor: 'transparent',
-          },
-          border: '1px solid #36454F', // Border thickness and color
-          borderRadius: '8px', // Rounded corners
-      }}
-      >
-        {books.map((book, index) => {
-          console.log(book);
-          return (
-            <Stack
-              key={book.id}
-              marginLeft={0}
-              marginRight={0}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => setSelectedIndex(index)}
-            >
-              <Stack
-                direction="row"
-                sx={{
-                  display: 'flex',
-                  width: '100%',
-                  justifyContent: 'space-between',
-                  
-                }}
-              >
-                <Stack direction="row" sx={{ display: 'flex',  alignItems: 'center', 
-                padding: 3, width: '70%'}}>
-                  <img
-                    src={book.thumbnail}
-                    alt={book.title}
-                    style={{
-                      width: '42px',
-                      height: '62px',
-                      marginRight: '16px',
+        {showResults ? (
+          <Stack
+            sx={{
+              overflow: 'auto',
+              height: '508px',
+              width: '100%',
+              '&::-webkit-scrollbar': {
+                width: '6px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                borderRadius: '4px',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              },
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: 'transparent',
+              },
+              border: '1px solid #36454F', // Border thickness and color
+              borderRadius: '8px', // Rounded corners
+            }}
+          >
+            {books.map((book, index) => {
+              console.log(book);
+              return (
+                <Stack
+                  key={book.id}
+                  marginLeft={0}
+                  marginRight={0}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  onClick={() => setSelectedIndex(index)}
+                >
+                  <Stack
+                    direction="row"
+                    sx={{
+                      display: 'flex',
+                      width: '100%',
+                      justifyContent: 'space-between',
                     }}
-                  />
+                  >
+                    <Stack
+                      direction="row"
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: 3,
+                        width: '70%',
+                      }}
+                    >
+                      <img
+                        src={book.thumbnail}
+                        alt={book.title}
+                        style={{
+                          width: '42px',
+                          height: '62px',
+                          marginRight: '16px',
+                        }}
+                      />
 
-                  <Stack direction="column" sx={{ textAlign: 'left' }}>
-                    <Typography fontSize={20}                 sx={{
-                      color: selectedIndex === index ?  'white': hoveredIndex === index ? 'white': 'grey',
-                    }}>{book.title}</Typography>
-                    <Typography fontSize={14} sx={{ opacity: 0.6 }}>
-                      {' '}
-                      {book.authors.join(', ')} {book.publishedDate}
-                    </Typography>
+                      <Stack direction="column" sx={{ textAlign: 'left' }}>
+                        <Typography
+                          fontSize={20}
+                          sx={{
+                            color:
+                              selectedIndex === index
+                                ? 'white'
+                                : hoveredIndex === index
+                                  ? 'white'
+                                  : 'grey',
+                          }}
+                        >
+                          {book.title}
+                        </Typography>
+                        <Typography fontSize={14} sx={{ opacity: 0.6 }}>
+                          {' '}
+                          {book.authors.join(', ')} {book.publishedDate}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    {selectedIndex === index && (
+                      <Stack
+                        direction="row"
+                        spacing={3}
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Typography sx={{ opacity: 0.6, marginLeft: '20%' }}>
+                          Selected
+                        </Typography>
+                        <img
+                          src={generateButton}
+                          width={142}
+                          height={46}
+                          onClick={handleGenerate}
+                          style={{ cursor: 'pointer', marginRight: 20 }}
+                        />
+                      </Stack>
+                    )}
                   </Stack>
                 </Stack>
-                {selectedIndex === index && (
-                  <Stack direction="row" spacing={3} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                  <Typography sx={{ opacity: 0.6, marginLeft: '20%'}}>
-                  Selected
-                  </Typography>
-                <img
-                  src={generateButton}
-                  width={142}
-                  height={46}
-                  onClick={handleGenerate}
-                  style={{ cursor: 'pointer', marginRight: 20 }}
-                />
-                        </Stack>
-              )}
-              </Stack>
-            </Stack>
-          );
-        })}
-      </Stack>: <></>}
-
-        </ClickAwayListener>
-   
-
-
+              );
+            })}
+          </Stack>
+        ) : (
+          <></>
+        )}
+      </ClickAwayListener>
     </Stack>
   );
 };
