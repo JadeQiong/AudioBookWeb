@@ -7,6 +7,8 @@ const cors = require('cors');
 const path = require('path');
 const getOpenAIClient = require('./openaiClient'); 
 const { execSync } = require('child_process'); // Import execSync
+const axios = require('axios');
+const config = require('./config');
 
 const app = express();
 const port = 3001;
@@ -26,22 +28,18 @@ app.post('/synthesize', async (req, res) => {
   const author = req.body.author;
 
   try {
-    // Generate transcript using OpenAI
+    // 调用新的 API 生成脚本
     const gptGeneratedText = await generatePodcastScript(booktitle, author);
-    console.log('GPT Generated Text:', gptGeneratedText);
+    console.log('Generated Text:', gptGeneratedText);
 
-    // Write the generated transcript to a file
+    // 继续处理生成的脚本（写入文件、音频生成等）
     const scriptPath = await writeScriptToFile(gptGeneratedText);
     console.log('Transcript has been written to', scriptPath);
 
-    // Process the script and merge the audio files
     const combinedFilePath = await processAndMerge(scriptPath);
-
-    // Add end music to the combined podcast
     const finalOutputPath = await addEndMusic(combinedFilePath);
     console.log('Process completed. Final podcast with start and end music is ready.');
 
-    // Send the final file as a response
     res.sendFile(finalOutputPath);
   } catch (error) {
     console.error('Error during processing:', error);
@@ -141,207 +139,145 @@ async function processAndMergeExistingMusic() {
   // return combinedPodcastPath;
 }
 
-async function generatePodcastScript_origin(bookTitle, author) {
-  const openai = getOpenAIClient();
-
-  // Define the segments or topics to be discussed in the podcast
-  const topics = [
-    "Discussion on the main theme of the book",
-    "Key characters or ideas presented in the book",
-    "Important quotes and their implications",
-    "How the book relates to current societal issues",
-    "Final thoughts and recommendations for readers"
-  ];
-
-  let fullScript = "";
-
-  // Generate the initial greeting and the first topic
-  const initialPrompt = `
-    Generate a podcast transcript discussing the book '${bookTitle}' by '${author}'.
-    Start with an introduction where Emma greets the audience and welcomes them to the podcast "BookTalks," where she introduces Michael as the regular guest.
-    Then discuss the first topic: ${topics[0]}.
-    Requirements:
-    1. Emma is the host and Michael is the guest, starting with Emma, and end with Michael's response. Even number of turns.
-    2. Michael should have a humorous tone.
-    3. The generated transcript should be at least 350-450 words.
-    4. Do not include "[Opening music plays]" or "[End of transcript]" or any other start or end-of-transcript markers.
-    5. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
-    6. Do **NOT** include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". **Do not imply the end of the podcast at all.**
-  `;
-  const initialResponse = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages: [{ role: 'user', content: initialPrompt }],
-  });
-  fullScript += initialResponse.choices[0].message.content.trim() + "\n\n";
-
-  // Generate the remaining topics without repetitive greetings
-  for (let i = 1; i < topics.length; i++) {
-    const prompt = `
-      Continue the podcast transcript discussing the book '${bookTitle}'.
-      The host Emma should smoothly transition into the next topic: ${topics[i]}.
-      Requirements:
-      1. Emma should continue without greeting the audience again and should not reintroduce the book. She should start directly with a question about the topic.
-      2. The conversation between Emma and Michael should be back-and-forth, focusing on discussing the topic without any transition into ending remarks, starting with Emma, and end with Michael's response. Even number of turns.
-      3. Include specific examples from the book in the conversation.
-      4. The generated transcript should be about 150 words.
-      5. Do **NOT** include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". **Do not imply the end of the podcast at all.**
-      6. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
-      7. The transcript should maintain a conversational tone and flow naturally without wrapping up the discussion.
-    `;
-  
-
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-    });
-
-    // // Process the response to exclude the last line
-    // const transcript = response.choices[0].message.content.trim();
-    // const lines = transcript.split('\n');
-
-    // // Exclude the last line
-    // const filteredTranscript = lines.slice(0, -1).join('\n');
-
-    // fullScript += filteredTranscript + "\n\n";
-    fullScript += response.choices[0].message.content.trim();
-  }
-
-    // Generate the final thoughts and closing segment separately
-    const closingPrompt = `
-    Generate the final segment of the podcast discussing the book '${bookTitle}'.
-    Emma should ask Michael for his final thoughts on the book and then wrap up the discussion.
-    Requirements:
-    1. The segment should have exactly two turns: Emma starts by asking for final thoughts, Michael responds, and Emma gives a brief closing statement.
-    2. Include a closing statement inviting listeners to suggest books for the next discussion.
-    3. The generated transcript should be concise and within 80 words.
-    4. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
-    5. Do not include "[End of transcript]" or any other end-of-transcript markers.
-  `;
-  
-  const closingResponse = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages: [{ role: 'user', content: closingPrompt }],
-  });
-  
-  // Process the response to ensure each dialogue line is on a separate line with a blank line in between
-  const lines = closingResponse.choices[0].message.content.trim()
-    .split('\n')
-    .filter(line => line.trim() !== ''); // Remove any extra empty lines
-  
-  // Format with a blank line between Emma and Michael
-  const formattedDialogue = lines.join('\n\n'); // Join with double line breaks for separation
-  
-  fullScript += formattedDialogue + "\n\n";
-  
-  
-
-
-
-  // Add the final question at the end
-  fullScript += `
-Emma: What book would you like to know about next time?
-  `;
-
-  return fullScript;
-}
+// async function generatePodcastScript_origin(bookTitle, author) {
+//   const openai = getOpenAIClient();
+//
+//   // Define the segments or topics to be discussed in the podcast
+//   const topics = [
+//     "Discussion on the main theme of the book",
+//     "Key characters or ideas presented in the book",
+//     "Important quotes and their implications",
+//     "How the book relates to current societal issues",
+//     "Final thoughts and recommendations for readers"
+//   ];
+//
+//   let fullScript = "";
+//
+//   // Generate the initial greeting and the first topic
+//   const initialPrompt = `
+//     Generate a podcast transcript discussing the book '${bookTitle}' by '${author}'.
+//     Start with an introduction where Emma greets the audience and welcomes them to the podcast "BookTalks," where she introduces Michael as the regular guest.
+//     Then discuss the first topic: ${topics[0]}.
+//     Requirements:
+//     1. Emma is the host and Michael is the guest, starting with Emma, and end with Michael's response. Even number of turns.
+//     2. Michael should have a humorous tone.
+//     3. The generated transcript should be at least 350-450 words.
+//     4. Do not include "[Opening music plays]" or "[End of transcript]" or any other start or end-of-transcript markers.
+//     5. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
+//     6. Do **NOT** include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". **Do not imply the end of the podcast at all.**
+//   `;
+//   const initialResponse = await openai.chat.completions.create({
+//     model: 'gpt-3.5-turbo',
+//     messages: [{ role: 'user', content: initialPrompt }],
+//   });
+//   fullScript += initialResponse.choices[0].message.content.trim() + "\n\n";
+//
+//   // Generate the remaining topics without repetitive greetings
+//   for (let i = 1; i < topics.length; i++) {
+//     const prompt = `
+//       Continue the podcast transcript discussing the book '${bookTitle}'.
+//       The host Emma should smoothly transition into the next topic: ${topics[i]}.
+//       Requirements:
+//       1. Emma should continue without greeting the audience again and should not reintroduce the book. She should start directly with a question about the topic.
+//       2. The conversation between Emma and Michael should be back-and-forth, focusing on discussing the topic without any transition into ending remarks, starting with Emma, and end with Michael's response. Even number of turns.
+//       3. Include specific examples from the book in the conversation.
+//       4. The generated transcript should be about 150 words.
+//       5. Do **NOT** include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". **Do not imply the end of the podcast at all.**
+//       6. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
+//       7. The transcript should maintain a conversational tone and flow naturally without wrapping up the discussion.
+//     `;
+//
+//
+//     const response = await openai.chat.completions.create({
+//       model: 'gpt-3.5-turbo',
+//       messages: [{ role: 'user', content: prompt }],
+//     });
+//
+//     // // Process the response to exclude the last line
+//     // const transcript = response.choices[0].message.content.trim();
+//     // const lines = transcript.split('\n');
+//
+//     // // Exclude the last line
+//     // const filteredTranscript = lines.slice(0, -1).join('\n');
+//
+//     // fullScript += filteredTranscript + "\n\n";
+//     fullScript += response.choices[0].message.content.trim();
+//   }
+//
+//     // Generate the final thoughts and closing segment separately
+//     const closingPrompt = `
+//     Generate the final segment of the podcast discussing the book '${bookTitle}'.
+//     Emma should ask Michael for his final thoughts on the book and then wrap up the discussion.
+//     Requirements:
+//     1. The segment should have exactly two turns: Emma starts by asking for final thoughts, Michael responds, and Emma gives a brief closing statement.
+//     2. Include a closing statement inviting listeners to suggest books for the next discussion.
+//     3. The generated transcript should be concise and within 80 words.
+//     4. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
+//     5. Do not include "[End of transcript]" or any other end-of-transcript markers.
+//   `;
+//
+//   const closingResponse = await openai.chat.completions.create({
+//     model: 'gpt-3.5-turbo',
+//     messages: [{ role: 'user', content: closingPrompt }],
+//   });
+//
+//   // Process the response to ensure each dialogue line is on a separate line with a blank line in between
+//   const lines = closingResponse.choices[0].message.content.trim()
+//     .split('\n')
+//     .filter(line => line.trim() !== ''); // Remove any extra empty lines
+//
+//   // Format with a blank line between Emma and Michael
+//   const formattedDialogue = lines.join('\n\n'); // Join with double line breaks for separation
+//
+//   fullScript += formattedDialogue + "\n\n";
+//
+//
+//
+//
+//
+//   // Add the final question at the end
+//   fullScript += `
+// Emma: What book would you like to know about next time?
+//   `;
+//
+//   return fullScript;
+// }
 
 async function generatePodcastScript(bookTitle, author) {
-  const openai = getOpenAIClient();
+  const { apiUrl, apiKey } = config;// 从配置文件获取 apiUrl 和 apiKey
 
-  // Define the segments or topics to be discussed in the podcast
-  const topics = [
-    "Discussion on the main theme of the book",
-    "Key characters or ideas presented in the book",
-    "Important quotes and their implications",
-    "How the book relates to current societal issues",
-    "Final thoughts and recommendations for readers"
-  ];
+  const payload = {
+    inputs: {
+      bookTitle: bookTitle,
+      author: author
+    },
+    response_mode: 'streaming', // 可选择 'blocking' 作为替代
+    user: 'abc-123' // 适当修改为实际的用户标识
+  };
 
-  let fullScript = "";
-
-  // Generate the initial greeting and the first topic
-  let previousContent = ""; // To hold previously generated content for context
-  const initialPrompt = `
-    Generate the opening segment of a podcast transcript discussing the book '${bookTitle}' by '${author}'.
-    Start with an introduction where Emma greets the audience and welcomes them to the podcast "BookTalks," where she introduces Michael as the regular guest.
-    Then move into discussing the first topic: ${topics[0]}.
-    Requirements:
-    1. Emma is the host and Michael is the guest, starting with Emma, and ending with Michael's response. Ensure an even number of turns.
-    2. Michael should have a humorous tone.
-    3. The generated transcript should be at least 350-450 words.
-    4. Focus solely on the introduction and the first topic; do not include any form of conclusion, closing remarks, or expressions like "Thank you for listening," "Final thoughts," or "See you next time."
-    5. Do not include "[Opening music plays]" or "[End of transcript]" or any other start or end-of-transcript markers.
-    6. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
-    7. The conversation should be left open-ended as it transitions to the next topic, with no implication that the podcast is ending.
-  `;
-  
-  const initialResponse = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages: [{ role: 'user', content: initialPrompt }],
-  });
-  
-  previousContent = initialResponse.choices[0].message.content.trim();
-  fullScript += previousContent + "\n\n";
-
-  fullScript +="[first]";
-
-  // Generate the remaining topics with previous content as context
-  for (let i = 1; i < topics.length; i++) {
-    const prompt = `
-      Continue the podcast transcript discussing the book '${bookTitle}'.
-      The host Emma should smoothly transition into the next topic: ${topics[i]}.
-      Requirements:
-      1. Emma should continue without greeting the audience again and should not reintroduce the book. She should start directly with a question about the topic.
-      2. The conversation between Emma and Michael should be back-and-forth, focusing on discussing the topic without any transition into ending remarks, starting with Emma, and end with Michael's response. Even number of turns.
-      3. Include specific examples from the book in the conversation.
-      4. The generated transcript should be about 150 words.
-      5. Do **NOT** include any ending greetings, closing remarks, or phrases like "Thank you for listening", "Final thoughts", or "See you next time". **Do not imply the end of the podcast at all.**
-      6. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
-      7. The transcript should maintain a conversational tone and flow naturally without wrapping up the discussion.
-    `;
-    
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        { role: 'system', content: previousContent }, // Feed the previous content as context
-        { role: 'user', content: prompt },
-      ],
+  try {
+    // 发送请求
+    const response = await axios.post(apiUrl, payload, {
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      }
     });
 
-    previousContent = response.choices[0].message.content.trim(); // Update context with new content
-    fullScript += previousContent + "\n\n";
+    const result = response.data;
+    console.log('API Response:', result);
+
+    // 检查请求状态并提取文本输出
+    if (result.data && result.data.status === 'succeeded') {
+      const scriptText = result.data.outputs.result; // 获取生成的脚本文本
+      return scriptText;
+    } else {
+      throw new Error(`API 请求失败：${result.data.error || '未知错误'}`);
+    }
+  } catch (error) {
+    console.error('Error generating podcast script:', error);
+    throw error;
   }
-
-  // Generate the final thoughts and closing segment separately
-  const closingPrompt = `
-    Generate the final segment of the podcast discussing the book '${bookTitle}'.
-    Emma should ask Michael for his final thoughts on the book and then wrap up the discussion.
-    Requirements:
-    1. The segment should have exactly two turns: Emma starts by asking for final thoughts, Michael responds, and Emma gives a brief closing statement.
-    2. Include a closing statement inviting listeners to suggest books for the next discussion.
-    3. The generated transcript should be concise and within 80 words.
-    4. Do not include any non-verbal cues like "(laughs)", "(sighs)", "(pauses)", or any similar expressions.
-    5. Do not include "[End of transcript]" or any other end-of-transcript markers.
-  `;
-  
-  const closingResponse = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages: [
-      { role: 'system', content: previousContent }, // Use the last topic's response as context
-      { role: 'user', content: closingPrompt },
-    ],
-  });
-  
-  previousContent = closingResponse.choices[0].message.content.trim();
-  
-  fullScript += previousContent + "\n\n";
-
-  // Add the final question at the end
-  fullScript += `
-Emma: What book would you like to know about next time?
-  `;
-
-  return fullScript;
 }
 
 
