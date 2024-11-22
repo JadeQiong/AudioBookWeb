@@ -92,7 +92,7 @@ const Home: React.FC<HomeProps> = ({
         </Stack>
       </Stack>
 
-      <div className="container_background">
+      {/* <div className="container_background">
         <Stack direction="column" sx={{ width: '60%', marginTop: '5%' }}>
           <Stack direction="row">
             <Stack direction="column" sx={{ width: '45%' }}>
@@ -129,7 +129,7 @@ const Home: React.FC<HomeProps> = ({
             </Stack>
           </Stack>
         </Stack>
-      </div>
+      </div> */}
       {isDebug && <LibraryView setBook={setBook}></LibraryView>}
     </Stack>
   );

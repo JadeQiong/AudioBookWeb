@@ -135,6 +135,7 @@ for (let i = 0; i < 2; i++) {
 const CAROUSEL = 'carousel';
 const LIBRARY = 'library';
 const WAITLIST = 'waitlist';
+const GENERATE = 'generate';
 
 export type AppProps = Readonly<{
   isDebug: boolean;
@@ -218,6 +219,11 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
   const handleHomeClick = () => {
     navigate('/');
     setView(CAROUSEL);
+  };
+
+  const handleGenerateClick = () => {
+    navigate('/generate');
+    setView(GENERATE);
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -377,6 +383,31 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
               >
                 Home
               </Button>
+              <Button
+                variant="contained"
+                size="large"
+                sx={
+                  view === GENERATE
+                    ? {
+                        fontWeight: 'bold',
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
+                        color: 'white',
+                      }
+                    : {
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
+                        color: 'white',
+                      }
+                }
+                onClick={handleGenerateClick}
+              >
+                Generate
+              </Button>
               {/* {isDebug && (
                 <Button
                   variant="contained"
@@ -404,29 +435,6 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                   library
                 </Button>
               )} */}
-              {isDebug &&
-                (user ? (
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => {
-                      supabase.auth.signOut();
-                      setUser(null);
-                    }}
-                    sx={{ color: 'white' }}
-                  >
-                    Sign Out
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => navigate('/signin')}
-                    sx={{ color: 'white' }}
-                  >
-                    Sign In
-                  </Button>
-                ))}
               <img
                 src={waitlistButton}
                 width={160}
@@ -436,7 +444,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 }}
                 style={{ cursor: 'pointer' }}
               />
-              {isDebug && (
+              {isDebug && user && (
                 <div>
                   <img
                     src={avatarIcon}
@@ -463,10 +471,27 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                     <MenuItem onClick={handleClose}>
                       {user?.email ? user.email : 'No email available'}
                     </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        supabase.auth.signOut();
+                        setUser(null);
+                      }}
+                    >
+                      Sign out
+                    </MenuItem>
                   </Menu>
                 </div>
               )}
-
+              {isDebug && !user && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => navigate('/signin')}
+                  sx={{ color: 'white' }}
+                >
+                  Sign In
+                </Button>
+              )}
               {isDebug && (
                 <Button
                   variant="contained"

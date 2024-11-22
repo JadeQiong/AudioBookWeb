@@ -2,23 +2,38 @@ import React, { useState, useEffect } from 'react';
 import {
   Grid,
   Card,
-  CardMedia,
   CardActionArea,
-  CardContent,
+  CardMedia,
   Typography,
-  IconButton,
-  Tabs,
-  Tab,
+  MenuItem,
+  Menu,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Button,
   Stack,
+  Pagination,
 } from '@mui/material';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import axios from 'axios';
-import Pagination from '@mui/material/Pagination';
 import DailyBook from '../components/DailyBook';
 import { Book } from '../types/book';
 import { Alert, AlertTitle, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import SearchBooks from '../components/Search';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark', // Enables dark mode
+  },
+  typography: {
+    fontFamily: 'Montserrat, Arial, sans-serif',
+  },
+});
+
+// Wrap your application's render in a ThemeProvider with the dark theme
 
 interface GenerateViewProps {
   setBook: React.Dispatch<React.SetStateAction<Book>>;
@@ -39,9 +54,18 @@ const GenerateView: React.FC<GenerateViewProps> = ({ setBook }) => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [showAlert, setShowAlert] = useState(false);
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [menuPosition, setMenuPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+
   // TODO
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  // const baseUrl = 'http://localhost:3001';
+  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  const baseUrl = 'http://localhost:3001';
 
   useEffect(() => {
     const fetchDailyBook = async () => {
@@ -109,9 +133,20 @@ const GenerateView: React.FC<GenerateViewProps> = ({ setBook }) => {
     return blob;
   }
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
-    setCurrentPage(1);
-    setSelectedTab(newValue);
+  const handleClose = () => {
+    setMenuPosition(null);
+  };
+
+  const handleDelete = () => {
+    console.log('Deleting book:', selectedBook?.title);
+    setOpenDialog(false);
+    handleClose();
+    // Add your delete logic here
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+    handleClose();
   };
 
   const filteredBooks =
@@ -224,10 +259,8 @@ const GenerateView: React.FC<GenerateViewProps> = ({ setBook }) => {
                   width: '120px', // 20% of the viewport width
                   height: '230px', // 30% of the viewport height
                 }}
-                onClick={() => {
-                  playOpusFile(getKeyPath(book.title, book.category), book);
-                }}
-                // onClick={() => fetchBookAudio(book?._id)}
+
+                // onContextMenu={(event) => handleRightClick(event, book)}
               >
                 <CardActionArea>
                   <CardMedia
@@ -245,8 +278,31 @@ const GenerateView: React.FC<GenerateViewProps> = ({ setBook }) => {
                   <HoverOverlay>
                     <PlayCircleOutlineIcon
                       style={{ fontSize: '3rem', color: 'white' }}
+                      onClick={() => {
+                        playOpusFile(
+                          getKeyPath(book.title, book.category),
+                          book
+                        );
+                      }}
                     />{' '}
-                    {/* Adjust icon size and color */}
+                    <MoreHorizIcon
+                      style={{
+                        fontSize: '1.5rem', // Make it smaller
+                        color: 'white',
+                        position: 'absolute', // Position it relative to HoverOverlay
+                        bottom: '10px', // Adjust bottom spacing as needed
+                        right: '10px', // Adjust right spacing as needed
+                        cursor: 'pointer', // Change cursor on hover
+                      }}
+                      onClick={(event: React.MouseEvent<SVGElement>) => {
+                        event.preventDefault();
+                        setMenuPosition({
+                          top: event.clientY,
+                          left: event.clientX,
+                        }); // Set menu position
+                        setSelectedBook(book);
+                      }}
+                    />
                   </HoverOverlay>
                 </CardActionArea>
                 <Typography
@@ -276,6 +332,35 @@ const GenerateView: React.FC<GenerateViewProps> = ({ setBook }) => {
           ))}
         </Grid>
 
+        <ThemeProvider theme={theme}>
+          <Menu
+            open={Boolean(menuPosition)}
+            anchorReference="anchorPosition" // Use manual positioning
+            anchorPosition={
+              menuPosition !== null
+                ? { top: menuPosition.top, left: menuPosition.left }
+                : undefined
+            }
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'right-click-menu',
+            }}
+          >
+            <MenuItem onClick={handleOpenDialog}>Delete</MenuItem>
+          </Menu>
+
+          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+            <DialogTitle>
+              Are you sure you want to delete this podcast?
+            </DialogTitle>
+            <DialogActions>
+              <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+              <Button onClick={handleDelete} color="error">
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </ThemeProvider>
         <Stack>
           <Pagination
             count={totalPages}

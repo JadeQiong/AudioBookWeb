@@ -215,12 +215,11 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
         </Alert>
       )}
 
-      <Stack
+      {/* <Stack
         direction="column"
         spacing={1}
         sx={{ width: 1600, padding: '40px' }}
       >
-        {/* <DailyBook book={dailyBook} startListening={fetchBookAudio}></DailyBook> */}
         <DailyBook
           book={dailyBook}
           startListening={() => {
@@ -231,10 +230,40 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
             );
           }}
         ></DailyBook>
-      </Stack>
+      </Stack> */}
 
       <Stack direction="column" spacing={1} sx={{ width: '90vw' }} margin={5}>
-        <Tabs
+        <Box sx={{}}>
+          {categories.slice(0, 6).map((category) => (
+            <Tab
+              sx={
+                category === selectedTab
+                  ? { flex: 1, fontWeight: 'bold' }
+                  : { color: 'white', flex: 1 }
+              }
+              key={category}
+              label={category}
+              value={category}
+              onClick={() => setSelectedTab(category)}
+            />
+          ))}
+        </Box>
+        <Box sx={{}}>
+          {categories.slice(6).map((category) => (
+            <Tab
+              sx={
+                category === selectedTab
+                  ? { flex: 1, fontWeight: 'bold' }
+                  : { color: 'white', flex: 1 }
+              }
+              key={category}
+              label={category}
+              value={category}
+              onClick={() => setSelectedTab(category)}
+            />
+          ))}
+        </Box>
+        {/* <Tabs
           value={selectedTab}
           onChange={handleChange}
           variant="scrollable"
@@ -248,7 +277,7 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
               value={category}
             />
           ))}
-        </Tabs>
+        </Tabs> */}
         <Grid container spacing={2}>
           {filteredBooks.map((book, index) => (
             <Grid item xs={4} sm={3} md={2} lg={1.5} key={index}>

@@ -33,7 +33,11 @@ const SearchBooks: React.FC = () => {
   const API_KEY = 'AIzaSyDo7BB8UuGnGuL6Kvzcirit3AKaBQs2sd4';
   // Replace with your Google Books API Key
 
-  const handleGenerate = () => {};
+  const handleGenerate = () => {
+    console.log('>>');
+    const data = runWorkflow('Chip war', 'A');
+    console.log(data);
+  };
 
   const searchBooks = async (query: string) => {
     if (query.trim()) {
@@ -101,7 +105,7 @@ const SearchBooks: React.FC = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (books.length === 0) return;
-
+    console.log('key down');
     if (e.key === 'ArrowDown') {
       setHoveredIndex((prev) =>
         prev === null ? 0 : (prev + 1) % books.length
@@ -117,8 +121,41 @@ const SearchBooks: React.FC = () => {
     }
   };
 
+  const runWorkflow = async (title: string, author: string) => {
+    try {
+      // Load the API key from the environment variables
+      // const apiKey = process.env.API_KEY;
+      const apiKey = 'app-19n0GLm9rf6UJEg9xT6u5pWW';
+      if (!apiKey) {
+        throw new Error('API_KEY is not defined in the environment variables');
+      }
+
+      const url = 'http://51.143.10.56/v1/workflows/run';
+
+      // Request payload
+      const data = {
+        inputs: { title, author },
+        response_mode: 'blocking',
+        user: 'booktalks_backend',
+      };
+
+      // Headers for the request
+      const headers = {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      };
+
+      // Make the POST request
+      const response = await axios.post(url, data, { headers });
+      return response.data; // Return the response data
+    } catch (error) {
+      console.error('Error running workflow:', error);
+      throw error; // Rethrow the error for further handling
+    }
+  };
+
   return (
-    <Stack sx={{ width: '60%' }} onKeyDown={handleKeyDown} tabIndex={0}>
+    <Stack sx={{ width: '60%' }} tabIndex={0}>
       <Stack
         sx={{ textAlign: 'left' }}
         margin={3}
@@ -156,7 +193,9 @@ const SearchBooks: React.FC = () => {
       <Stack margin={2} marginLeft={0}>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <Typography fontSize={16} sx={{ opacity: 0.6, textAlign: 'left' }}>
-          {loading ? 'Loading...' : books.length + ' results'}
+          {loading && books.length > 0
+            ? 'Loading...'
+            : books.length + ' results'}
         </Typography>
       </Stack>
 
@@ -180,9 +219,29 @@ const SearchBooks: React.FC = () => {
               border: '1px solid #36454F', // Border thickness and color
               borderRadius: '8px', // Rounded corners
             }}
+            tabIndex={0} // Make the Stack focusable
+            onKeyDown={(e) => {
+              if (books.length === 0) return;
+
+              e.preventDefault(); // Prevent default browser behavior for arrow keys
+              if (e.key === 'ArrowDown') {
+                setHoveredIndex((prev) =>
+                  prev === null ? 0 : (prev + 1) % books.length
+                );
+              } else if (e.key === 'ArrowUp') {
+                setHoveredIndex((prev) =>
+                  prev === null
+                    ? books.length - 1
+                    : (prev - 1 + books.length) % books.length
+                );
+              } else if (e.key === 'Enter' && hoveredIndex !== null) {
+                setSelectedIndex(hoveredIndex);
+              }
+            }}
+            // onKeyDown={handleKeyDown}
           >
             {books.map((book, index) => {
-              console.log(book);
+              // console.log(book);
               return (
                 <Stack
                   key={book.id}
@@ -198,6 +257,12 @@ const SearchBooks: React.FC = () => {
                       display: 'flex',
                       width: '100%',
                       justifyContent: 'space-between',
+                      backgroundColor:
+                        selectedIndex === index
+                          ? '#383838'
+                          : hoveredIndex === index
+                            ? '#242424'
+                            : '#101010',
                     }}
                   >
                     <Stack
