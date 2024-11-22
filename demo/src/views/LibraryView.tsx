@@ -37,12 +37,13 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
   const [categories, setCategories] = useState<string[]>(['All']);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage] = useState<number>(16);
+
   const [totalPages, setTotalPages] = useState<number>(0);
   const [showAlert, setShowAlert] = useState(false);
 
   // TODO
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  // const baseUrl = 'http://localhost:3001';
+  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  const baseUrl = 'http://localhost:3001';
 
   useEffect(() => {
     const fetchDailyBook = async () => {

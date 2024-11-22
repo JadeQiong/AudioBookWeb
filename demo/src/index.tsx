@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ReactGA from 'react-ga';
+import { UserProvider } from './providers/UserProvider';
 
 // Initialize GA with the Measurement ID from the environment variable
 const gaMeasurementId = process.env.REACT_APP_GA_MEASUREMENT_ID;
@@ -19,14 +20,16 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/test/*" element={<App isDebug={true} />} />
-        <Route path="/*" element={<App isDebug={false} />} />
-      </Routes>
-    </Router>
-  </React.StrictMode>
+  <UserProvider>
+    <React.StrictMode>
+      <Router>
+        <Routes>
+          <Route path="/test/*" element={<App isDebug={true} />} />
+          <Route path="/*" element={<App isDebug={false} />} />
+        </Routes>
+      </Router>
+    </React.StrictMode>
+  </UserProvider>
 );
 
 reportWebVitals();

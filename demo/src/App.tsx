@@ -63,6 +63,8 @@ import usePageTracking from './hooks/usePageTracking';
 import HomeView from './views/Home';
 import ReactGA from 'react-ga';
 
+import { useUser } from './providers/UserProvider';
+
 const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat, Arial, sans-serif',
@@ -157,6 +159,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
   const [book, setBook] = useState(newBook);
   const [playing, setPlaying] = React.useState<boolean>(false);
   const [sliderIndex, setSliderIndex] = useState(-1);
+  const { signOut } = useUser();
 
   type UserType = {
     id: string;
@@ -319,7 +322,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
           <Stack
             direction="row"
             sx={{
-              margin: 2,
+              margin: 1,
               alignItems: 'center',
               width: '90%',
               display: 'flex',
@@ -339,7 +342,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                   setView(CAROUSEL);
                   handlePlay(book);
                 }}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', marginLeft: -45 }}
               />
               <Typography
                 sx={{
@@ -357,7 +360,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 BookTalks
               </Typography>
             </Stack>
-            <Stack direction="row" spacing={2} alignItems="center">
+            <Stack direction="row">
               <Button
                 variant="contained"
                 size="large"
@@ -408,6 +411,8 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
               >
                 Generate
               </Button>
+            </Stack>
+            <Stack direction="row" spacing={2} alignItems="center">
               {/* {isDebug && (
                 <Button
                   variant="contained"
@@ -471,14 +476,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                     <MenuItem onClick={handleClose}>
                       {user?.email ? user.email : 'No email available'}
                     </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        supabase.auth.signOut();
-                        setUser(null);
-                      }}
-                    >
-                      Sign out
-                    </MenuItem>
+                    <MenuItem onClick={signOut}>Sign out</MenuItem>
                   </Menu>
                 </div>
               )}
