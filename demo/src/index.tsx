@@ -21,14 +21,14 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <UserProvider>
-    <React.StrictMode>
-      <Router>
-        <Routes>
-          <Route path="/test/*" element={<App isDebug={true} />} />
-          <Route path="/*" element={<App isDebug={false} />} />
-        </Routes>
-      </Router>
-    </React.StrictMode>
+    {/* <React.StrictMode> */}
+    <Router>
+      <Routes>
+        <Route path="/test/*" element={<App isDebug={true} />} />
+        <Route path="/*" element={<App isDebug={false} />} />
+      </Routes>
+    </Router>
+    {/* </React.StrictMode> */}
   </UserProvider>
 );
 

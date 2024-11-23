@@ -77,6 +77,7 @@ export const Player: React.FC<SliderProps> = React.forwardRef<
     useImperativeHandle(ref, () => ({
       handlePlayPause,
     }));
+
     return (
       <>
         <HoverSlider
@@ -84,6 +85,7 @@ export const Player: React.FC<SliderProps> = React.forwardRef<
           audio={book.audio}
           title={book.title}
           isHide={hoverIsHide}
+          cover_url={book.cover_url}
           setIsHide={setHoverIsHide}
           playing={playing}
           setPlaying={setPlaying}
