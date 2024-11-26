@@ -37,6 +37,7 @@ export type SliderProps = Readonly<{
   ref?: React.LegacyRef<HoverSliderRef>;
   audio?: any;
   title?: string;
+  cover_url?: string;
   isHide: boolean;
   setIsHide?: any;
   playing: boolean;
@@ -69,6 +70,7 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
       onDurationChange,
       value,
       onValueUpdated,
+      cover_url,
     },
     ref
   ) => {
@@ -316,6 +318,18 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
           padding={0}
           alignItems="center"
         >
+          <img
+            src={cover_url}
+            alt="Cover"
+            style={{
+              marginRight: '10px',
+              width: '30px', // Set the width of the image
+              height: 'auto', // Maintain aspect ratio
+              objectFit: 'cover', // Ensure the image fills the container without distortion
+              borderRadius: '8px', // Optional: Add rounded corners
+            }}
+          />
+
           <IconButton
             onClick={() => {
               setPlaying(!playing);

@@ -63,6 +63,8 @@ import usePageTracking from './hooks/usePageTracking';
 import HomeView from './views/Home';
 import ReactGA from 'react-ga';
 
+import { useUser } from './providers/UserProvider';
+
 const theme = createTheme({
   typography: {
     fontFamily: 'Montserrat, Arial, sans-serif',
@@ -135,6 +137,7 @@ for (let i = 0; i < 2; i++) {
 const CAROUSEL = 'carousel';
 const LIBRARY = 'library';
 const WAITLIST = 'waitlist';
+const GENERATE = 'generate';
 
 export type AppProps = Readonly<{
   isDebug: boolean;
@@ -156,6 +159,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
   const [book, setBook] = useState(newBook);
   const [playing, setPlaying] = React.useState<boolean>(false);
   const [sliderIndex, setSliderIndex] = useState(-1);
+  const { signOut } = useUser();
 
   type UserType = {
     id: string;
@@ -218,6 +222,11 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
   const handleHomeClick = () => {
     navigate('/');
     setView(CAROUSEL);
+  };
+
+  const handleGenerateClick = () => {
+    navigate('/generate');
+    setView(GENERATE);
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -313,7 +322,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
           <Stack
             direction="row"
             sx={{
-              margin: 2,
+              margin: 1,
               alignItems: 'center',
               width: '90%',
               display: 'flex',
@@ -333,7 +342,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                   setView(CAROUSEL);
                   handlePlay(book);
                 }}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: 'pointer', marginLeft: -45 }}
               />
               <Typography
                 sx={{
@@ -351,7 +360,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 BookTalks
               </Typography>
             </Stack>
-            <Stack direction="row" spacing={2} alignItems="center">
+            <Stack direction="row">
               <Button
                 variant="contained"
                 size="large"
@@ -377,6 +386,33 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
               >
                 Home
               </Button>
+              <Button
+                variant="contained"
+                size="large"
+                sx={
+                  view === GENERATE
+                    ? {
+                        fontWeight: 'bold',
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
+                        color: 'white',
+                      }
+                    : {
+                        backgroundColor: 'transparent', // Ensures the background is transparent
+                        borderColor: 'transparent', // Ensures no border color
+                        borderWidth: 0, // Ensures no border width
+                        boxShadow: 'none', // Removes any shadow
+                        color: 'white',
+                      }
+                }
+                onClick={handleGenerateClick}
+              >
+                Generate
+              </Button>
+            </Stack>
+            <Stack direction="row" spacing={2} alignItems="center">
               {/* {isDebug && (
                 <Button
                   variant="contained"
@@ -404,29 +440,6 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                   library
                 </Button>
               )} */}
-              {isDebug &&
-                (user ? (
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => {
-                      supabase.auth.signOut();
-                      setUser(null);
-                    }}
-                    sx={{ color: 'white' }}
-                  >
-                    Sign Out
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={() => navigate('/signin')}
-                    sx={{ color: 'white' }}
-                  >
-                    Sign In
-                  </Button>
-                ))}
               <img
                 src={waitlistButton}
                 width={160}
@@ -436,7 +449,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 }}
                 style={{ cursor: 'pointer' }}
               />
-              {isDebug && (
+              {isDebug && user && (
                 <div>
                   <img
                     src={avatarIcon}
@@ -463,10 +476,20 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                     <MenuItem onClick={handleClose}>
                       {user?.email ? user.email : 'No email available'}
                     </MenuItem>
+                    <MenuItem onClick={signOut}>Sign out</MenuItem>
                   </Menu>
                 </div>
               )}
-
+              {isDebug && !user && (
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => navigate('/signin')}
+                  sx={{ color: 'white' }}
+                >
+                  Sign In
+                </Button>
+              )}
               {isDebug && (
                 <Button
                   variant="contained"

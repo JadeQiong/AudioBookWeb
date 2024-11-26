@@ -6,8 +6,11 @@ import { IconButton, InputAdornment } from '@mui/material';
 import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleLogo from '../assets/images/google.svg';
 import ContinueIcon from '../assets/images/continue_button.svg';
+import { useUser } from '../providers/UserProvider';
 
 const LoginView = () => {
+  const { handleGoogleSignIn } = useUser();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -20,16 +23,6 @@ const LoginView = () => {
     event.preventDefault();
   };
   console.log('login view is here');
-  const handleGoogleSignIn = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-    if (error) {
-      console.error('Error logging in with Google:', error.message);
-    } else {
-      console.log('Redirecting for Google authentication', data);
-    }
-  };
 
   const handleEmailLogin = async () => {
     const { data, error } = await supabase.auth.signInWithPassword({
