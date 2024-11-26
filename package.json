@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "react-ga": "^3.3.1",
+    "react-share": "^5.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}

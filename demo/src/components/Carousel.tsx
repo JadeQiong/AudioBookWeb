@@ -84,8 +84,6 @@ export const Carousel: FC<CarouselProps> = forwardRef(
         Math.round((itemWidth / 2 / Math.tan(Math.PI / len)) * radiusFactor),
       [itemWidth, len]
     );
-    console.log('radius is ', radius);
-
     const ref = useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = useState(
       Math.floor(items.length / 2)
