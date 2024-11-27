@@ -159,39 +159,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
   const [book, setBook] = useState(newBook);
   const [playing, setPlaying] = React.useState<boolean>(false);
   const [sliderIndex, setSliderIndex] = useState(-1);
-  const { signOut } = useUser();
-
-  type UserType = {
-    id: string;
-    email?: string;
-    // Add any other properties as per your user model.
-  };
-
-  const [user, setUser] = useState<UserType | null>(null);
-
-  useEffect(() => {
-    const getSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error('Error fetching session:', error.message);
-        return;
-      }
-      console.log(data.session?.user);
-      setUser(data?.session?.user ?? null);
-    };
-
-    getSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setUser(session?.user ?? null);
-      }
-    );
-
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, []);
+  const { signOut, user } = useUser();
 
   useEffect(() => {
     if (audioIndex >= 0) {
@@ -225,8 +193,12 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
   };
 
   const handleGenerateClick = () => {
-    navigate('/generate');
-    setView(GENERATE);
+    if (!user) {
+      navigate('/signin');
+    } else {
+      navigate('/generate');
+      setView(GENERATE);
+    }
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

@@ -116,6 +116,7 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
         </Box>
         <BookList
           setBook={setBook}
+          setBooks={setBooks}
           books={filteredBooks}
           isPublic={true}
         ></BookList>
@@ -123,6 +124,9 @@ const LibraryView: React.FC<LibraryViewProps> = ({ setBook }) => {
         <Box ref={loadMoreRef} sx={{ height: '50px', marginTop: '20px' }}>
           {isLoading && (
             <Typography color="white">Loading more books...</Typography>
+          )}
+          {!isLoading && books.length === 0 && (
+            <Typography color="white">Book list is empty.</Typography>
           )}
         </Box>
       </Stack>

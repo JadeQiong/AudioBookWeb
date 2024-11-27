@@ -4,6 +4,8 @@ import { Stack, Button, Typography, ClickAwayListener } from '@mui/material';
 import generateButton from '../assets/images/generate.svg';
 import helloButton from '../assets/images/hello.svg';
 import stars from '../assets/images/stars.svg';
+import { useUser } from '../providers/UserProvider';
+import { baseUrl } from '../configs/NetworkConfig';
 
 interface Book {
   id: string;
@@ -32,12 +34,36 @@ const SearchBooks: React.FC = () => {
   const [showResults, setShowResults] = useState<boolean>(false);
 
   const API_KEY = 'AIzaSyDo7BB8UuGnGuL6Kvzcirit3AKaBQs2sd4';
+  const { user } = useUser();
+
   // Replace with your Google Books API Key
 
-  const handleGenerate = () => {
-    console.log('>>');
-    const data = runWorkflow('Chip war', 'A');
-    console.log(data);
+  const handleGenerate = async (book: Book) => {
+    setLoading(true);
+    setError(null);
+    console.log(user?.id);
+    try {
+      const response = await axios.post(
+        `${baseUrl}/api/users/${user?.id}/books`,
+        {
+          title: book.title,
+          // only fetch the first author
+          author: book.authors[0],
+          cover_url: book.thumbnail,
+        }
+      );
+
+      // Add the newly created book to the list
+      setBooks((prevBooks) => [...prevBooks, response.data.book]);
+    } catch (err: any) {
+      console.error('Error creating book:', err);
+      setError(
+        err.response?.data?.message ||
+          'An error occurred while creating the book'
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const searchBooks = async (query: string) => {
@@ -104,44 +130,11 @@ const SearchBooks: React.FC = () => {
     setShowResults(false);
   };
 
-  const runWorkflow = async (title: string, author: string) => {
-    try {
-      // Load the API key from the environment variables
-      // const apiKey = process.env.API_KEY;
-      const apiKey = 'app-19n0GLm9rf6UJEg9xT6u5pWW';
-      if (!apiKey) {
-        throw new Error('API_KEY is not defined in the environment variables');
-      }
-
-      const url = 'http://51.143.10.56/v1/workflows/run';
-
-      // Request payload
-      const data = {
-        inputs: { title, author },
-        response_mode: 'blocking',
-        user: 'booktalks_backend',
-      };
-
-      // Headers for the request
-      const headers = {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      };
-
-      // Make the POST request
-      const response = await axios.post(url, data, { headers });
-      return response.data; // Return the response data
-    } catch (error) {
-      console.error('Error running workflow:', error);
-      throw error; // Rethrow the error for further handling
-    }
-  };
-
   return (
     <Stack
       sx={{
         width: '100%',
-        height: '400px',
+        zIndex: 10,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -151,7 +144,7 @@ const SearchBooks: React.FC = () => {
         backgroundRepeat: 'no-repeat', // Prevent repetition
       }}
     >
-      <Stack sx={{ width: '60%' }} tabIndex={0}>
+      <Stack sx={{ width: '100%' }} tabIndex={0}>
         <Stack
           sx={{ textAlign: 'left' }}
           margin={3}
@@ -176,7 +169,7 @@ const SearchBooks: React.FC = () => {
             fontSize: 20,
             height: '70px',
             paddingLeft: 20,
-            border: '2px solid transparent', // Set transparent border
+            border: '2px solid transparent',
             borderRadius: '9px',
             backgroundImage:
               'linear-gradient(#101010, #101010), linear-gradient(90deg, #0162F3 8%, #FFFFFF 50%, #5494F7 90%)', // Gradient border
@@ -186,13 +179,25 @@ const SearchBooks: React.FC = () => {
           }}
         />
 
-        <Stack margin={2} marginLeft={0}>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+        <Stack direction="row" margin={2} marginLeft={0}>
           <Typography fontSize={16} sx={{ opacity: 0.6, textAlign: 'left' }}>
             {loading && books.length > 0
               ? 'Loading...'
               : books.length + ' results'}
           </Typography>
+          {error && (
+            <Typography
+              fontSize={16}
+              sx={{
+                opacity: 0.6,
+                textAlign: 'left',
+                color: 'red',
+                marginLeft: 2,
+              }}
+            >
+              {error}
+            </Typography>
+          )}
         </Stack>
 
         <ClickAwayListener onClickAway={handleClickAway}>
@@ -295,7 +300,8 @@ const SearchBooks: React.FC = () => {
                           </Typography>
                           <Typography fontSize={14} sx={{ opacity: 0.6 }}>
                             {' '}
-                            {book.authors.join(', ')} {book.publishedDate}
+                            {book.authors && book.authors.join(', ')}{' '}
+                            {book.publishedDate}
                           </Typography>
                         </Stack>
                       </Stack>
@@ -316,7 +322,13 @@ const SearchBooks: React.FC = () => {
                             src={generateButton}
                             width={142}
                             height={46}
-                            onClick={handleGenerate}
+                            onClick={async () => {
+                              try {
+                                await handleGenerate(book);
+                              } catch (error) {
+                                console.error('Error generating book:', error);
+                              }
+                            }}
                             style={{ cursor: 'pointer', marginRight: 20 }}
                           />
                         </Stack>

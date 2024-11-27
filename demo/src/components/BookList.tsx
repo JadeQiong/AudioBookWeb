@@ -24,9 +24,13 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Alert } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { useUser } from '../providers/UserProvider';
+import GeneratingIcon from '../assets/images/generating.svg';
 
 interface BookListProps {
   books: Book[];
+  setBooks: React.Dispatch<React.SetStateAction<Book[]>>;
   setBook: React.Dispatch<React.SetStateAction<Book>>;
   setSelectedBook?: React.Dispatch<React.SetStateAction<Book | null>>;
   isPublic: boolean;
@@ -82,6 +86,7 @@ function getKeyPath(title: string, category: string) {
 
 const BookList: React.FC<BookListProps> = ({
   books,
+  setBooks,
   setBook,
   setSelectedBook,
   isPublic,
@@ -92,11 +97,36 @@ const BookList: React.FC<BookListProps> = ({
     top: number;
     left: number;
   } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
+  const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    console.log(bookToDelete);
     setOpenDialog(false);
     handleClose();
     // Add your delete logic here
+    setIsLoading(true);
+    setError(null);
+    const id = bookToDelete?._id;
+    try {
+      const response = await axios.delete(
+        `${baseUrl}/api/users/${user?.id}/book/${id}`
+      );
+      console.log(response.data);
+
+      // Update state to remove the deleted book
+      setBooks((prevBooks) => prevBooks.filter((book) => book._id !== id));
+    } catch (err: any) {
+      console.error('Error deleting book:', err);
+      setError(
+        err.response?.data?.message ||
+          'An error occurred while deleting the book'
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleOpenDialog = () => {
@@ -135,7 +165,6 @@ const BookList: React.FC<BookListProps> = ({
           Sorry, this book's audio is not available.
         </Alert>
       )}
-
       <Grid container spacing={2}>
         {books.map((book, index) => (
           <Grid item xs={4} sm={3} md={2} lg={1.5} key={index}>
@@ -145,73 +174,93 @@ const BookList: React.FC<BookListProps> = ({
                 width: '120px', // 20% of the viewport width
                 height: '230px', // 30% of the viewport height
               }}
-
-              // onContextMenu={(event) => handleRightClick(event, book)}
             >
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  sx={{
-                    height: '177px', // Set only height or width, not both
-                    width: 'auto', // Let the width be automatic
-                    maxWidth: '100%', // Ensure it doesn't overflow its container
-                    objectFit: 'contain', // This prevents cropping by fitting the image within the dimensions
-                    position: 'relative',
-                  }}
-                  image={book.cover_url}
-                  alt={book.title}
-                />
-                <HoverOverlay>
-                  <PlayCircleOutlineIcon
-                    style={{ fontSize: '3rem', color: 'white' }}
-                    onClick={() => {
-                      playOpusFile(getKeyPath(book.title, book.category), book);
+              {book.status === 'running' && (
+                <>
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      maxWidth: '100%', // Ensure it doesn't overflow its container
+                      objectFit: 'contain', // This prevents cropping by fitting the image within the dimensions
+                      position: 'relative',
                     }}
-                  />{' '}
-                  {!isPublic && (
-                    <MoreHorizIcon
-                      style={{
-                        fontSize: '1.5rem', // Make it smaller
-                        color: 'white',
-                        position: 'absolute', // Position it relative to HoverOverlay
-                        bottom: '10px', // Adjust bottom spacing as needed
-                        right: '10px', // Adjust right spacing as needed
-                        cursor: 'pointer', // Change cursor on hover
+                    image={GeneratingIcon}
+                    alt={book.title}
+                  />
+                </>
+              )}
+              {book.status !== 'running' && (
+                <>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      sx={{
+                        height: '177px', // Set only height or width, not both
+                        width: 'auto', // Let the width be automatic
+                        maxWidth: '100%', // Ensure it doesn't overflow its container
+                        objectFit: 'contain', // This prevents cropping by fitting the image within the dimensions
+                        position: 'relative',
                       }}
-                      onClick={(event: React.MouseEvent<SVGElement>) => {
-                        event.preventDefault();
-                        setMenuPosition({
-                          top: event.clientY,
-                          left: event.clientX,
-                        }); // Set menu position
-                        if (setSelectedBook) setSelectedBook(book);
-                      }}
+                      image={book.cover_url}
+                      alt={book.title}
                     />
-                  )}
-                </HoverOverlay>
-              </CardActionArea>
-              <Typography
-                gutterBottom
-                component="div"
-                sx={{
-                  // padding: 1,
-                  paddingLeft: 0,
-                  paddingTop: '1vh',
-                  // Define an explicit height or max-height to ensure the box can contain exactly two lines
-                  maxHeight: '5.5vh', // Adjust this value based on your font size and line height
-                  overflow: 'hidden',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  fontSize: '1。3vh',
-                  color: 'white',
-                  textAlign: 'left',
-                  lineHeight: '2.5vh', // Adjust line height to fit the container's height
-                  textOverflow: 'ellipsis', // This should already be handled by WebkitLineClamp, but it's good to specify
-                }}
-              >
-                {book.title}
-              </Typography>
+                    <HoverOverlay>
+                      <PlayCircleOutlineIcon
+                        style={{ fontSize: '3rem', color: 'white' }}
+                        onClick={() => {
+                          playOpusFile(
+                            getKeyPath(book.title, book.category),
+                            book
+                          );
+                        }}
+                      />{' '}
+                      {!isPublic && (
+                        <MoreHorizIcon
+                          style={{
+                            fontSize: '1.5rem', // Make it smaller
+                            color: 'white',
+                            position: 'absolute', // Position it relative to HoverOverlay
+                            bottom: '10px', // Adjust bottom spacing as needed
+                            right: '10px', // Adjust right spacing as needed
+                            cursor: 'pointer', // Change cursor on hover
+                          }}
+                          onClick={(event: React.MouseEvent<SVGElement>) => {
+                            setBookToDelete(book);
+                            event.preventDefault();
+                            setMenuPosition({
+                              top: event.clientY,
+                              left: event.clientX,
+                            }); // Set menu position
+                            if (setSelectedBook) setSelectedBook(book);
+                          }}
+                        />
+                      )}
+                    </HoverOverlay>
+                  </CardActionArea>
+                  <Typography
+                    gutterBottom
+                    component="div"
+                    sx={{
+                      // padding: 1,
+                      paddingLeft: 0,
+                      paddingTop: '1vh',
+                      // Define an explicit height or max-height to ensure the box can contain exactly two lines
+                      maxHeight: '5.5vh', // Adjust this value based on your font size and line height
+                      overflow: 'hidden',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      fontSize: '1。3vh',
+                      color: 'white',
+                      textAlign: 'left',
+                      lineHeight: '2.5vh', // Adjust line height to fit the container's height
+                      textOverflow: 'ellipsis', // This should already be handled by WebkitLineClamp, but it's good to specify
+                    }}
+                  >
+                    {book.title}
+                  </Typography>
+                </>
+              )}
             </Card>
           </Grid>
         ))}
@@ -230,7 +279,15 @@ const BookList: React.FC<BookListProps> = ({
             'aria-labelledby': 'right-click-menu',
           }}
         >
-          {!isPublic && <MenuItem onClick={handleOpenDialog}>Delete</MenuItem>}
+          {!isPublic && (
+            <MenuItem
+              onClick={() => {
+                handleOpenDialog();
+              }}
+            >
+              Delete
+            </MenuItem>
+          )}
         </Menu>
 
         <Dialog
@@ -248,13 +305,22 @@ const BookList: React.FC<BookListProps> = ({
           </DialogTitle>
           <DialogActions>
             <Button
-              onClick={() => setOpenDialog(false)}
+              onClick={() => {
+                setOpenDialog(false);
+                setBookToDelete(null);
+              }}
               sx={{ color: 'white', borderRadius: 5, width: 100, height: 40 }}
             >
               Cancel
             </Button>
             <Button
-              onClick={handleDelete}
+              onClick={async () => {
+                try {
+                  await handleDelete();
+                } catch (error) {
+                  console.error('Error generating book:', error);
+                }
+              }}
               variant="contained"
               sx={{ borderRadius: 5, width: 100, height: 40 }}
               color="error"
