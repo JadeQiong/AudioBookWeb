@@ -40,52 +40,59 @@ const GenerateView: React.FC<GenerateViewProps> = ({ setBook }) => {
     if (!isLoading && hasMore && user?.id) {
       setCurrentPage((prevPage) => prevPage + 1);
     }
-    console.log(currentPage);
   }, [isLoading, hasMore]);
 
-  useEffect(() => {
-    const fetchBooks = () => {
-      if (!user?.id) return;
-      if (!hasMore || isLoading) {
-        return; // Avoid fetching if already loading or no more data
-      }
+  // useEffect(() => {
+  //   console.log('books are refreshed');
+  // }, [books]);
 
-      setIsLoading(true);
-      const url = `${baseUrl}/api/users/${user?.id}/library?page=${currentPage}&limit=${itemsPerPage}`;
+  const fetchBooks = (isForced: boolean) => {
+    if (!user?.id) return;
+    if (!isForced && (!hasMore || isLoading)) {
+      return; // Avoid fetching if already loading or no more data
+    }
 
-      axios
-        .get(url)
-        .then((response) => {
-          const { books: newBooks, totalBooks } = response.data;
-          console.log(response.data);
-          if (newBooks) {
-            setBooks((prevBooks) => [...prevBooks, ...newBooks]);
-            console.log('new books', newBooks);
-            const totalPages = Math.ceil(totalBooks / itemsPerPage); // Ensure totalPages is a whole number
-            setTotalPages(totalPages);
-            setHasMore(currentPage < totalPages);
+    setIsLoading(true);
+    const url = `${baseUrl}/api/users/${user?.id}/library?page=${currentPage}&limit=${itemsPerPage}`;
+
+    axios
+      .get(url)
+      .then((response) => {
+        const { books: newBooks, totalBooks } = response.data;
+        console.log(response.data);
+        if (newBooks) {
+          if (isForced) {
+            setBooks(newBooks);
           } else {
-            console.log('failed!');
-            setBooks([]); // Clear books if no data is returned
-            setTotalPages(0);
-            setHasMore(false);
+            setBooks((prevBooks) => [...prevBooks, ...newBooks]);
           }
-        })
-        .catch((error) => {
-          console.error('Error fetching books:', error);
+
+          console.log('new books', newBooks);
+          const totalPages = Math.ceil(totalBooks / itemsPerPage); // Ensure totalPages is a whole number
+          setTotalPages(totalPages);
+          setHasMore(currentPage < totalPages);
+        } else {
           console.log('failed!');
           setBooks([]); // Clear books if no data is returned
           setTotalPages(0);
           setHasMore(false);
-        })
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching books:', error);
+        console.log('failed!');
+        setBooks([]); // Clear books if no data is returned
+        setTotalPages(0);
+        setHasMore(false);
+      })
 
-        .finally(() => {
-          setIsLoading(false); // Ensure loading state is reset
-        });
-    };
+      .finally(() => {
+        setIsLoading(false); // Ensure loading state is reset
+      });
+  };
 
-    fetchBooks();
-    // Prevent including `currentPage` or `itemsPerPage` in the dependency array unless necessary
+  useEffect(() => {
+    fetchBooks(false);
   }, [currentPage, user?.id]); // Include only necessary dependencies
 
   return (
@@ -95,19 +102,28 @@ const GenerateView: React.FC<GenerateViewProps> = ({ setBook }) => {
       alignItems="center"
       sx={{ backgroundColor: '#101010', minHeight: '85vh', width: '60%' }}
     >
-      <SearchBooks></SearchBooks>
+      <SearchBooks
+        onRefresh={(book: Book) => {
+          console.log('on refresh');
+          // Add the newly created book to the list
+          fetchBooks(true);
+          // setBooks((prevBooks) => [book, ...prevBooks]);
+        }}
+      ></SearchBooks>
       <Stack sx={{ position: 'absolute', marginTop: '300px' }}>
         <Typography sx={{ fontSize: 30, fontWeight: 'bold' }}>
           My Library
         </Typography>
         <Stack direction="column" spacing={1} sx={{ width: '90vw' }} margin={5}>
-          <BookList
-            books={books}
-            setBooks={setBooks}
-            setBook={setBook}
-            setSelectedBook={setSelectedBook}
-            isPublic={false}
-          ></BookList>
+          {!isLoading && (
+            <BookList
+              books={books}
+              setBooks={setBooks}
+              setBook={setBook}
+              setSelectedBook={setSelectedBook}
+              isPublic={false}
+            ></BookList>
+          )}
 
           <Box ref={loadMoreRef} sx={{ height: '50px', marginTop: '20px' }}>
             {isLoading && (

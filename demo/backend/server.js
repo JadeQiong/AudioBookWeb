@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const textToSpeech = require('@google-cloud/text-to-speech');
 const fs = require('fs');
 // const util = require('util');
 const cors = require('cors');
@@ -16,15 +15,12 @@ const combineMusicRoute = require('./routes/combineMusicRoute');
 const generateAudioRoute = require('./routes/generateAudioRoute');
 
 const app = express();
-const port = 3001;
+const port = 3005;
 
 // Consolidated middleware setup
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-
-// Initialize Google Text-to-Speech Client
-const ttsClient = new textToSpeech.TextToSpeechClient();
 
 // Detailed route registration with error handling
 app.post('/synthesize', async (req, res, next) => {

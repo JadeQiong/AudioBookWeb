@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import { Stack, Button, Typography, ClickAwayListener } from '@mui/material';
+import { Stack, Typography, ClickAwayListener } from '@mui/material';
 import generateButton from '../assets/images/generate.svg';
 import helloButton from '../assets/images/hello.svg';
 import stars from '../assets/images/stars.svg';
 import { useUser } from '../providers/UserProvider';
 import { baseUrl } from '../configs/NetworkConfig';
+import { Construction } from '@mui/icons-material';
 
 interface Book {
   id: string;
@@ -16,6 +17,10 @@ interface Book {
   description: string;
 }
 
+interface SearchProps {
+  onRefresh: any;
+}
+
 // Extend the global window interface to include gtag
 declare global {
   interface Window {
@@ -23,7 +28,7 @@ declare global {
   }
 }
 
-const SearchBooks: React.FC = () => {
+const SearchBooks: React.FC<SearchProps> = ({ onRefresh }) => {
   const [query, setQuery] = useState<string>('');
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,16 +38,25 @@ const SearchBooks: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showResults, setShowResults] = useState<boolean>(false);
 
-  const API_KEY = 'AIzaSyDo7BB8UuGnGuL6Kvzcirit3AKaBQs2sd4';
+  const API_KEY = process.env.REACT_APP_GOOGLE_BOOKS_API_KEY;
   const { user } = useUser();
 
-  // Replace with your Google Books API Key
+  const generateAudio = async (_id: string, title: string, author: string) => {
+    const response = await axios.post(`${baseUrl}/api/generate`, {
+      _id: _id,
+      title: title,
+      author: author,
+    });
+    return response;
+  };
 
+  // Replace with your Google Books API Key
   const handleGenerate = async (book: Book) => {
+    setShowResults(false);
     setLoading(true);
     setError(null);
-    console.log(user?.id);
     try {
+      console.log('handle generate');
       const response = await axios.post(
         `${baseUrl}/api/users/${user?.id}/books`,
         {
@@ -52,9 +66,18 @@ const SearchBooks: React.FC = () => {
           cover_url: book.thumbnail,
         }
       );
+      const newBook = response.data.book;
+      onRefresh(newBook);
+      console.log('send /generate request');
+      const result = await generateAudio(
+        newBook._id,
+        newBook.title,
+        newBook.author
+      );
+      console.log('generate podcast: ', result);
+      onRefresh(newBook);
 
-      // Add the newly created book to the list
-      setBooks((prevBooks) => [...prevBooks, response.data.book]);
+      // onRefresh(null);
     } catch (err: any) {
       console.error('Error creating book:', err);
       setError(
@@ -121,12 +144,12 @@ const SearchBooks: React.FC = () => {
     }
   };
   const inputRef = useRef<HTMLInputElement>(null);
+
   const handleClickAway = (event: MouseEvent | TouchEvent) => {
     if (inputRef.current && inputRef.current.contains(event.target as Node)) {
       // If the click is inside the input, do nothing
       return;
     }
-
     setShowResults(false);
   };
 
@@ -183,7 +206,9 @@ const SearchBooks: React.FC = () => {
           <Typography fontSize={16} sx={{ opacity: 0.6, textAlign: 'left' }}>
             {loading && books.length > 0
               ? 'Loading...'
-              : books.length + ' results'}
+              : books.length > 0 || query
+                ? books.length + ' results'
+                : ''}
           </Typography>
           {error && (
             <Typography
@@ -200,12 +225,12 @@ const SearchBooks: React.FC = () => {
           )}
         </Stack>
 
-        <ClickAwayListener onClickAway={handleClickAway}>
+        <ClickAwayListener onClickAway={handleClickAway} key={1}>
           {showResults ? (
             <Stack
               sx={{
                 overflow: 'auto',
-                height: '508px',
+                maxHeight: '508px',
                 width: '100%',
                 '&::-webkit-scrollbar': {
                   width: '6px',

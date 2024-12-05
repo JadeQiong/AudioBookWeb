@@ -6,8 +6,10 @@ const fs = require('fs');
 // const util = require('util');
 const { execSync } = require('child_process');
 const config = require('../config'); // assuming config is in a separate file
-const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
-const ttsClient = new TextToSpeechClient();
+const textToSpeech = require('@google-cloud/text-to-speech');
+const ttsClient = new textToSpeech.TextToSpeechClient({
+  keyFilename: './nomadic-grid-440200-k3-b896be88e481.json'
+});
 
 async function generatePodcastScript(bookTitle, author) {
   const { apiUrl, apiKey } = config;
@@ -40,11 +42,12 @@ function splitTextIntoChunks(text) {
 
 const synthesizeHandler = async (req, res) => {
   try {
+    const id = req.body.id;
     const booktitle = req.body.text;
     const author = req.body.author;
 
     // 参数验证
-    if (!booktitle || !author) {
+    if (!booktitle || !author || !id) {
       return res.status(400).json({ 
         error: 'Missing required parameters', 
         details: 'Both book title and author are required' 
@@ -69,9 +72,14 @@ const synthesizeHandler = async (req, res) => {
     }
 
     const finalAudioBuffer = Buffer.concat(audioBuffers);
-
-    res.setHeader('Content-Type', 'audio/mpeg');
-    res.send(finalAudioBuffer);
+    // Return both the transcript and the audio
+    res.status(200).json({
+      id: id,
+      transcript: scriptText,
+      audio: finalAudioBuffer.toString('base64'), // Encode audio in Base64 to send as JSON
+    });
+    // res.setHeader('Content-Type', 'audio/mpeg');
+    // res.send(finalAudioBuffer);
   } catch (error) {
     console.error('Synthesize Route Error:', error);
     res.status(500).json({ 

@@ -1,6 +1,6 @@
 // src/components/BookList.tsx
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Book } from '../types/book';
 import {
   Grid,
@@ -97,8 +97,7 @@ const BookList: React.FC<BookListProps> = ({
     top: number;
     left: number;
   } | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const { user } = useUser();
   const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
 
@@ -106,26 +105,17 @@ const BookList: React.FC<BookListProps> = ({
     console.log(bookToDelete);
     setOpenDialog(false);
     handleClose();
-    // Add your delete logic here
-    setIsLoading(true);
-    setError(null);
     const id = bookToDelete?._id;
     try {
       const response = await axios.delete(
         `${baseUrl}/api/users/${user?.id}/book/${id}`
       );
       console.log(response.data);
-
       // Update state to remove the deleted book
       setBooks((prevBooks) => prevBooks.filter((book) => book._id !== id));
     } catch (err: any) {
       console.error('Error deleting book:', err);
-      setError(
-        err.response?.data?.message ||
-          'An error occurred while deleting the book'
-      );
     } finally {
-      setIsLoading(false);
     }
   };
 
@@ -137,6 +127,8 @@ const BookList: React.FC<BookListProps> = ({
   const handleClose = () => {
     setMenuPosition(null);
   };
+
+  useEffect(() => {}, [books]);
 
   async function playOpusFile(audioKey: string, curBook: Book) {
     try {
@@ -175,7 +167,7 @@ const BookList: React.FC<BookListProps> = ({
                 height: '230px', // 30% of the viewport height
               }}
             >
-              {book.status === 'running' && (
+              {/* {book.status === 'running' && (
                 <>
                   <CardMedia
                     component="img"
@@ -188,8 +180,8 @@ const BookList: React.FC<BookListProps> = ({
                     alt={book.title}
                   />
                 </>
-              )}
-              {book.status !== 'running' && (
+              )} */}
+              {
                 <>
                   <CardActionArea>
                     <CardMedia
@@ -209,7 +201,9 @@ const BookList: React.FC<BookListProps> = ({
                         style={{ fontSize: '3rem', color: 'white' }}
                         onClick={() => {
                           playOpusFile(
-                            getKeyPath(book.title, book.category),
+                            book?.file_path
+                              ? book.file_path
+                              : getKeyPath(book.title, book.category),
                             book
                           );
                         }}
@@ -260,7 +254,7 @@ const BookList: React.FC<BookListProps> = ({
                     {book.title}
                   </Typography>
                 </>
-              )}
+              }
             </Card>
           </Grid>
         ))}

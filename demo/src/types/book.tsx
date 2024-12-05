@@ -6,5 +6,6 @@ export interface Book {
   author: string;
   audio?: any;
   audioSrc?: string; // Path to the audio file
+  file_path?: string;
   status?: string;
 }
