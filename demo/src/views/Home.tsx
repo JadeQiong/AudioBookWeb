@@ -8,6 +8,7 @@ import wailtlistLogo from '../assets/images/waitlist.png';
 import dotsIcon from '../assets/images/dots.png';
 import { ThemeProvider, createMuiTheme } from '@mui/material';
 import LibraryView from './LibraryView';
+import CustomCarousel from '../components/CustomCarousel';
 
 const THEME = createMuiTheme({
   typography: {
@@ -73,23 +74,33 @@ const Home: React.FC<HomeProps> = ({
 
       <Stack
         spacing={2}
-        sx={{ height: 750, width: '100%', overflow: 'hidden' }}
+        sx={{
+          height: 600,
+          width: '80vw',
+          overflowY: 'hidden',
+          // alignItems: 'center',
+        }}
       >
-        <Stack
+        <CustomCarousel
+          items={items}
+          onIndexChange={handleIndexChange}
+        ></CustomCarousel>
+        {/* <Stack
           direction="column"
           sx={{ height: 750, overflow: 'hidden', alignItems: 'center' }}
-        >
-          <Carousel
+        > */}
+
+        {/* <Carousel
             ref={carouselRef}
             items={items}
             slideOnClick
             showControls={false}
             onIndexChange={handleIndexChange}
             autoPlay={true}
-          ></Carousel>
+          ></Carousel> */}
 
-          <Box sx={{ height: 150 }}></Box>
-        </Stack>
+        {/* <Box sx={{ height: 150 }}></Box> */}
+        {/* </Stack> */}
       </Stack>
 
       {/* <div className="container_background">

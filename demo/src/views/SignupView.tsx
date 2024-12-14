@@ -254,10 +254,21 @@ const SignupView = () => {
             {signUpError}
           </Typography>
         )}
-        <Typography variant="body2" sx={{ mt: 2 }}>
+        <Typography
+          variant="body2"
+          sx={{ mt: 2, color: '#AFAFAF', textAlign: 'left' }}
+        >
           Have an account?{' '}
           <Link href="/signin" underline="hover">
             Sign in
+          </Link>
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{ mt: 2, color: '#AFAFAF', textAlign: 'left' }}
+        >
+          <Link href="/contact" underline="hover">
+            Get help
           </Link>
         </Typography>
         {/* Error Message */}

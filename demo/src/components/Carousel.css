@@ -172,3 +172,56 @@
   backdrop-filter: blur(2px);
   background-color: rgba(255, 255, 255, 0.4);
 }
+/* 
+.carousel {
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel__container {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel__slide {
+  width: 100%;
+  height: auto;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.carousel__controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+} */
+
+.new_carousel__slide {
+  position: relative; /* Establish a positioning context for the overlay */
+}
+
+.new_carousel__slide-overlay {
+  color: #fff;
+  text-align: center;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  position: absolute;
+  top: 0;
+  left: 10;
+  right: 0;
+  bottom: 0; /* Ensure it covers the entire slide */
+  opacity: 0;
+  transition: opacity 0.35s ease-in-out;
+  border-radius: 5px;
+  background: url('../assets/images/background.png') no-repeat center center;
+  background-size: cover; /* Ensure the background image scales properly */
+  user-select: none;
+  z-index: 100;
+}
+
+.new_carousel__slide:hover .new_carousel__slide-overlay {
+  opacity: 1; /* Show the overlay on hover */
+}

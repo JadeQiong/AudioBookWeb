@@ -119,20 +119,9 @@ const contentsMap = [
   chipWarContent,
 ];
 
-let repeatedImagesArray: any[] = [];
-for (let i = 0; i < 2; i++) {
-  repeatedImagesArray = [...repeatedImagesArray, ...picturesMap];
-}
-
-let repeatedAudiosArray: any[] = [];
-for (let i = 0; i < 2; i++) {
-  repeatedAudiosArray = [...repeatedAudiosArray, ...audiosMap];
-}
-
-let repeatedContentsArray: any[] = [];
-for (let i = 0; i < 2; i++) {
-  repeatedContentsArray = [...repeatedContentsArray, ...contentsMap];
-}
+let repeatedImagesArray: any[] = [...picturesMap];
+let repeatedAudiosArray: any[] = [...audiosMap];
+let repeatedContentsArray: any[] = [...contentsMap];
 
 const CAROUSEL = 'carousel';
 const LIBRARY = 'library';
@@ -166,9 +155,9 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
       const newBook: Book = {
         title: repeatedContentsArray[audioIndex]?.title,
         // TODO: this fields are not corrent...
-        cover_url: 'https://example.com/gatsby.jpg',
-        category: 'Classic Fiction',
-        author: 'F. Scott Fitzgerald',
+        cover_url: repeatedImagesArray[audioIndex],
+        category: repeatedContentsArray[audioIndex]?.categories[0],
+        author: repeatedContentsArray[audioIndex]?.author,
         // Optional fields can be omitted or included as needed
         audio: repeatedAudiosArray[audioIndex],
       };
@@ -248,7 +237,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
     });
   };
 
-  const items: CarouselItem[] = Array(18)
+  const items: CarouselItem[] = Array(9)
     .fill('')
     .map((_: string, index: number) => ({
       alt: 'A random photo',
@@ -462,7 +451,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                   Sign In
                 </Button>
               )}
-              {isDebug && (
+              {/* {isDebug && (
                 <Button
                   variant="contained"
                   size="large"
@@ -490,7 +479,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 >
                   Contact Us
                 </Button>
-              )}
+              )} */}
             </Stack>
           </Stack>
 

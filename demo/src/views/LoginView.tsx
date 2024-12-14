@@ -127,6 +127,14 @@ const LoginView = () => {
             Sign up
           </Link>
         </Typography>
+        <Typography
+          variant="body2"
+          sx={{ mt: 2, color: '#AFAFAF', textAlign: 'left' }}
+        >
+          <Link href="/contact" underline="hover">
+            Get help
+          </Link>
+        </Typography>
       </Box>
     </Stack>
   );

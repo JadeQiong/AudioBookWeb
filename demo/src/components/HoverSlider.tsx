@@ -277,132 +277,156 @@ export const HoverSlider: React.FC<SliderProps> = React.forwardRef<
           right: '20px',
           bottom: '20px',
           width: '400px',
-          height: '72px',
-          backgroundColor: '#333333',
-          padding: 2,
+          height: 'auto',
           zIndex: 10,
           color: 'white',
           visibility: isHide ? 'hidden' : 'visible',
         }}
       >
-        <Box
-          display="flex"
+        {/* Top-Right Close Button */}
+        <IconButton
+          onClick={handleClose}
           sx={{
-            height: 20,
-            fontSize: 12,
-            fontWeight: 'bold',
-            paddingLeft: 5,
-            paddingRight: 5,
-          }}
-          alignItems="flex-start"
-          justifyContent="space-between"
-        >
-          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-            {title}
-          </Box>
-          <IconButton
-            onClick={handleClose}
-            sx={{
-              height: 10,
-              width: 10,
-              marginRight: -5,
-            }}
-          >
-            <CloseIcon sx={{ color: 'white', scale: '0.8' }} />
-          </IconButton>
-        </Box>
-
-        <Stack
-          direction="row"
-          sx={{ zIndex: 2 }}
-          padding={0}
-          alignItems="center"
-        >
-          <img
-            src={cover_url}
-            alt="Cover"
-            style={{
-              marginRight: '10px',
-              width: '30px', // Set the width of the image
-              height: 'auto', // Maintain aspect ratio
-              objectFit: 'cover', // Ensure the image fills the container without distortion
-              borderRadius: '8px', // Optional: Add rounded corners
-            }}
-          />
-
-          <IconButton
-            onClick={() => {
-              setPlaying(!playing);
-            }}
-            sx={{ height: 10, width: 10, margin: 0.5, scale: '1.5' }}
-          >
-            {playing ? (
-              <StopIcon sx={{ color: 'white' }} />
-            ) : (
-              <PlayArrowIcon sx={{ color: 'white' }} />
-            )}
-          </IconButton>
-
-          <audio
-            ref={audioRef}
-            src={audio}
-            onLoadedMetadata={handleLoadedMetadata}
-            onTimeUpdate={handleTimeUpdate}
-            preload="metadata"
-            style={{ display: isHide ? 'none' : 'block' }}
-          />
-
-          <Slider
-            aria-label="Audio Progress"
-            value={value}
-            onChange={handleChange}
-            min={0}
-            max={100}
-            sx={{
-              width: '100%',
-              marginLeft: 2,
-              marginRight: 2,
-              zIndex: 10,
-              '& .MuiSlider-thumb': {
-                height: 12, // Control button height
-                width: 12, // Control button width
-                borderRadius: '40%', // Control button shape
-                backgroundColor: 'transparent',
-              },
-              '& .MuiSlider-track': {
-                border: 'none',
-                marginLeft: 0.5,
-                marginRight: 0.5,
-                height: 3, // Track height
-                borderRadius: 4, // Track border radius
-                background: 'linear-gradient(to right, #00008b, #fff)', // Gradient color
-              },
-              '& .MuiSlider-rail': {
-                height: 12, // Rail height
-                borderRadius: 4, // Rail border radius
-                backgroundColor: '#b3b3b3', // Rail color
-              },
-            }}
-          />
-        </Stack>
-
-        <Stack
-          direction="row"
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
             position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            marginTop: -2,
+            top: '-145px',
+            right: '5px',
+            height: '34px',
+            width: '34px',
+            backgroundColor: '#555555',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: '#666666',
+            },
+            zIndex: 11,
           }}
         >
-          <Typography sx={{ fontSize: 15, margin: 1, zIndex: -1 }}>
-            {formatTime(Math.min(duration, (value / 100.0) * duration))} /{' '}
-            {formatTime(duration)}
-          </Typography>
-        </Stack>
+          <CloseIcon sx={{ scale: '0.8' }} />
+        </IconButton>
+        <Box
+          sx={{
+            position: 'absolute',
+            right: '20px',
+            bottom: '20px',
+            width: '400px',
+            height: 'auto',
+            backgroundColor: 'rgba(42, 42, 42, 0.7)', // 30% transparency
+            backdropFilter: 'blur(8px)', // Background blur effect
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.6)', // Drop shadow
+            padding: 2,
+            zIndex: 10,
+            color: 'white',
+            visibility: isHide ? 'hidden' : 'visible',
+            borderRadius: '8px',
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            sx={{ height: '100%' }}
+          >
+            {/* Cover Image */}
+            <img
+              src={cover_url}
+              alt="Cover"
+              style={{
+                width: '60px', // Slightly larger cover image
+                height: '80px', // Make height equal to width
+                objectFit: 'cover',
+                borderRadius: '8px', // Rounded corners
+                overflow: 'hidden',
+              }}
+            />
+
+            {/* Middle Content */}
+            <Stack direction="column" sx={{ flex: 1, maxWidth: '70%' }}>
+              {/* Title */}
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 'bold',
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
+                }}
+              >
+                {title}
+              </Typography>
+              <audio
+                ref={audioRef}
+                src={audio}
+                onLoadedMetadata={handleLoadedMetadata}
+                onTimeUpdate={handleTimeUpdate}
+                preload="metadata"
+                style={{ display: isHide ? 'none' : 'block' }}
+              />
+
+              {/* Slider */}
+              <Slider
+                aria-label="Audio Progress"
+                value={value}
+                onChange={handleChange}
+                min={0}
+                max={100}
+                sx={{
+                  width: '100%',
+                  marginTop: 1,
+                  '& .MuiSlider-thumb': {
+                    height: 12, // Control button height
+                    width: 12, // Control button width
+                    borderRadius: '40%', // Control button shape
+                    backgroundColor: 'transparent',
+                  },
+                  '& .MuiSlider-track': {
+                    border: 'none',
+                    height: 3, // Track height
+                    borderRadius: 4, // Track border radius
+                    background: 'linear-gradient(to right, #00008b, #fff)', // Gradient color
+                  },
+                  '& .MuiSlider-rail': {
+                    height: 3, // Rail height
+                    borderRadius: 4, // Rail border radius
+                    backgroundColor: '#b3b3b3', // Rail color
+                  },
+                }}
+              />
+
+              {/* Time */}
+              <Typography
+                sx={{
+                  fontSize: 12,
+                  marginTop: 0.5,
+                  color: '#cccccc',
+                }}
+              >
+                {formatTime(Math.min(duration, (value / 100.0) * duration))} /{' '}
+                {formatTime(duration)}
+              </Typography>
+            </Stack>
+
+            {/* Play/Stop Button */}
+            <IconButton
+              onClick={() => {
+                setPlaying(!playing);
+              }}
+              sx={{
+                height: 40,
+                width: 40,
+                backgroundColor: '#444444',
+                borderRadius: '50%',
+                '&:hover': {
+                  backgroundColor: '#555555',
+                },
+              }}
+            >
+              {playing ? (
+                <StopIcon sx={{ color: 'white', fontSize: 28 }} />
+              ) : (
+                <PlayArrowIcon sx={{ color: 'white', fontSize: 28 }} />
+              )}
+            </IconButton>
+          </Stack>
+        </Box>
       </Box>
     );
   }

@@ -40,8 +40,8 @@ const BookInfoPanel: React.FC<BookInfo> = ({
       sx={{
         position: 'relative',
         color: 'white',
-        width: '26rem',
-        height: '39rem',
+        width: '100%',
+        height: '100%',
         maxWidth: '100%',
         backgroundSize: 'cover',
         borderRadius: '8px',

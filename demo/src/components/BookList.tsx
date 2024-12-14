@@ -167,21 +167,46 @@ const BookList: React.FC<BookListProps> = ({
                 height: '230px', // 30% of the viewport height
               }}
             >
-              {/* {book.status === 'running' && (
+              {book.status === 'running' && (
                 <>
-                  <CardMedia
-                    component="img"
-                    sx={{
-                      maxWidth: '100%', // Ensure it doesn't overflow its container
-                      objectFit: 'contain', // This prevents cropping by fitting the image within the dimensions
-                      position: 'relative',
-                    }}
-                    image={GeneratingIcon}
-                    alt={book.title}
-                  />
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      sx={{
+                        maxWidth: '100%', // Ensure it doesn't overflow its container
+                        objectFit: 'contain', // This prevents cropping by fitting the image within the dimensions
+                        position: 'relative',
+                      }}
+                      image={GeneratingIcon}
+                      alt={book.title}
+                    />
+                    <HoverOverlay>
+                      {!isPublic && (
+                        <MoreHorizIcon
+                          style={{
+                            fontSize: '1.5rem', // Make it smaller
+                            color: 'white',
+                            position: 'absolute', // Position it relative to HoverOverlay
+                            bottom: '10px', // Adjust bottom spacing as needed
+                            right: '10px', // Adjust right spacing as needed
+                            cursor: 'pointer', // Change cursor on hover
+                          }}
+                          onClick={(event: React.MouseEvent<SVGElement>) => {
+                            setBookToDelete(book);
+                            event.preventDefault();
+                            setMenuPosition({
+                              top: event.clientY,
+                              left: event.clientX,
+                            }); // Set menu position
+                            if (setSelectedBook) setSelectedBook(book);
+                          }}
+                        />
+                      )}
+                    </HoverOverlay>
+                  </CardActionArea>
                 </>
-              )} */}
-              {
+              )}
+              {book.status !== 'running' && (
                 <>
                   <CardActionArea>
                     <CardMedia
@@ -254,7 +279,7 @@ const BookList: React.FC<BookListProps> = ({
                     {book.title}
                   </Typography>
                 </>
-              }
+              )}
             </Card>
           </Grid>
         ))}

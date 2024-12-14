@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from 'react';
 import { supabase } from '../utils/supabaseClient'; // Adjust the path as needed
+import { baseUrl } from '../configs/NetworkConfig';
 
 type UserType = {
   id: string;
@@ -62,6 +63,9 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
+        options: {
+          redirectTo: `${baseUrl}`,
+        },
       });
       if (error) {
         console.error('Error logging in with Google:', error.message);
