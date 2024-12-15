@@ -7,8 +7,10 @@ import React, {
 } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { Backdrop, Box, Typography, colors } from '@mui/material';
+import { Backdrop, Box, Button, Typography, colors } from '@mui/material';
 import './Carousel.css';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 export type CarouselItem = Readonly<{
   alt?: string;
@@ -55,7 +57,7 @@ const responsive = {
 
 const CustomCarousel: React.FC<CustomCarouselProps> = ({
   items,
-  autoPlay = true,
+  autoPlay = false,
   autoPlaySpeed = 5000,
   swipeable = true,
   draggable = true,
@@ -97,10 +99,184 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({
     }
   }, [selectedIndex]);
 
-  const imageHeight = '27rem';
-  const imageWidth = '18rem';
+  const imageHeight = '24rem';
+  const imageWidth = '16rem';
   const highlightHeight = '30rem';
   const highlightWidth = '20rem';
+
+  // if(carouselRef.current)
+  // console.log(carouselRef.current.state.currentSlide, items)
+  const handleAfterChange = (previousIndex: number) => {
+    const currentSlide = carouselRef.current.state.currentSlide; // Access the current slide
+    if (currentSlide > previousIndex) {
+      console.log(
+        'User clicked next!',
+        currentSlide,
+        ', selected index ',
+        selectedIndex
+      );
+      setSelectedIndex((currentSlide - items.length + 2) % items.length);
+    } else if (currentSlide < previousIndex) {
+      console.log('User clicked previous!', currentSlide - items.length + 2);
+      // setSelectedIndex(selectedIndex-1);
+      setSelectedIndex((currentSlide + 2) % items.length);
+    }
+  };
+
+  // Move to the next slide
+  const goToNext = () => {
+    if (carouselRef.current) {
+      carouselRef.current.next();
+    }
+  };
+
+  // Move to the previous slide
+  const goToPrevious = () => {
+    if (carouselRef.current) {
+      carouselRef.current.previous();
+    }
+  };
+
+  const CustomLeftArrow = ({ ...rest }) => {
+    return (
+      <Box
+        onClick={goToPrevious}
+        sx={{
+          position: 'absolute',
+          transform: 'translateY(-50%)',
+          height: imageHeight, // Rectangle height
+          width: imageWidth, // Rectangle width
+          cursor: 'pointer', // Pointer for the rectangle
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'transparent',
+        }}
+      >
+        <Button
+          sx={{
+            height: '60px', // Circular button diameter
+            width: '50px',
+            borderRadius: '50%', // Ensures the button is circular
+            backgroundColor: 'rgba(255, 255, 255, 0.2)', // Glass effect
+            backdropFilter: 'blur(8px)',
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', // Subtle shadow
+            color: 'white',
+            flexShrink: 0, // Prevent shrinking of the button
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.4)', // Slightly brighter hover effect
+            },
+            pointerEvents: 'none', // Ensures the button itself doesn't block clicks on the rectangle
+          }}
+        >
+          <NavigateBeforeIcon sx={{ fontSize: '40px' }} />
+        </Button>
+      </Box>
+    );
+  };
+
+  // Handle keydown for left and right arrows
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      // Move to the previous slide
+      if (carouselRef.current) {
+        carouselRef.current.previous();
+      }
+    } else if (event.key === 'ArrowRight') {
+      // Move to the next slide
+      if (carouselRef.current) {
+        carouselRef.current.next();
+      }
+    }
+  };
+
+  useEffect(() => {
+    // Attach the event listener when the component mounts
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); // Empty dependency array to ensure the listener is only attached once
+
+  const CustomRightArrow = ({ ...rest }) => {
+    return (
+      <Box
+        onClick={goToNext}
+        sx={{
+          position: 'absolute',
+          transform: 'translateY(-50%)',
+          height: imageHeight, // Rectangle height
+          width: imageWidth, // Rectangle width
+          cursor: 'pointer', // Pointer for the rectangle
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'transparent', // No background for the rectangle
+        }}
+      >
+        <Button
+          sx={{
+            height: '60px', // Circular button diameter
+            width: '50px',
+            borderRadius: '50%', // Ensures the button is circular
+            backgroundColor: 'rgba(255, 255, 255, 0.2)', // Glass effect
+            backdropFilter: 'blur(8px)',
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', // Subtle shadow
+            color: 'white',
+            flexShrink: 0, // Prevent shrinking of the button
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.4)', // Slightly brighter hover effect
+            },
+            pointerEvents: 'none', // Ensures the button itself doesn't block clicks on the rectangle
+          }}
+        >
+          <NavigateNextIcon sx={{ fontSize: '40px' }} />
+        </Button>
+      </Box>
+    );
+  };
+
+  type ArrowWrapperProps = {
+    leftArrow: ReactNode;
+    rightArrow: ReactNode;
+    spacing?: number;
+  };
+
+  const ArrowWrapper = ({
+    leftArrow,
+    rightArrow,
+    spacing = 50,
+  }: ArrowWrapperProps) => {
+    return (
+      <>
+        {/* Left Arrow */}
+        <div
+          style={{
+            position: 'absolute',
+            // left: `${spacing}px`,
+            top: '50%',
+            left: '22%',
+            transform: 'translateY(-50%)',
+          }}
+        >
+          {leftArrow}
+        </div>
+        {/* Right Arrow */}
+        <div
+          style={{
+            position: 'absolute',
+            right: `38%`,
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }}
+        >
+          {rightArrow}
+        </div>
+      </>
+    );
+  };
 
   return (
     <Carousel
@@ -114,13 +290,25 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({
       autoPlay={autoPlay}
       autoPlaySpeed={autoPlaySpeed}
       keyBoardControl={false}
-      customTransition={customTransition}
-      transitionDuration={transitionDuration}
+      // customTransition={customTransition}
+      // transitionDuration={transitionDuration}
       containerClass={containerClass}
       removeArrowOnDeviceType={['tablet', 'mobile']}
       deviceType={deviceType}
       dotListClass={dotListClass}
       itemClass={itemClass}
+      customLeftArrow={<></>}
+      customTransition="transform 0.5s ease-in-out" // Smooth slide animation
+      transitionDuration={500} // Animation duration in milliseconds
+      customRightArrow={
+        <ArrowWrapper
+          leftArrow={<CustomLeftArrow />}
+          rightArrow={<CustomRightArrow />}
+          spacing={50} // Adjust this value to control the distance
+        />
+      }
+      rewindWithAnimation={true}
+      afterChange={(previousIndex) => handleAfterChange(previousIndex)} // Event for slide chang
     >
       {items.map((item, index) => {
         const height = index === selectedIndex ? highlightHeight : imageHeight;
@@ -143,10 +331,10 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({
                 flexDirection: 'column', // Stack items vertically
                 alignItems: 'center', // Center items horizontally
               }}
-              onClick={() => {
-                if (item.onClick) item.onClick();
-                handleItemClick(index);
-              }}
+              // onClick={() => {
+              //   if (item.onClick) item.onClick();
+              //   handleItemClick(index);
+              // }}
             >
               <div
                 style={{
@@ -167,7 +355,7 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({
                     left: 0,
                     width: '100%', // Fill the container width
                     height: '100%', // Fill the container height
-                    cursor: 'pointer',
+                    // cursor: 'pointer',
                     borderRadius: '15px', // Apply rounded corners
                   }}
                   alt={item.alt}

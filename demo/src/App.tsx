@@ -55,7 +55,7 @@ import { supabase } from './utils/supabaseClient';
 import LoginView from './views/LoginView';
 import SignupView from './views/SignupView';
 import ContactView from './views/ContactView';
-
+import VerificationCodeView from './views/VerificationCodeView';
 import TextToSpeech from './components/TextToSpeech';
 import GenerateView from './views/GenerateView';
 
@@ -513,6 +513,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
             />
             <Route path="/signin" element={<LoginView />} />
             <Route path="/signup" element={<SignupView />} />
+            <Route path="/verify" element={<VerificationCodeView />} />
             <Route path="/contact" element={<ContactView />} />
             <Route path="/waitlist" element={<WaitlistPopup />} />
             <Route

@@ -72,25 +72,25 @@ const Home: React.FC<HomeProps> = ({
         </Stack>
       </div>
 
-      <Stack
-        spacing={2}
-        sx={{
-          height: 600,
-          width: '80vw',
-          overflowY: 'hidden',
-          // alignItems: 'center',
-        }}
-      >
-        <CustomCarousel
-          items={items}
-          onIndexChange={handleIndexChange}
-        ></CustomCarousel>
-        {/* <Stack
+      <div className="container_background">
+        <Stack
+          spacing={2}
+          sx={{
+            height: 600,
+            width: '80vw',
+            overflowY: 'hidden',
+          }}
+        >
+          <CustomCarousel
+            items={items}
+            onIndexChange={handleIndexChange}
+          ></CustomCarousel>
+          {/* <Stack
           direction="column"
           sx={{ height: 750, overflow: 'hidden', alignItems: 'center' }}
         > */}
 
-        {/* <Carousel
+          {/* <Carousel
             ref={carouselRef}
             items={items}
             slideOnClick
@@ -99,10 +99,10 @@ const Home: React.FC<HomeProps> = ({
             autoPlay={true}
           ></Carousel> */}
 
-        {/* <Box sx={{ height: 150 }}></Box> */}
-        {/* </Stack> */}
-      </Stack>
-
+          {/* <Box sx={{ height: 150 }}></Box> */}
+          {/* </Stack> */}
+        </Stack>
+      </div>
       {/* <div className="container_background">
         <Stack direction="column" sx={{ width: '60%', marginTop: '5%' }}>
           <Stack direction="row">

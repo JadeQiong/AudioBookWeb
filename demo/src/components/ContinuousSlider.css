@@ -14,3 +14,11 @@
 .paused {
   animation-play-state: paused;
 }
+
+.custom-carousel-container .carousel-arrow-left {
+  left: 200px;
+}
+
+.custom-carousel-container .carousel-arrow-right {
+  right: 200px;
+}
