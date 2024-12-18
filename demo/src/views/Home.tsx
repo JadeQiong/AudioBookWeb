@@ -9,6 +9,7 @@ import dotsIcon from '../assets/images/dots.png';
 import { ThemeProvider, createMuiTheme } from '@mui/material';
 import LibraryView from './LibraryView';
 import CustomCarousel from '../components/CustomCarousel';
+import GenerateNowIcon from '../assets/images/generateNow.svg';
 
 const THEME = createMuiTheme({
   typography: {
@@ -36,9 +37,9 @@ const Home: React.FC<HomeProps> = ({
 }) => {
   const carouselRef = React.createRef<CarouselRef>();
   return (
-    <Stack>
+    <Stack sx={{ display: 'flex', alignItems: 'center' }}>
       <div className="container_background">
-        <Stack direction="column" sx={{ width: '100%', marginBottom: '5%' }}>
+        <Stack direction="column">
           <ThemeProvider theme={THEME}>
             <Typography
               variant="h4"
@@ -71,7 +72,13 @@ const Home: React.FC<HomeProps> = ({
           </Typography>
         </Stack>
       </div>
-
+      <img
+        src={GenerateNowIcon}
+        width={231}
+        height={46}
+        onClick={() => {}}
+        style={{ cursor: 'pointer', margin: '2%', marginBottom: '3%' }}
+      />
       <div className="container_background">
         <Stack
           spacing={2}

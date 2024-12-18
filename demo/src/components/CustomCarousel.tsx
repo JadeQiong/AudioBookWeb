@@ -11,6 +11,10 @@ import { Backdrop, Box, Button, Typography, colors } from '@mui/material';
 import './Carousel.css';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import { IconButton } from '@mui/material';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import LaunchIcon from '@mui/icons-material/Launch';
 
 export type CarouselItem = Readonly<{
   alt?: string;
@@ -72,16 +76,6 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({
   onIndexChange,
 }) => {
   const carouselRef = useRef<any>(null);
-  const handleItemClick = (index: number) => {
-    setSelectedIndex(index);
-    // Number of items visible on the current screen (adjust based on responsive config)
-    const visibleItems = 5; // For example, if desktop shows 5 items
-    //  const centerIndex = Math.max(0, index - Math.floor(visibleItems / 2)); // Calculate centered index
-
-    //  if (carouselRef.current) {
-    //    carouselRef.current.goToSlide(centerIndex); // Center the selected slide
-    //  }
-  };
 
   const classNamePrefix = '';
   const getClassName = useCallback(
@@ -108,19 +102,9 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({
   // console.log(carouselRef.current.state.currentSlide, items)
   const handleAfterChange = (previousIndex: number) => {
     const currentSlide = carouselRef.current.state.currentSlide; // Access the current slide
-    if (currentSlide > previousIndex) {
-      console.log(
-        'User clicked next!',
-        currentSlide,
-        ', selected index ',
-        selectedIndex
-      );
-      setSelectedIndex((currentSlide - items.length + 2) % items.length);
-    } else if (currentSlide < previousIndex) {
-      console.log('User clicked previous!', currentSlide - items.length + 2);
-      // setSelectedIndex(selectedIndex-1);
-      setSelectedIndex((currentSlide + 2) % items.length);
-    }
+    console.log('prev ', previousIndex, ' current slide ', currentSlide);
+    // since we are highlighting the middle one
+    setSelectedIndex((currentSlide + 2) % items.length);
   };
 
   // Move to the next slide
@@ -331,10 +315,6 @@ const CustomCarousel: React.FC<CustomCarouselProps> = ({
                 flexDirection: 'column', // Stack items vertically
                 alignItems: 'center', // Center items horizontally
               }}
-              // onClick={() => {
-              //   if (item.onClick) item.onClick();
-              //   handleItemClick(index);
-              // }}
             >
               <div
                 style={{

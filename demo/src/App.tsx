@@ -334,6 +334,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                         borderWidth: 0, // Ensures no border width
                         boxShadow: 'none', // Removes any shadow
                         color: 'white',
+                        textTransform: 'none',
                       }
                     : {
                         backgroundColor: 'transparent', // Ensures the background is transparent
@@ -341,6 +342,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                         borderWidth: 0, // Ensures no border width
                         boxShadow: 'none', // Removes any shadow
                         color: 'white',
+                        textTransform: 'none',
                       }
                 }
                 onClick={handleHomeClick}
@@ -359,6 +361,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                         borderWidth: 0, // Ensures no border width
                         boxShadow: 'none', // Removes any shadow
                         color: 'white',
+                        textTransform: 'none',
                       }
                     : {
                         backgroundColor: 'transparent', // Ensures the background is transparent
@@ -366,6 +369,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                         borderWidth: 0, // Ensures no border width
                         boxShadow: 'none', // Removes any shadow
                         color: 'white',
+                        textTransform: 'none',
                       }
                 }
                 onClick={handleGenerateClick}
@@ -374,33 +378,6 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
               </Button>
             </Stack>
             <Stack direction="row" spacing={2} alignItems="center">
-              {/* {isDebug && (
-                <Button
-                  variant="contained"
-                  size="large"
-                  sx={
-                    view === CAROUSEL
-                      ? {
-                          backgroundColor: 'transparent', // Ensures the background is transparent
-                          borderColor: 'transparent', // Ensures no border color
-                          borderWidth: 0, // Ensures no border width
-                          boxShadow: 'none', // Removes any shadow
-                          color: 'white',
-                        }
-                      : {
-                          fontWeight: 'bold',
-                          backgroundColor: 'transparent', // Ensures the background is transparent
-                          borderColor: 'transparent', // Ensures no border color
-                          borderWidth: 0, // Ensures no border width
-                          boxShadow: 'none', // Removes any shadow
-                          color: 'white',
-                        }
-                  }
-                  onClick={handleLibraryClick}
-                >
-                  library
-                </Button>
-              )} */}
               <img
                 src={waitlistButton}
                 width={160}
@@ -451,35 +428,6 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                   Sign In
                 </Button>
               )}
-              {/* {isDebug && (
-                <Button
-                  variant="contained"
-                  size="large"
-                  sx={
-                    view === CAROUSEL
-                      ? {
-                          fontWeight: 'bold',
-                          backgroundColor: 'transparent', // Ensures the background is transparent
-                          borderColor: 'transparent', // Ensures no border color
-                          borderWidth: 0, // Ensures no border width
-                          boxShadow: 'none', // Removes any shadow
-                          color: 'white',
-                        }
-                      : {
-                          backgroundColor: 'transparent', // Ensures the background is transparent
-                          borderColor: 'transparent', // Ensures no border color
-                          borderWidth: 0, // Ensures no border width
-                          boxShadow: 'none', // Removes any shadow
-                          color: 'white',
-                        }
-                  }
-                  onClick={() => {
-                    navigate('/contact');
-                  }}
-                >
-                  Contact Us
-                </Button>
-              )} */}
             </Stack>
           </Stack>
 
