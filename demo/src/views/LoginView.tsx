@@ -7,7 +7,6 @@ import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleLogo from '../assets/images/google.svg';
 import ContinueIcon from '../assets/images/continue_button.svg';
 import { useUser } from '../providers/UserProvider';
-import { useNavigate } from 'react-router-dom';
 
 const LoginView = () => {
   const { handleGoogleSignIn, handleEmailLogin } = useUser();

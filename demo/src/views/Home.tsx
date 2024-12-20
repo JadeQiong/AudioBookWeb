@@ -10,6 +10,8 @@ import { ThemeProvider, createMuiTheme } from '@mui/material';
 import LibraryView from './LibraryView';
 import CustomCarousel from '../components/CustomCarousel';
 import GenerateNowIcon from '../assets/images/generateNow.svg';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../providers/UserProvider';
 
 const THEME = createMuiTheme({
   typography: {
@@ -35,7 +37,10 @@ const Home: React.FC<HomeProps> = ({
   onWaitlistClicked,
   setBook,
 }) => {
+  const navigate = useNavigate();
   const carouselRef = React.createRef<CarouselRef>();
+  const { user } = useUser();
+
   return (
     <Stack sx={{ display: 'flex', alignItems: 'center' }}>
       <div className="container_background">
@@ -54,7 +59,7 @@ const Home: React.FC<HomeProps> = ({
               }}
             >
               Transform Your Books Into AI-Driven Podcasts{' '}
-              {isDebug ? '[DEBUG]' : ''}
+              {/* {isDebug ? '[DEBUG]' : ''} */}
             </Typography>
           </ThemeProvider>
           <Typography
@@ -76,22 +81,36 @@ const Home: React.FC<HomeProps> = ({
         src={GenerateNowIcon}
         width={231}
         height={46}
-        onClick={() => {}}
+        onClick={() => {
+          if (!user) {
+            navigate('/signin');
+          } else {
+            navigate('/generate');
+          }
+        }}
         style={{ cursor: 'pointer', margin: '2%', marginBottom: '3%' }}
       />
       <div className="container_background">
         <Stack
           spacing={2}
           sx={{
-            height: 600,
+            height: 500,
             width: '80vw',
             overflowY: 'hidden',
           }}
         >
-          <CustomCarousel
-            items={items}
-            onIndexChange={handleIndexChange}
-          ></CustomCarousel>
+          <div
+            style={{
+              position: 'relative',
+              top: '50%',
+              transform: 'translateY(-50%)',
+            }}
+          >
+            <CustomCarousel
+              items={items}
+              onIndexChange={handleIndexChange}
+            ></CustomCarousel>
+          </div>
           {/* <Stack
           direction="column"
           sx={{ height: 750, overflow: 'hidden', alignItems: 'center' }}
@@ -110,45 +129,7 @@ const Home: React.FC<HomeProps> = ({
           {/* </Stack> */}
         </Stack>
       </div>
-      {/* <div className="container_background">
-        <Stack direction="column" sx={{ width: '60%', marginTop: '5%' }}>
-          <Stack direction="row">
-            <Stack direction="column" sx={{ width: '45%' }}>
-              <Typography
-                variant="h4"
-                gutterBottom
-                sx={{ textAlign: 'left', fontWeight: 'bolder' }}
-              >
-                Immersive book talks.
-              </Typography>
-              <img src={dotsIcon} width={46} height={15} />
-            </Stack>
-            <Stack sx={{ width: '5%' }}></Stack>
-            <Stack direction="column" sx={{ width: '50%' }} spacing={4}>
-              <Typography
-                variant="body1"
-                gutterBottom
-                sx={{ textAlign: 'left' }}
-              >
-                No more dry summaries—AI-Driven BookTalks delivers a vibrant
-                audio experience that brings literature to life, connecting
-                readers with books in a profound and modern way. Experience the
-                future of reading with AI-Driven BookTalks, where every book
-                becomes a captivating conversation.
-              </Typography>
-
-              <img
-                src={wailtlistLogo}
-                width={273}
-                height={29}
-                onClick={onWaitlistClicked}
-                style={{ cursor: 'pointer' }}
-              />
-            </Stack>
-          </Stack>
-        </Stack>
-      </div> */}
-      {isDebug && <LibraryView setBook={setBook}></LibraryView>}
+      <LibraryView setBook={setBook}></LibraryView>
     </Stack>
   );
 };

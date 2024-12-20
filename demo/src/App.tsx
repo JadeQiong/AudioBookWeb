@@ -300,6 +300,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 width={190}
                 height={59}
                 onClick={() => {
+                  setAnchorEl(null);
                   navigate('/');
                   setView(CAROUSEL);
                   handlePlay(book);
@@ -315,6 +316,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 }}
                 onClick={() => {
                   navigate('/');
+                  setAnchorEl(null);
                   setView(CAROUSEL);
                 }}
                 style={{ cursor: 'pointer' }}
@@ -385,6 +387,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 height={46}
                 onClick={() => {
                   navigate('/waitlist');
+                  setAnchorEl(null);
                 }}
                 style={{ cursor: 'pointer' }}
               />
@@ -423,7 +426,10 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={() => navigate('/signin')}
+                  onClick={() => {
+                    setAnchorEl(null);
+                    navigate('/signin');
+                  }}
                   sx={{ color: 'white' }}
                 >
                   Sign In
@@ -449,6 +455,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                   items={items}
                   handleIndexChange={handleIndexChange}
                   onWaitlistClicked={() => {
+                    setAnchorEl(null);
                     navigate('/waitlist');
                     setView(WAITLIST);
                   }}
@@ -473,6 +480,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
                   items={items}
                   handleIndexChange={handleIndexChange}
                   onWaitlistClicked={() => {
+                    setAnchorEl(null);
                     navigate('/waitlist');
                     setView(WAITLIST);
                   }}

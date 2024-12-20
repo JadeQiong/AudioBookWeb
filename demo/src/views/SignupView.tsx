@@ -9,6 +9,7 @@ import ContinueIcon from '../assets/images/continue_button.svg';
 import axios from 'axios';
 import { baseUrl } from '../configs/NetworkConfig';
 import { useNavigate } from 'react-router-dom';
+import { Snackbar, Alert, AlertColor } from '@mui/material';
 
 const SignupView = () => {
   const navigate = useNavigate();
@@ -22,6 +23,11 @@ const SignupView = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState('');
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Controls Snackbar visibility
+  const [snackbarMessage, setSnackbarMessage] = useState(''); // Snackbar message
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<AlertColor>('success'); // Snackbar type
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -84,18 +90,30 @@ const SignupView = () => {
       return;
     }
 
-    const response = await axios.post(`${baseUrl}/api/register`, {
-      username: username,
-      password: password,
-      email: email,
-    });
+    try {
+      const response = await axios.post(`${baseUrl}/api/register`, {
+        username: username,
+        password: password,
+        email: email,
+      });
 
-    // Handle based on status code
-    if (response.status === 200) {
-      console.log('Registration successful:', response.data);
-      navigate('/signin');
-    } else {
-      console.log('Unexpected status code:', response.status);
+      if (response.status === 200) {
+        setSnackbarMessage('Registration successful!');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+        navigate('/signin');
+      } else {
+        setSnackbarMessage(
+          'Unexpected error during registration. Please try again.'
+        );
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error('Registration failed:', error);
+      setSnackbarMessage('Registration failed. Please try again.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
     }
     // // Proceed with signup using supabase, including the username in user_metadata
     // const { data, error } = await supabase.auth.signUp({
@@ -114,6 +132,11 @@ const SignupView = () => {
     // } else {
     //   console.log('Successfully sign up ', data);
     // }
+  };
+
+  // Close Snackbar
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -290,6 +313,22 @@ const SignupView = () => {
         </Typography>
         {/* Error Message */}
       </Box>
+
+      {/* Snackbar for Notifications */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Stack>
   );
 };

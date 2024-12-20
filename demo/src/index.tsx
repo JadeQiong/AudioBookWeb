@@ -25,8 +25,9 @@ root.render(
     <Router>
       <UserProvider>
         <Routes>
+          {/* update isDebug = true to turn on debug mode */}
           <Route path="/test/*" element={<App isDebug={true} />} />
-          <Route path="/*" element={<App isDebug={false} />} />
+          <Route path="/*" element={<App isDebug={true} />} />
         </Routes>
       </UserProvider>
     </Router>
