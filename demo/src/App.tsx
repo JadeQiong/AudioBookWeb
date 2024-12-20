@@ -150,6 +150,7 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
   const [sliderIndex, setSliderIndex] = useState(-1);
   const { signOut, user } = useUser();
 
+  console.log('user = ', user);
   useEffect(() => {
     if (audioIndex >= 0) {
       const newBook: Book = {

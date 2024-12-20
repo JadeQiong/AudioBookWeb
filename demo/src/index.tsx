@@ -20,16 +20,18 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <UserProvider>
+  <>
     {/* <React.StrictMode> */}
     <Router>
-      <Routes>
-        <Route path="/test/*" element={<App isDebug={true} />} />
-        <Route path="/*" element={<App isDebug={false} />} />
-      </Routes>
+      <UserProvider>
+        <Routes>
+          <Route path="/test/*" element={<App isDebug={true} />} />
+          <Route path="/*" element={<App isDebug={false} />} />
+        </Routes>
+      </UserProvider>
     </Router>
     {/* </React.StrictMode> */}
-  </UserProvider>
+  </>
 );
 
 reportWebVitals();

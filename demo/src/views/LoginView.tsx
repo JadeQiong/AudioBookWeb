@@ -7,9 +7,10 @@ import { Google, Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleLogo from '../assets/images/google.svg';
 import ContinueIcon from '../assets/images/continue_button.svg';
 import { useUser } from '../providers/UserProvider';
+import { useNavigate } from 'react-router-dom';
 
 const LoginView = () => {
-  const { handleGoogleSignIn } = useUser();
+  const { handleGoogleSignIn, handleEmailLogin } = useUser();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,18 +24,6 @@ const LoginView = () => {
     event.preventDefault();
   };
   console.log('login view is here');
-
-  const handleEmailLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
-      console.error('Error logging in with email:', error.message);
-    } else {
-      console.log('Successfully logged in', data);
-    }
-  };
 
   return (
     <Stack sx={{ marginTop: '10%' }} minHeight="85vh">
@@ -115,7 +104,9 @@ const LoginView = () => {
           src={ContinueIcon}
           width={'100%'}
           // height={47}
-          onClick={handleEmailLogin}
+          onClick={() => {
+            handleEmailLogin(email, password);
+          }}
           style={{ cursor: 'pointer', alignItems: 'center', margin: 2 }}
         />
         <Typography

@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import { supabase } from '../utils/supabaseClient'; // Adjust the path as needed
 import { baseUrl } from '../configs/NetworkConfig';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 type UserType = {
   id: string;
@@ -18,6 +20,7 @@ type UserContextType = {
   setUser: (user: UserType | null) => void;
   signOut: () => Promise<void>;
   handleGoogleSignIn: () => Promise<void>;
+  handleEmailLogin: (email: string, password: string) => Promise<void>;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -26,6 +29,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<UserType | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getSession = async () => {
@@ -37,23 +41,32 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
       setUser(data?.session?.user ?? null);
     };
 
-    getSession();
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser)); // Parse the stored string back into an object
+    } else {
+      getSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setUser(session?.user ?? null);
-      }
-    );
+      const { data: authListener } = supabase.auth.onAuthStateChange(
+        async (_event, session) => {
+          setUser(session?.user ?? null);
+        }
+      );
 
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
+      return () => {
+        authListener?.subscription.unsubscribe();
+      };
+    }
   }, []);
 
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
       setUser(null);
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        localStorage.removeItem('user');
+      }
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -77,9 +90,34 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const handleEmailLogin = async (email: string, password: string) => {
+    try {
+      const response = await axios.post(`${baseUrl}/api/login`, {
+        email: email,
+        password: password,
+      });
+
+      // Handle based on status code
+      if (response.status === 200) {
+        const userData = {
+          id: response.data.user_id,
+          email: response.data.email,
+        };
+        setUser(userData); // Set the user state
+        localStorage.setItem('user', JSON.stringify(userData));
+        console.log({ id: response.data.user_id, email: response.data.email });
+        navigate('/');
+      } else {
+        console.log('Unexpected status code:', response.status);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ user, setUser, signOut, handleGoogleSignIn }}
+      value={{ user, setUser, signOut, handleGoogleSignIn, handleEmailLogin }}
     >
       {children}
     </UserContext.Provider>

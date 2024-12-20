@@ -6,8 +6,12 @@ import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleLogo from '../assets/images/google.svg';
 import ContinueIcon from '../assets/images/continue_button.svg';
+import axios from 'axios';
+import { baseUrl } from '../configs/NetworkConfig';
+import { useNavigate } from 'react-router-dom';
 
 const SignupView = () => {
+  const navigate = useNavigate();
   const [username, setUserName] = useState('');
   const [usernameError, setUsernameError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -80,23 +84,36 @@ const SignupView = () => {
       return;
     }
 
-    // Proceed with signup using supabase, including the username in user_metadata
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          username, // Storing username in user_metadata
-        },
-      },
+    const response = await axios.post(`${baseUrl}/api/register`, {
+      username: username,
+      password: password,
+      email: email,
     });
 
-    if (error) {
-      console.error('Error sign up in with email:', error.message);
-      setSignUpError('Sign-up failed. Please try again.');
+    // Handle based on status code
+    if (response.status === 200) {
+      console.log('Registration successful:', response.data);
+      navigate('/signin');
     } else {
-      console.log('Successfully sign up ', data);
+      console.log('Unexpected status code:', response.status);
     }
+    // // Proceed with signup using supabase, including the username in user_metadata
+    // const { data, error } = await supabase.auth.signUp({
+    //   email,
+    //   password,
+    //   options: {
+    //     data: {
+    //       username, // Storing username in user_metadata
+    //     },
+    //   },
+    // });
+
+    // if (error) {
+    //   console.error('Error sign up in with email:', error.message);
+    //   setSignUpError('Sign-up failed. Please try again.');
+    // } else {
+    //   console.log('Successfully sign up ', data);
+    // }
   };
 
   return (
