@@ -268,12 +268,36 @@ const App: React.FC<AppProps> = ({ isDebug }) => {
     setPopupOpen(false);
   };
 
-  const handlePlay = (book: Book) => {
+  const handlePlay = async (book: Book) => {
+    // 1. Log the playback event in Google Analytics
     ReactGA.event({
-      category: 'Audio',
-      action: 'Play',
-      label: book.title, // Use the book's title as the label
+      category: 'Audio', 
+      action: 'Play', 
+      label: book.title, 
     });
+  
+    // 2. Send playback data to the backend for database logging
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/play', {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({
+          book_id: book._id, 
+          user_id: 'guest',
+          duration: 120, 
+        }),
+      });
+  
+      // Handle response from the backend
+      if (!response.ok) {
+        console.error('Failed to log playback:', await response.text());
+        return;
+      }
+  
+      console.log(`Playback of book "${book.title}" logged successfully`); // Confirm successful logging
+    } catch (error) {
+      console.error('Error while logging playback:', error);
+    }
   };
 
   const items: CarouselItem[] = Array(18)
